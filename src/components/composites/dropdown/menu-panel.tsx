@@ -52,7 +52,12 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
 
   const { groups, flat } = useMemo(() => normalize(level.items), [level.items]);
   const indexOf = useMemo(() => new Map(flat.map((item, i) => [item.id, i] as const)), [flat]);
-  const [activeIdx, setActiveIdx] = useState(() => (seed === 'none' ? -1 : edgeEnabled(flat, seed === 'last')));
+  const seedIndex = () => {
+    if (seed === 'none') return -1;
+    if (seed === 'selected') return flat.findIndex((item) => item.selected && !item.disabled);
+    return edgeEnabled(flat, seed === 'last');
+  };
+  const [activeIdx, setActiveIdx] = useState(seedIndex);
 
   const panelRef = refFor('panel:' + level.key);
   const rowFor = (i: number) => refFor('row:' + levelKey(depth, flat[i].id)) as unknown as RefObject<HTMLDivElement>;
@@ -85,8 +90,13 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
 
   useLayoutEffect(() => {
     if (seed === 'none') return;
-    if (contentLevel) panelRef.current?.focus();
-    else setActiveIdx(edgeEnabled(flat, seed === 'last'));
+    if (contentLevel) {
+      panelRef.current?.focus();
+      return;
+    }
+    const i = seedIndex();
+    if (i < 0) panelRef.current?.focus();
+    setActiveIdx(i);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seed]);
 

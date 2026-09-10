@@ -94,7 +94,7 @@ export function resolveLevels(items: DropdownItems, path: string[]): Level[] {
   return levels;
 }
 
-export type SeedFocus = 'first' | 'last' | 'none';
+export type SeedFocus = 'first' | 'last' | 'selected' | 'none';
 
 export interface MenuChain {
   levels: Level[];

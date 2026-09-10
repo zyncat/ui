@@ -121,7 +121,7 @@ function ovCloneTrigger(
     activateOn,
   }: {
     open: boolean;
-    onPress: () => void;
+    onPress: (e: ReactPointerEvent<HTMLElement> | ReactMouseEvent<HTMLElement>) => void;
     onKeyDown?: (e: ReactKeyboardEvent<HTMLElement>) => void;
     panelId: string;
     haspopup: string;
@@ -147,7 +147,7 @@ function ovCloneTrigger(
     'aria-expanded': open,
     'aria-controls': open ? panelId : undefined,
     'data-activate': activateOn === 'pointerdown' ? 'pointerdown' : undefined,
-    ...activationProps<HTMLElement>(() => onPress(), {
+    ...activationProps<HTMLElement>(onPress, {
       on: activateOn,
       onPointerDown: own.onPointerDown,
       onClick: own.onClick,

@@ -43,6 +43,11 @@ export function declinePointerDown() {
   activatedOnPointerDown = false;
 }
 
+export function pressedByKeyboard(e: AnyPointerEvent | AnyMouseEvent) {
+  const native = ('nativeEvent' in e ? e.nativeEvent : e) as PointerEvent;
+  return !native.pointerType;
+}
+
 export function clickActivates(e: AnyMouseEvent) {
   const native = ('nativeEvent' in e ? e.nativeEvent : e) as PointerEvent;
   if (isInert(e.currentTarget)) return false;

@@ -22,7 +22,7 @@ import { motionFor } from '../../../tokens/motion-tokens';
 import { useControllable } from '../../internal/hooks/use-controllable';
 import type { MenuSize, MenuWeight } from '../../internal/menu/highlight';
 import { ovCloneTrigger, OverlayPortal } from '../../internal/overlay/layer';
-import type { ActivateOn } from '../../internal/utils/activation';
+import { pressedByKeyboard, type ActivateOn } from '../../internal/utils/activation';
 import { MenuPanel } from './menu-panel';
 import {
   levelKey,
@@ -108,7 +108,7 @@ export function Dropdown({
 }: DropdownProps) {
   const [open, setOpen] = useControllable(controlledOpen, defaultOpen, onOpenChange);
   const [path, setPath] = useState<string[]>([]);
-  const [seed, setSeed] = useState({ key: ROOT_LEVEL, focus: 'first' as SeedFocus });
+  const [seed, setSeed] = useState({ key: ROOT_LEVEL, focus: 'selected' as SeedFocus });
 
   const refs = useRef(new Map<string, RefObject<HTMLElement>>());
   const hoverDepth = useRef(-1);
@@ -176,7 +176,7 @@ export function Dropdown({
     <Fragment>
       {ovCloneTrigger(trigger, {
         open,
-        onPress: () => (open ? dismiss(false) : show('first')),
+        onPress: (e) => (open ? dismiss(false) : show(pressedByKeyboard(e) ? 'first' : 'selected')),
         onKeyDown: (e) => {
           if (open || (e.key !== 'ArrowDown' && e.key !== 'ArrowUp')) return;
           e.preventDefault();

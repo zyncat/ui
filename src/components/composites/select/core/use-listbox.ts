@@ -65,13 +65,15 @@ export function useListbox({
   }
 
   useEffect(() => {
-    if (!open) setQuery('');
+    if (open) return;
+    setQuery('');
+    setActiveIdx(-1);
   }, [open]);
 
   useEffect(() => {
     if (!open) return;
-    const sel = navItems.findIndex((o) => isSelected(o.value) && !o.disabled);
-    setActiveIdx(sel >= 0 ? sel : edgeEnabled(navItems, false));
+    if (query) setActiveIdx(edgeEnabled(navItems, false));
+    else setActiveIdx(navItems.findIndex((o) => isSelected(o.value) && !o.disabled));
   }, [open, query]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
