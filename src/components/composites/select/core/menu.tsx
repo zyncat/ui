@@ -8,7 +8,7 @@ import { Presence } from '../../../../motion/presence';
 import type { DisableableAnimation } from '../../../../motion/timing';
 import { useMotion, type MotionSpecs } from '../../../../motion/use-motion';
 import { motionFor, type MotionTransition } from '../../../../tokens/motion-tokens';
-import { menuHighlightAttrs, type MenuHighlightProps } from '../../../internal/menu/highlight';
+import { menuSurfaceAttrs, type MenuSurfaceProps } from '../../../internal/menu/highlight';
 import { OverlayPortal, useOutsidePress, useOverlayEntry } from '../../../internal/overlay/layer';
 import { useAnchorPosition } from '../../../internal/overlay/position';
 
@@ -37,7 +37,7 @@ function selectMenuLayers(
       ];
 }
 
-export interface SelectMenuProps extends MenuHighlightProps {
+export interface SelectMenuProps extends MenuSurfaceProps {
   open: boolean;
   menuId: string;
   requestClose: () => void;
@@ -54,6 +54,8 @@ function MenuSurface({
   multiple,
   highlight,
   rail,
+  size,
+  weight,
   animate,
   exit,
   children,
@@ -80,7 +82,7 @@ function MenuSurface({
       id={menuId}
       role="presentation"
       data-multiple={multiple ? 'true' : undefined}
-      {...menuHighlightAttrs({ highlight, rail })}
+      {...menuSurfaceAttrs({ highlight, rail, size, weight })}
     >
       {children}
     </div>
@@ -95,6 +97,8 @@ export function SelectMenu({
   multiple,
   highlight,
   rail,
+  size,
+  weight,
   animation,
   children,
 }: SelectMenuProps) {
@@ -112,6 +116,8 @@ export function SelectMenu({
             multiple={multiple}
             highlight={highlight}
             rail={rail}
+            size={size}
+            weight={weight}
           >
             {children}
           </MenuSurface>

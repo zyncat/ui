@@ -20,6 +20,7 @@ import { popIn, popOut } from '../../../motion/presets';
 import type { DisableableAnimation } from '../../../motion/timing';
 import { motionFor } from '../../../tokens/motion-tokens';
 import { useControllable } from '../../internal/hooks/use-controllable';
+import type { MenuSize, MenuWeight } from '../../internal/menu/highlight';
 import { ovCloneTrigger, OverlayPortal } from '../../internal/overlay/layer';
 import type { ActivateOn } from '../../internal/utils/activation';
 import { MenuPanel } from './menu-panel';
@@ -68,6 +69,10 @@ export interface DropdownProps {
   /** Hue of the highlight that travels between rows: the neutral wash, or the accent wash with accent
    *  ink on the active row. @default 'neutral' */
   highlight?: 'neutral' | 'accent';
+  /** Row density - the vertical padding on every row, submenus included. @default 'md' */
+  size?: MenuSize;
+  /** Weight of every row label. @default 'medium' */
+  weight?: MenuWeight;
   /** Short accent bar on the leading edge of the highlight, marking the active row. @default false */
   rail?: boolean;
 
@@ -94,6 +99,8 @@ export function Dropdown({
   align = 'start',
   highlight = 'neutral',
   rail = false,
+  size = 'md',
+  weight = 'medium',
   id,
   ariaLabel,
   htmlProps,
@@ -137,6 +144,8 @@ export function Dropdown({
     align,
     highlight,
     rail,
+    size,
+    weight,
     ariaLabel,
     htmlProps,
     seed,

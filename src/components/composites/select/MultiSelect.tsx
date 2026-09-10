@@ -7,6 +7,7 @@ import type { HTMLAttributes, ReactNode } from 'react';
 import type { DataAttributes } from '../../../dom-props';
 import type { DisableableAnimation } from '../../../motion/timing';
 import { useControllable } from '../../internal/hooks/use-controllable';
+import type { MenuWeight } from '../../internal/menu/highlight';
 import type { ActivateOn } from '../../internal/utils/activation';
 import { cx } from '../../internal/utils/cx';
 import { CheckGlyph } from '../../primitives/checkbox/check-glyph';
@@ -25,8 +26,10 @@ export interface MultiSelectProps {
   onChange?: (value: string[], toggled: SelectOption) => void;
   /** Trigger text when nothing is selected. @default 'Select options' */
   placeholder?: string;
-  /** Control height. @default 'md' */
+  /** Control height, and the vertical padding of the rows in the menu. @default 'md' */
   size?: 'sm' | 'md' | 'lg';
+  /** Weight of every option label in the menu. @default 'medium' */
+  weight?: MenuWeight;
   /** Disabled - trigger is inert and the menu cannot open. @default false */
   disabled?: boolean;
   /** Danger ring + border. @default false */
@@ -79,6 +82,7 @@ export function MultiSelect({
   searchPlaceholder = 'Filter options',
   highlight = 'neutral',
   rail = false,
+  weight = 'medium',
   leadingIcon = null,
   id,
   ariaLabel,
@@ -141,6 +145,8 @@ export function MultiSelect({
         multiple
         highlight={highlight}
         rail={rail}
+        size={size}
+        weight={weight}
         activateOn={activateOn}
         animation={animation}
         check={(sel) => <CheckboxTick checked={sel} />}

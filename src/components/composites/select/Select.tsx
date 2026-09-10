@@ -7,6 +7,7 @@ import type { HTMLAttributes, ReactNode } from 'react';
 import type { DataAttributes } from '../../../dom-props';
 import type { DisableableAnimation } from '../../../motion/timing';
 import { useControllable } from '../../internal/hooks/use-controllable';
+import type { MenuWeight } from '../../internal/menu/highlight';
 import type { ActivateOn } from '../../internal/utils/activation';
 import { cx } from '../../internal/utils/cx';
 import {
@@ -31,8 +32,10 @@ export interface SelectProps {
   onChange?: (value: string, option: SelectOption) => void;
   /** Trigger text when nothing is selected. @default 'Select an option' */
   placeholder?: string;
-  /** Control height. @default 'md' */
+  /** Control height, and the vertical padding of the rows in the menu. @default 'md' */
   size?: 'sm' | 'md' | 'lg';
+  /** Weight of every option label in the menu. @default 'medium' */
+  weight?: MenuWeight;
   /** Disabled - trigger is inert and the menu cannot open. @default false */
   disabled?: boolean;
   /** Danger ring + border. @default false */
@@ -83,6 +86,7 @@ export function Select({
   searchPlaceholder = 'Filter options',
   highlight = 'neutral',
   rail = false,
+  weight = 'medium',
   leadingIcon = null,
   id,
   ariaLabel,
@@ -138,6 +142,8 @@ export function Select({
         ariaLabel={ariaLabel}
         highlight={highlight}
         rail={rail}
+        size={size}
+        weight={weight}
         activateOn={activateOn}
         animation={animation}
         {...(!showCheck && { check: () => null })}

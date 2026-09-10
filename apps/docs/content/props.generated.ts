@@ -1257,7 +1257,18 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       default: "'Select an option'",
       description: 'Trigger text when nothing is selected.',
     },
-    { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Control height.' },
+    {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description: 'Control height, and the vertical padding of the rows in the menu.',
+    },
+    {
+      name: 'weight',
+      type: 'MenuWeight',
+      default: "'medium'",
+      description: 'Weight of every option label in the menu.',
+    },
     {
       name: 'disabled',
       type: 'boolean',
@@ -1362,7 +1373,18 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       default: "'Select options'",
       description: 'Trigger text when nothing is selected.',
     },
-    { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Control height.' },
+    {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description: 'Control height, and the vertical padding of the rows in the menu.',
+    },
+    {
+      name: 'weight',
+      type: 'MenuWeight',
+      default: "'medium'",
+      description: 'Weight of every option label in the menu.',
+    },
     {
       name: 'disabled',
       type: 'boolean',
@@ -2233,6 +2255,13 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       description:
         'Hue of the highlight that travels between rows: the neutral wash, or the accent wash with accent ink on the active row.',
     },
+    {
+      name: 'size',
+      type: 'MenuSize',
+      default: "'md'",
+      description: 'Row density - the vertical padding on every row, submenus included.',
+    },
+    { name: 'weight', type: 'MenuWeight', default: "'medium'", description: 'Weight of every row label.' },
     {
       name: 'rail',
       type: 'boolean',

@@ -10,6 +10,8 @@ DropdownGroup[] (labelled sections); a row with its own items opens a submenu, n
 you like. content on a row opens your own panel body in place of a submenu; selected marks the
 current value of a single-choice group with a check. Keyboard is the APG menu button: arrows move,
 Right/Left open and close a submenu, Enter/Space commit, typeahead, Esc one level, Tab the lot.
+size sm|md|lg sets the vertical padding of every row, submenus included; weight sets the label
+weight regular|medium|semibold.
 highlight neutral|accent picks the hue of the highlight travelling between rows; rail adds a short
 accent bar on its leading edge. returnFocus false leaves focus where a committing row put it.
 

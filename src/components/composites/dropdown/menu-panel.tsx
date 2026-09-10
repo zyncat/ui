@@ -9,7 +9,7 @@ import { useMotion, type MotionSpecs } from '../../../motion/use-motion';
 import { edgeEnabled, matchPrefix, stepEnabled } from '../../internal/collection/collection';
 import { useTypeahead } from '../../internal/hooks/use-typeahead';
 import { Icon } from '../../internal/icon/Icon';
-import { menuHighlightAttrs } from '../../internal/menu/highlight';
+import { menuSurfaceAttrs } from '../../internal/menu/highlight';
 import { MenuRow } from '../../internal/menu/menu-row';
 import { useReturnFocus } from '../../internal/overlay/focus';
 import { useOutsidePress, useOverlayEntry } from '../../internal/overlay/layer';
@@ -259,7 +259,7 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
   return (
     <div
       {...(nested ? undefined : chain.htmlProps)}
-      {...menuHighlightAttrs(chain)}
+      {...menuSurfaceAttrs(chain)}
       ref={panelRef as unknown as RefObject<HTMLDivElement>}
       id={menuId}
       className={cx('zc-menu-surface zc-menu-scroller zc-dropdown__menu', !nested && chain.htmlProps?.className)}
