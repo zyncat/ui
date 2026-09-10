@@ -86,9 +86,16 @@
 
   .zc-menu-row__icon {
     display: inline-flex;
+    align-items: center;
     flex: 0 0 auto;
     font-size: var(--icon-sm);
     color: var(--text-muted);
+  }
+  .zc-menu-row__icon > svg,
+  .zc-menu-row__icon > img {
+    width: var(--icon-sm);
+    height: var(--icon-sm);
+    display: block;
   }
   .zc-menu-row__text {
     display: flex;
