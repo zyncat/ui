@@ -23,9 +23,16 @@
     /* The ink on a strong-ink fill - the canvas colour in either polarity. */
     --text-inverse: var(--gray-0);
 
-    --border-subtle: var(--gray-150);
-    --border-default: var(--gray-200);
-    --border-strong: var(--gray-300);
+    /* One rung lighter than the ink roles: Stripe hangs its hairline on gray-150, not gray-200. */
+    --border-subtle: var(--gray-100);
+    --border-default: var(--gray-150);
+    --border-strong: var(--gray-200);
+
+    /* Stripe's slate rung at the alpha that lands its hover face exactly on the canvas: translucent,
+       so a tinted surface still shows through instead of being covered. Held at the ramp's distance
+       from --neutral, so a retint carries the hover with it. */
+    --bg-hover: oklch(from var(--neutral) 0.896 0.0186 calc(h - 9.7) / 0.246);
+    --bg-press: oklch(from var(--neutral) 0.896 0.0186 calc(h - 9.7) / 0.291);
   }
 
   :root,
@@ -45,9 +52,8 @@
     /* The ink on a hue fill - the ramp's lightest rung in either polarity. */
     --text-on-accent: var(--gray-0);
 
-    /* Translucent washes of the ink, never opaque near-whites. */
-    --neutral-wash: color-mix(in oklab, var(--text-secondary) 6%, transparent);
-    --neutral-wash-press: color-mix(in oklab, var(--text-secondary) 10%, transparent);
+    --neutral-wash: var(--bg-hover);
+    --neutral-wash-press: var(--bg-press);
 
     /* The accent's hue one step down - repoint it for a hue of its own. */
     --info: var(--accent-hover);

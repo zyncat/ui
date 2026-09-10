@@ -21,6 +21,8 @@
   --background-color-muted: var(--bg-muted);
   --background-color-inset: var(--bg-inset);
   --background-color-overlay: var(--bg-overlay);
+  --background-color-hover: var(--bg-hover);
+  --background-color-press: var(--bg-press);
 
   /* Ink - text-<role>; the body ink is text-default because text-body is the type role */
   --text-color-strong: var(--text-strong);

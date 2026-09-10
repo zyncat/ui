@@ -11,8 +11,9 @@
     --warning: oklch(0.7 0.142 75);
     /* Destructive actions and errors - the danger button ladder, ring, subtle, text and wash follow. */
     --danger: oklch(0.545 0.196 27);
-    /* The gray ramp's hue - the accent by default, so chrome shares its temperature. */
-    --neutral: var(--accent);
+    /* The middle of the gray ramp - every rung holds its hue distance from this one, so moving it
+       retints the whole ramp. Stripe's gray-500; point it at --accent to share the brand temperature. */
+    --neutral: oklch(0.553 0.031 260.3);
     /* Roundness - every --radius-<step> is a fixed ratio of it, 0 squaring every corner. */
     --radius: 0.5rem;
     /* The body face - every --type-* bundle follows. The package loads no webfont; point this at yours. */

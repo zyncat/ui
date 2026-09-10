@@ -24,6 +24,10 @@ export interface ColorBgTokens {
   inset?: string | number;
   /** `--bg-overlay`. Default: `color-mix(in oklab, var(--gray-900) 44%, transparent)`. Dark: `oklch(from var(--neutral) 0.06 0.004 h / 0.64)`. */
   overlay?: string | number;
+  /** `--bg-hover` - Stripe's slate rung at the alpha that lands its hover face exactly on the canvas: translucent, so a tinted surface still shows through instead of being covered. Held at the ramp's distance from --neutral, so a retint carries the hover with it. Default: `oklch(from var(--neutral) 0.896 0.0186 calc(h - 9.7) / 0.246)`. Dark: `color-mix(in oklab, var(--text-secondary) 6%, transparent)`. */
+  hover?: string | number;
+  /** `--bg-press`. Default: `oklch(from var(--neutral) 0.896 0.0186 calc(h - 9.7) / 0.291)`. Dark: `color-mix(in oklab, var(--text-secondary) 10%, transparent)`. */
+  press?: string | number;
 }
 
 /** Ink, from strong to disabled, and the faces on a fill. */
@@ -46,11 +50,11 @@ export interface ColorTextTokens {
 
 /** Hairlines, from subtle to strong. */
 export interface ColorBorderTokens {
-  /** `--border-subtle`. Default: `var(--gray-150)`. Dark: `oklch(from var(--neutral) 0.265 0.008 h)`. */
+  /** `--border-subtle` - One rung lighter than the ink roles: Stripe hangs its hairline on gray-150, not gray-200. Default: `var(--gray-100)`. Dark: `oklch(from var(--neutral) 0.265 0.008 h)`. */
   subtle?: string | number;
-  /** `--border-default`. Default: `var(--gray-200)`. Dark: `oklch(from var(--neutral) 0.315 0.009 h)`. */
+  /** `--border-default`. Default: `var(--gray-150)`. Dark: `oklch(from var(--neutral) 0.315 0.009 h)`. */
   default?: string | number;
-  /** `--border-strong`. Default: `var(--gray-300)`. Dark: `oklch(from var(--neutral) 0.4 0.011 h)`. */
+  /** `--border-strong`. Default: `var(--gray-200)`. Dark: `oklch(from var(--neutral) 0.4 0.011 h)`. */
   strong?: string | number;
 }
 
@@ -58,7 +62,7 @@ export interface ColorBorderTokens {
 export interface ColorTokens {
   /** `--accent` - The brand hue - hover, active, lift, subtle, border, wash, the focus ring and info follow. Default: `oklch(0.63 0.118 198)`. */
   accent?: string | number;
-  /** `--neutral` - The gray ramp's hue - the accent by default, so chrome shares its temperature. Default: `var(--accent)`. */
+  /** `--neutral` - The middle of the gray ramp - every rung holds its hue distance from this one, so moving it retints the whole ramp. Stripe's gray-500; point it at --accent to share the brand temperature. Default: `oklch(0.553 0.031 260.3)`. */
   neutral?: string | number;
   /** `--success` - Positive status - its subtle, text and wash follow. Default: `oklch(0.548 0.122 152)`. */
   success?: string | number;
@@ -417,7 +421,7 @@ export interface TokenProperties {
   '--warning'?: string | number;
   /** `--danger` - Destructive actions and errors - the danger button ladder, ring, subtle, text and wash follow. Default: `oklch(0.545 0.196 27)`. */
   '--danger'?: string | number;
-  /** `--neutral` - The gray ramp's hue - the accent by default, so chrome shares its temperature. Default: `var(--accent)`. */
+  /** `--neutral` - The middle of the gray ramp - every rung holds its hue distance from this one, so moving it retints the whole ramp. Stripe's gray-500; point it at --accent to share the brand temperature. Default: `oklch(0.553 0.031 260.3)`. */
   '--neutral'?: string | number;
   /** `--radius` - Roundness - every --radius-<step> is a fixed ratio of it, 0 squaring every corner. Default: `0.5rem`. */
   '--radius'?: string | number;
@@ -425,33 +429,33 @@ export interface TokenProperties {
   '--font-body'?: string | number;
   /** `--font-code` - The code face - --type-code follows. The package loads no webfont; point this at yours. Default: `ui-monospace, 'SF Mono', 'Menlo', monospace`. */
   '--font-code'?: string | number;
-  /** `--gray-0` - The top of the ramp, not pure white: it carries --neutral like every rung below it. Default: `oklch(from var(--neutral) 0.995 0.002 h)`. Re-derived on every theme root. */
+  /** `--gray-0` - Stripe's neutral ramp, rung for rung: --neutral is its midpoint, and every step holds that hue's distance from it, so a new --neutral carries the whole ramp with it. The top rung is pure white - the only rung Stripe leaves untinted. Default: `oklch(from var(--neutral) 1 0 h)`. Re-derived on every theme root. */
   '--gray-0'?: string | number;
-  /** `--gray-50`. Default: `oklch(from var(--neutral) 0.984 0.003 h)`. Re-derived on every theme root. */
+  /** `--gray-50`. Default: `oklch(from var(--neutral) 0.978 0.0034 calc(h - 12.4))`. Re-derived on every theme root. */
   '--gray-50'?: string | number;
-  /** `--gray-100`. Default: `oklch(from var(--neutral) 0.97 0.004 h)`. Re-derived on every theme root. */
+  /** `--gray-100`. Default: `oklch(from var(--neutral) 0.948 0.0052 calc(h - 12.4))`. Re-derived on every theme root. */
   '--gray-100'?: string | number;
-  /** `--gray-150`. Default: `oklch(from var(--neutral) 0.954 0.005 h)`. Re-derived on every theme root. */
+  /** `--gray-150`. Default: `oklch(from var(--neutral) 0.889 0.0105 calc(h - 12.3))`. Re-derived on every theme root. */
   '--gray-150'?: string | number;
-  /** `--gray-200`. Default: `oklch(from var(--neutral) 0.924 0.006 h)`. Re-derived on every theme root. */
+  /** `--gray-200`. Default: `oklch(from var(--neutral) 0.83 0.0165 calc(h - 6.4))`. Re-derived on every theme root. */
   '--gray-200'?: string | number;
-  /** `--gray-300`. Default: `oklch(from var(--neutral) 0.874 0.007 h)`. Re-derived on every theme root. */
+  /** `--gray-300`. Default: `oklch(from var(--neutral) 0.742 0.0226 calc(h - 1.1))`. Re-derived on every theme root. */
   '--gray-300'?: string | number;
-  /** `--gray-400`. Default: `oklch(from var(--neutral) 0.765 0.009 h)`. Re-derived on every theme root. */
+  /** `--gray-400`. Default: `oklch(from var(--neutral) 0.651 0.0247 calc(h + 0.4))`. Re-derived on every theme root. */
   '--gray-400'?: string | number;
-  /** `--gray-500`. Default: `oklch(from var(--neutral) 0.642 0.011 h)`. Re-derived on every theme root. */
+  /** `--gray-500`. Default: `oklch(from var(--neutral) 0.553 0.031 h)`. Re-derived on every theme root. */
   '--gray-500'?: string | number;
-  /** `--gray-600`. Default: `oklch(from var(--neutral) 0.532 0.012 h)`. Re-derived on every theme root. */
+  /** `--gray-600`. Default: `oklch(from var(--neutral) 0.466 0.0267 calc(h + 11.4))`. Re-derived on every theme root. */
   '--gray-600'?: string | number;
-  /** `--gray-700`. Default: `oklch(from var(--neutral) 0.422 0.012 h)`. Re-derived on every theme root. */
+  /** `--gray-700`. Default: `oklch(from var(--neutral) 0.392 0.0226 calc(h + 11.6))`. Re-derived on every theme root. */
   '--gray-700'?: string | number;
-  /** `--gray-800`. Default: `oklch(from var(--neutral) 0.305 0.01 h)`. Re-derived on every theme root. */
+  /** `--gray-800`. Default: `oklch(from var(--neutral) 0.317 0.0214 calc(h + 21.1))`. Re-derived on every theme root. */
   '--gray-800'?: string | number;
-  /** `--gray-900`. Default: `oklch(from var(--neutral) 0.225 0.008 h)`. Re-derived on every theme root. */
+  /** `--gray-900`. Default: `oklch(from var(--neutral) 0.226 0.0194 calc(h + 20))`. Re-derived on every theme root. */
   '--gray-900'?: string | number;
-  /** `--gray-950`. Default: `oklch(from var(--neutral) 0.165 0.007 h)`. Re-derived on every theme root. */
+  /** `--gray-950`. Default: `oklch(from var(--neutral) 0.181 0.0185 calc(h + 19.2))`. Re-derived on every theme root. */
   '--gray-950'?: string | number;
-  /** `--shadow-rgb` - Cool near-black on the white canvas. Default: `15 22 25`. Dark: `0 0 0`. */
+  /** `--shadow-rgb` - Cool near-black on the white canvas. Default: `16 17 26`. Dark: `0 0 0`. */
   '--shadow-rgb'?: string | number;
   /** `--weight-regular`. Default: `400`. */
   '--weight-regular'?: string | number;
@@ -723,12 +727,16 @@ export interface TokenProperties {
   '--text-disabled'?: string | number;
   /** `--text-inverse` - The ink on a strong-ink fill - the canvas colour in either polarity. Default: `var(--gray-0)`. Dark: `oklch(from var(--neutral) 0.165 0.006 h)`. */
   '--text-inverse'?: string | number;
-  /** `--border-subtle`. Default: `var(--gray-150)`. Dark: `oklch(from var(--neutral) 0.265 0.008 h)`. */
+  /** `--border-subtle` - One rung lighter than the ink roles: Stripe hangs its hairline on gray-150, not gray-200. Default: `var(--gray-100)`. Dark: `oklch(from var(--neutral) 0.265 0.008 h)`. */
   '--border-subtle'?: string | number;
-  /** `--border-default`. Default: `var(--gray-200)`. Dark: `oklch(from var(--neutral) 0.315 0.009 h)`. */
+  /** `--border-default`. Default: `var(--gray-150)`. Dark: `oklch(from var(--neutral) 0.315 0.009 h)`. */
   '--border-default'?: string | number;
-  /** `--border-strong`. Default: `var(--gray-300)`. Dark: `oklch(from var(--neutral) 0.4 0.011 h)`. */
+  /** `--border-strong`. Default: `var(--gray-200)`. Dark: `oklch(from var(--neutral) 0.4 0.011 h)`. */
   '--border-strong'?: string | number;
+  /** `--bg-hover` - Stripe's slate rung at the alpha that lands its hover face exactly on the canvas: translucent, so a tinted surface still shows through instead of being covered. Held at the ramp's distance from --neutral, so a retint carries the hover with it. Default: `oklch(from var(--neutral) 0.896 0.0186 calc(h - 9.7) / 0.246)`. Dark: `color-mix(in oklab, var(--text-secondary) 6%, transparent)`. */
+  '--bg-hover'?: string | number;
+  /** `--bg-press`. Default: `oklch(from var(--neutral) 0.896 0.0186 calc(h - 9.7) / 0.291)`. Dark: `color-mix(in oklab, var(--text-secondary) 10%, transparent)`. */
+  '--bg-press'?: string | number;
   /** `--accent-fill` - The resting face of a filled control. Default: `var(--accent)`. Dark: `oklch(from var(--accent) calc(l - 0.06) calc(c - 0.01) h)`. Re-derived on every theme root. */
   '--accent-fill'?: string | number;
   /** `--accent-lift`. Default: `oklch(from var(--accent) calc(l + 0.075) calc(c - 0.006) h)`. Re-derived on every theme root. */
@@ -749,9 +757,9 @@ export interface TokenProperties {
   '--text-accent'?: string | number;
   /** `--text-on-accent` - The ink on a hue fill - the ramp's lightest rung in either polarity. Default: `var(--gray-0)`. Re-derived on every theme root. */
   '--text-on-accent'?: string | number;
-  /** `--neutral-wash` - Translucent washes of the ink, never opaque near-whites. Default: `color-mix(in oklab, var(--text-secondary) 6%, transparent)`. Re-derived on every theme root. */
+  /** `--neutral-wash`. Default: `var(--bg-hover)`. Re-derived on every theme root. */
   '--neutral-wash'?: string | number;
-  /** `--neutral-wash-press`. Default: `color-mix(in oklab, var(--text-secondary) 10%, transparent)`. Re-derived on every theme root. */
+  /** `--neutral-wash-press`. Default: `var(--bg-press)`. Re-derived on every theme root. */
   '--neutral-wash-press'?: string | number;
   /** `--info` - The accent's hue one step down - repoint it for a hue of its own. Default: `var(--accent-hover)`. Re-derived on every theme root. */
   '--info'?: string | number;

@@ -4,25 +4,27 @@
   :root,
   [data-theme],
   [data-polarity] {
-    /* The top of the ramp, not pure white: it carries --neutral like every rung below it. */
-    --gray-0: oklch(from var(--neutral) 0.995 0.002 h);
-    --gray-50: oklch(from var(--neutral) 0.984 0.003 h);
-    --gray-100: oklch(from var(--neutral) 0.97 0.004 h);
-    --gray-150: oklch(from var(--neutral) 0.954 0.005 h);
-    --gray-200: oklch(from var(--neutral) 0.924 0.006 h);
-    --gray-300: oklch(from var(--neutral) 0.874 0.007 h);
-    --gray-400: oklch(from var(--neutral) 0.765 0.009 h);
-    --gray-500: oklch(from var(--neutral) 0.642 0.011 h);
-    --gray-600: oklch(from var(--neutral) 0.532 0.012 h);
-    --gray-700: oklch(from var(--neutral) 0.422 0.012 h);
-    --gray-800: oklch(from var(--neutral) 0.305 0.01 h);
-    --gray-900: oklch(from var(--neutral) 0.225 0.008 h);
-    --gray-950: oklch(from var(--neutral) 0.165 0.007 h);
+    /* Stripe's neutral ramp, rung for rung: --neutral is its midpoint, and every step holds that
+       hue's distance from it, so a new --neutral carries the whole ramp with it. The top rung is
+       pure white - the only rung Stripe leaves untinted. */
+    --gray-0: oklch(from var(--neutral) 1 0 h);
+    --gray-50: oklch(from var(--neutral) 0.978 0.0034 calc(h - 12.4));
+    --gray-100: oklch(from var(--neutral) 0.948 0.0052 calc(h - 12.4));
+    --gray-150: oklch(from var(--neutral) 0.889 0.0105 calc(h - 12.3));
+    --gray-200: oklch(from var(--neutral) 0.83 0.0165 calc(h - 6.4));
+    --gray-300: oklch(from var(--neutral) 0.742 0.0226 calc(h - 1.1));
+    --gray-400: oklch(from var(--neutral) 0.651 0.0247 calc(h + 0.4));
+    --gray-500: oklch(from var(--neutral) 0.553 0.031 h);
+    --gray-600: oklch(from var(--neutral) 0.466 0.0267 calc(h + 11.4));
+    --gray-700: oklch(from var(--neutral) 0.392 0.0226 calc(h + 11.6));
+    --gray-800: oklch(from var(--neutral) 0.317 0.0214 calc(h + 21.1));
+    --gray-900: oklch(from var(--neutral) 0.226 0.0194 calc(h + 20));
+    --gray-950: oklch(from var(--neutral) 0.181 0.0185 calc(h + 19.2));
   }
 
   :root,
   [data-polarity='light'] {
     /* Cool near-black on the white canvas. */
-    --shadow-rgb: 15 22 25;
+    --shadow-rgb: 16 17 26;
   }
 }

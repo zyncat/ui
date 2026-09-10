@@ -24,6 +24,9 @@
     --border-default: oklch(from var(--neutral) 0.315 0.009 h);
     --border-strong: oklch(from var(--neutral) 0.4 0.011 h);
 
+    --bg-hover: color-mix(in oklab, var(--text-secondary) 6%, transparent);
+    --bg-press: color-mix(in oklab, var(--text-secondary) 10%, transparent);
+
     --shadow-rgb: 0 0 0;
     --shadow-strength: 3.5;
     --sheen-strength: 0.2;
