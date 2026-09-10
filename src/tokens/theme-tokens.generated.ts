@@ -551,11 +551,11 @@ export interface TokenProperties {
   '--space-10'?: string | number;
   /** `--measure-prose`. Default: `38rem`. */
   '--measure-prose'?: string | number;
-  /** `--control-height-sm`. Default: `1.75rem`. */
+  /** `--control-height-sm`. Default: `1.85rem`. */
   '--control-height-sm'?: string | number;
-  /** `--control-height`. Default: `2rem`. */
+  /** `--control-height`. Default: `2.25rem`. */
   '--control-height'?: string | number;
-  /** `--control-height-lg`. Default: `2.3rem`. */
+  /** `--control-height-lg`. Default: `2.5rem`. */
   '--control-height-lg'?: string | number;
   /** `--control-box`. Default: `1.125rem`. */
   '--control-box'?: string | number;

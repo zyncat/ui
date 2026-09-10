@@ -16,9 +16,9 @@
 
     --measure-prose: 38rem;
 
-    --control-height-sm: 1.75rem;
-    --control-height: 2rem;
-    --control-height-lg: 2.3rem;
+    --control-height-sm: 1.85rem;
+    --control-height: 2.25rem;
+    --control-height-lg: 2.5rem;
     --control-box: 1.125rem;
     --control-switch: 1.25rem; /* the switch track - the one control size off the scale */
 
