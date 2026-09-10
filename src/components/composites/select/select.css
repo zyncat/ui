@@ -46,7 +46,6 @@
   .zc-select[data-open='true'] .zc-select__trigger {
     border-color: var(--accent);
     background: var(--bg-surface);
-    outline: var(--ring-accent);
   }
 
   .zc-select[data-size='sm'] .zc-select__trigger {
@@ -64,10 +63,12 @@
   .zc-select[data-invalid='true'] .zc-select__trigger {
     border-color: var(--danger);
   }
-  .zc-select[data-invalid='true'] .zc-select__trigger:focus-visible,
-  .zc-select[data-invalid='true'][data-open='true'] .zc-select__trigger {
+  .zc-select[data-invalid='true'] .zc-select__trigger:focus-visible {
     border-color: var(--danger);
     outline: var(--ring-danger);
+  }
+  .zc-select[data-invalid='true'][data-open='true'] .zc-select__trigger {
+    border-color: var(--danger);
   }
 
   .zc-select[data-disabled='true'] .zc-select__trigger {

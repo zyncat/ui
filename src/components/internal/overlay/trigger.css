@@ -8,6 +8,5 @@
   [data-activate='pointerdown'][aria-haspopup][aria-expanded='true']:not(:disabled):not(.zc-is-loading) {
     transform: none;
     border-color: var(--accent);
-    outline: var(--ring-accent);
   }
 }

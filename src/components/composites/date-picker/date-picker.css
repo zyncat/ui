@@ -27,7 +27,6 @@
   .zc-dtf__trigger[aria-expanded='true']:not(:disabled) {
     border-color: var(--accent);
     background: var(--bg-surface);
-    outline: var(--ring-accent);
   }
 
   .zc-dtp,
