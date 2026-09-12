@@ -104,6 +104,10 @@ export function Presence({ children, initial = true, mode = 'sync', onExitComple
   const leaving = shown.some((entry) => entry.exiting);
 
   useEffect(() => {
+    bornAtMount.current.clear();
+  }, []);
+
+  useEffect(() => {
     if (wasExiting.current && !leaving) complete.current?.();
     wasExiting.current = leaving;
   }, [leaving]);

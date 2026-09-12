@@ -3,6 +3,7 @@
 import { createElement, useCallback, useRef, type ReactNode, type Ref } from 'react';
 
 import { useFlip, type FlipTuning } from './flip';
+import { usePresence } from './presence-context';
 import { useMotion, type MotionSpecs } from './use-motion';
 
 export interface MotionProps extends MotionSpecs {
@@ -32,6 +33,7 @@ export function Motion({
   children,
   ...rest
 }: MotionProps) {
+  const { isPresent } = usePresence();
   const flipRef = useFlip<HTMLElement>(layoutId ?? null, layoutTransition, !!layoutId || !!layout);
   const host = useRef<HTMLElement | null>(null);
   const forwarded = useRef(ref);
@@ -50,5 +52,5 @@ export function Motion({
     [flipRef],
   );
 
-  return createElement(as, { ...rest, ref: attach }, children);
+  return createElement(as, { ...rest, 'data-exiting': isPresent ? undefined : 'true', ref: attach }, children);
 }

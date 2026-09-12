@@ -16,6 +16,9 @@ export function run(spec: MotionSpec | undefined, el: HTMLElement): Playback[] {
   return [Array.isArray(spec) ? animate(el, ...spec) : animate(el, spec)];
 }
 
+const sameDeps = (a: unknown[], b: unknown[]): boolean =>
+  a.length === b.length && a.every((v, i) => Object.is(v, b[i]));
+
 const allSettled = (plays: Playback[]): Promise<void> =>
   plays.length ? Promise.all(plays.map((play) => play.finished)).then((): void => {}) : Promise.resolve();
 
@@ -34,7 +37,7 @@ export interface MotionSpecs {
 export function useMotion(ref: RefObject<HTMLElement | null>, { animate, exit, initial, deps }: MotionSpecs): void {
   const presence = usePresence();
   const playing = useRef<Playback[]>([]);
-  const mounted = useRef(false);
+  const ran = useRef<unknown[] | null>(null);
   const exiting = useRef(false);
   const spec = useRef({ animate, exit, initial });
   spec.current = { animate, exit, initial };
@@ -57,9 +60,11 @@ export function useMotion(ref: RefObject<HTMLElement | null>, { animate, exit, i
 
   useLayoutEffect(() => {
     const el = ref.current;
-    const atMount = !mounted.current;
-    mounted.current = true;
     if (!el) return;
+    const current = deps ?? [];
+    const previous = ran.current;
+    ran.current = current;
+    const atMount = !previous || sameDeps(previous, current);
     if (atMount && (spec.current.initial ?? presence.initial) === false) return;
     stop();
     playing.current = run(spec.current.animate, el);
