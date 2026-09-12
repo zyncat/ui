@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 
 import { useGlide } from '../../../../motion/glide';
 import { edgeEnabled, matchPrefix, stepEnabled } from '../../../internal/collection/collection';
 import { useTypeahead } from '../../../internal/hooks/use-typeahead';
-import { matches, normalize, optionText, type SelectGroup, type SelectOption } from './types';
+import { matches, normalize, optionText, type ListSection, type SelectGroup, type SelectOption } from './types';
 
 export interface UseListboxArgs {
   options: SelectOption[] | SelectGroup[];
@@ -33,23 +33,44 @@ export function useListbox({
   closeOnCommit,
 }: UseListboxArgs) {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState('');
+  const [query, setQueryState] = useState('');
   const [activeIdx, setActiveIdx] = useState(-1);
   const typeahead = useTypeahead();
 
   const triggerRef = useRef<HTMLButtonElement>(null),
     listRef = useRef<HTMLDivElement>(null),
+    contentRef = useRef<HTMLDivElement>(null),
     searchRef = useRef<HTMLInputElement>(null);
   const autoId = useId();
   const baseId = id || idPrefix + autoId;
   const menuId = baseId + '-menu';
   const listId = baseId + '-list';
-  const glide = useGlide(listRef);
+  const glide = useGlide(contentRef);
 
   const { groups, flat } = useMemo(() => normalize(options), [options]);
-  const navItems = useMemo(() => flat.filter((o) => matches(o, query)), [flat, query]);
+  const { sections, navItems } = useMemo(() => {
+    const sections: ListSection[] = [];
+    const navItems: SelectOption[] = [];
+    groups.forEach((group, gi) => {
+      const rows = [];
+      for (const option of group.items) {
+        if (!matches(option, query)) continue;
+        rows.push({ option, index: navItems.length });
+        navItems.push(option);
+      }
+      sections.push({ key: 'group:' + gi, label: group.label || undefined, rows });
+    });
+    return { sections, navItems };
+  }, [groups, query]);
+
+  const smoothScroll = useRef(false);
+  const setQuery = (next: string) => {
+    smoothScroll.current = false;
+    setQueryState(next);
+  };
 
   const show = () => {
+    smoothScroll.current = false;
     if (!disabled && !loading) setOpen(true);
   };
   const requestClose = () => setOpen(false);
@@ -70,7 +91,7 @@ export function useListbox({
     setActiveIdx(-1);
   }, [open]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!open) return;
     if (query) setActiveIdx(edgeEnabled(navItems, false));
     else setActiveIdx(navItems.findIndex((o) => isSelected(o.value) && !o.disabled));
@@ -82,35 +103,56 @@ export function useListbox({
     if (ref.current) ref.current.focus();
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    const list = listRef.current;
-    if (!open || activeIdx < 0 || !list) return;
-    const el = list.querySelector('[data-idx="' + activeIdx + '"]') as HTMLElement | null;
-    if (!el) return;
-    if (el.offsetTop < list.scrollTop) list.scrollTop = el.offsetTop;
-    else if (el.offsetTop + el.offsetHeight > list.scrollTop + list.clientHeight)
-      list.scrollTop = el.offsetTop + el.offsetHeight - list.clientHeight;
-  }, [activeIdx, open]); // eslint-disable-line react-hooks/exhaustive-deps
+  const rowAt = useCallback(
+    (i: number) =>
+      open && i >= 0 && listRef.current
+        ? listRef.current.querySelector<HTMLElement>('[data-idx="' + i + '"]:not([data-exiting])')
+        : null,
+    [open],
+  );
+
+  const follow = useCallback(
+    (behavior: ScrollBehavior) => {
+      const list = listRef.current;
+      const content = contentRef.current;
+      const row = rowAt(activeIdx);
+      if (!list || !content || !row) return glide.leave();
+      const inset = getComputedStyle(list);
+      const rowTop = content.offsetTop + row.offsetTop;
+      const above = rowTop - (parseFloat(inset.scrollPaddingTop) || 0);
+      const below = rowTop + row.offsetHeight + (parseFloat(inset.scrollPaddingBottom) || 0) - list.clientHeight;
+      if (list.scrollTop > above) list.scrollTo({ top: above, behavior });
+      else if (list.scrollTop < below) list.scrollTo({ top: below, behavior });
+      glide.enter(row);
+    },
+    [rowAt, activeIdx, glide],
+  );
 
   useLayoutEffect(() => {
-    const list = listRef.current;
-    const el = open && activeIdx >= 0 && list && list.querySelector<HTMLElement>('[data-idx="' + activeIdx + '"]');
-    if (el) glide.enter(el);
-    else glide.leave();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, activeIdx, query]);
+    follow(smoothScroll.current ? 'auto' : 'instant');
+  }, [follow, query]);
 
+  useEffect(() => {
+    const content = contentRef.current;
+    if (!content) return;
+    const reflows = new ResizeObserver(() => follow('instant'));
+    reflows.observe(content);
+    return () => reflows.disconnect();
+  }, [follow]);
+
+  function navigate(i: number) {
+    if (i < 0) return;
+    smoothScroll.current = true;
+    setActiveIdx(i);
+  }
   function moveActive(dir: number) {
-    const i = stepEnabled(navItems, activeIdx, dir);
-    if (i >= 0) setActiveIdx(i);
+    navigate(stepEnabled(navItems, activeIdx, dir));
   }
   function edgeActive(toEnd: boolean) {
-    const i = edgeEnabled(navItems, toEnd);
-    if (i >= 0) setActiveIdx(i);
+    navigate(edgeEnabled(navItems, toEnd));
   }
   function typeAhead(ch: string) {
-    const i = matchPrefix(navItems, optionText, typeahead.push(ch));
-    if (i >= 0) setActiveIdx(i);
+    navigate(matchPrefix(navItems, optionText, typeahead.push(ch)));
   }
 
   function onMenuKeyDown(e: KeyboardEvent) {
@@ -164,6 +206,7 @@ export function useListbox({
     setQuery,
     triggerRef,
     listRef,
+    contentRef,
     searchRef,
     baseId,
     menuId,
@@ -172,6 +215,7 @@ export function useListbox({
     adId,
     groups,
     flat,
+    sections,
     navItems,
     glide,
     isSelected,

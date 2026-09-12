@@ -7,7 +7,7 @@ import type { HTMLAttributes, ReactNode } from 'react';
 import type { DataAttributes } from '../../../dom-props';
 import type { DisableableAnimation } from '../../../motion/timing';
 import { useControllable } from '../../internal/hooks/use-controllable';
-import type { MenuWeight } from '../../internal/menu/highlight';
+import type { MenuSize, MenuWeight } from '../../internal/menu/highlight';
 import type { ActivateOn } from '../../internal/utils/activation';
 import { cx } from '../../internal/utils/cx';
 import {
@@ -32,8 +32,11 @@ export interface SelectProps {
   onChange?: (value: string, option: SelectOption) => void;
   /** Trigger text when nothing is selected. @default 'Select an option' */
   placeholder?: string;
-  /** Control height, and the vertical padding of the rows in the menu. @default 'md' */
+  /** Trigger height, type and padding. The menu follows it unless `menuSize` overrides. @default 'md' */
   size?: 'sm' | 'md' | 'lg';
+  /** Menu density on its own - row type, row padding and the filter field. A row carrying a
+   *  description sits one step taller than a plain one at every step. @default the `size` value */
+  menuSize?: MenuSize;
   /** Weight of every option label in the menu. @default 'medium' */
   weight?: MenuWeight;
   /** Disabled - trigger is inert and the menu cannot open. @default false */
@@ -79,6 +82,7 @@ export function Select({
   onChange,
   placeholder = 'Select an option',
   size = 'md',
+  menuSize = size,
   disabled = false,
   invalid = false,
   loading = false,
@@ -142,7 +146,7 @@ export function Select({
         ariaLabel={ariaLabel}
         highlight={highlight}
         rail={rail}
-        size={size}
+        size={menuSize}
         weight={weight}
         activateOn={activateOn}
         animation={animation}

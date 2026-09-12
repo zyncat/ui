@@ -2,16 +2,17 @@
 
 import '../../../internal/menu/menu-surface.css';
 
-import { Fragment, useMemo, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { GlidePill } from '../../../../motion/glide';
+import { Presence } from '../../../../motion/presence';
 import type { DisableableAnimation } from '../../../../motion/timing';
 import { Icon } from '../../../internal/icon/Icon';
 import type { MenuSurfaceProps } from '../../../internal/menu/highlight';
-import { MenuRow } from '../../../internal/menu/menu-row';
+import { MenuGroupLabel, MenuRow } from '../../../internal/menu/menu-row';
 import { activationProps, type ActivateOn } from '../../../internal/utils/activation';
-import { Collapse } from '../../../primitives/collapse/Collapse';
 import { SelectMenu } from './menu';
+import type { ListRow } from './types';
 import type { ListboxState } from './use-listbox';
 
 export interface ListboxPanelProps extends MenuSurfaceProps {
@@ -60,7 +61,33 @@ export function ListboxPanel({
   animation,
   check = defaultCheck,
 }: ListboxPanelProps) {
-  const navIndex = useMemo(() => new Map(lb.navItems.map((o, i) => [o.value, i] as const)), [lb.navItems]);
+  const grouped = lb.sections.some((s) => s.label);
+  const option = (row: ListRow) => {
+    const opt = row.option;
+    const isSel = lb.isSelected(opt.value);
+    return (
+      <MenuRow
+        key={opt.value}
+        data-idx={row.index}
+        id={lb.optId(opt.value)}
+        className="zc-select__option"
+        role="option"
+        aria-selected={isSel}
+        aria-disabled={opt.disabled || undefined}
+        data-selected={isSel ? 'true' : undefined}
+        data-active={row.index === lb.activeIdx ? 'true' : undefined}
+        data-disabled={opt.disabled ? 'true' : undefined}
+        onMouseEnter={() => !opt.disabled && lb.setActiveIdx(row.index)}
+        onMouseDown={(e) => e.preventDefault()}
+        {...activationProps<HTMLDivElement>(() => lb.commit(opt), { on: activateOn, holdFocus: true })}
+        icon={opt.icon}
+        label={opt.label}
+        description={opt.description}
+        trailing={check(isSel) ? <span className="zc-select__option-check">{check(isSel)}</span> : null}
+      />
+    );
+  };
+
   return (
     <SelectMenu
       open={lb.open}
@@ -101,59 +128,28 @@ export function ListboxPanel({
         tabIndex={-1}
         aria-label={ariaLabel}
         aria-activedescendant={searchable ? undefined : lb.adId}
+        data-grouped={grouped ? 'true' : undefined}
         onKeyDown={searchable ? undefined : lb.onMenuKeyDown}
       >
-        <GlidePill className="zc-menu-glide zc-select__glide" glide={lb.glide} />
         {loading ? (
           <LoadingRows />
         ) : (
-          <Fragment>
-            {lb.groups.map((g, gi) => (
-              <div className="zc-select__group" role="group" aria-label={g.label || undefined} key={gi}>
-                {g.label && g.items.some((o) => navIndex.has(o.value)) && (
-                  <div className="zc-menu-group-label zc-select__group-label">{g.label}</div>
-                )}
-                {g.items.map((opt) => {
-                  const i = navIndex.get(opt.value) ?? -1;
-                  const visible = i !== -1;
-                  const isSel = lb.isSelected(opt.value);
-                  const row = (
-                    <MenuRow
-                      key={opt.value}
-                      id={visible ? lb.optId(opt.value) : undefined}
-                      data-idx={visible ? i : undefined}
-                      className="zc-select__option"
-                      role="option"
-                      aria-selected={isSel}
-                      aria-hidden={!visible || undefined}
-                      aria-disabled={opt.disabled || undefined}
-                      data-selected={isSel ? 'true' : undefined}
-                      data-active={visible && i === lb.activeIdx ? 'true' : undefined}
-                      data-disabled={opt.disabled ? 'true' : undefined}
-                      onMouseEnter={() => visible && !opt.disabled && lb.setActiveIdx(i)}
-                      onMouseDown={(e) => e.preventDefault()}
-                      {...activationProps<HTMLDivElement>(() => visible && lb.commit(opt), {
-                        on: activateOn,
-                        holdFocus: true,
-                      })}
-                      icon={opt.icon}
-                      label={opt.label}
-                      description={opt.description}
-                      trailing={check(isSel) ? <span className="zc-select__option-check">{check(isSel)}</span> : null}
-                    />
-                  );
-                  return searchable ? (
-                    <Collapse key={opt.value} open={visible} fade>
-                      {row}
-                    </Collapse>
-                  ) : (
-                    row
-                  );
-                })}
+          <div className="zc-menu-list" ref={lb.contentRef}>
+            <GlidePill className="zc-menu-glide zc-select__glide" glide={lb.glide} />
+            {lb.sections.map((section) => (
+              <div className="zc-select__group" role="group" aria-label={section.label || undefined} key={section.key}>
+                <Presence initial={false}>
+                  {section.label && section.rows.length ? (
+                    <MenuGroupLabel key="label" className="zc-select__group-label">
+                      {section.label}
+                    </MenuGroupLabel>
+                  ) : null}
+                  {section.rows.map(option)}
+                </Presence>
               </div>
             ))}
             {lb.navItems.length === 0 && <EmptyRow query={lb.query} />}
-          </Fragment>
+          </div>
         )}
       </div>
     </SelectMenu>

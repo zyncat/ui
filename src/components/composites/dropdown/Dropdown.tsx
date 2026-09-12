@@ -69,7 +69,9 @@ export interface DropdownProps {
   /** Hue of the highlight that travels between rows: the neutral wash, or the accent wash with accent
    *  ink on the active row. @default 'neutral' */
   highlight?: 'neutral' | 'accent';
-  /** Row density - the vertical padding on every row, submenus included. @default 'md' */
+  /** Menu density - row type and padding on every row, submenus included; a row carrying a
+   *  description sits one step taller than a plain one. The trigger is your own node, so this
+   *  never touches it. @default 'md' */
   size?: MenuSize;
   /** Weight of every row label. @default 'medium' */
   weight?: MenuWeight;

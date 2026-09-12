@@ -159,9 +159,25 @@
     color: var(--text-disabled);
   }
 
+  .zc-select__menu[data-size='sm'] .zc-select__search {
+    padding: var(--space-1) var(--space-2);
+    gap: var(--space-1);
+  }
+  .zc-select__menu[data-size='sm'] .zc-select__search-input {
+    font-size: var(--size-caption);
+    line-height: var(--leading-caption);
+  }
+  .zc-select__menu[data-size='lg'] .zc-select__search {
+    padding: var(--space-3);
+  }
+
   .zc-select__list {
     position: relative;
     scroll-behavior: smooth;
+    scroll-padding-block: var(--space-1);
+  }
+  .zc-select__list[data-grouped='true'] {
+    scroll-padding-top: calc(var(--menu-group-label-height) + var(--space-1));
   }
 
   .zc-select__group-label {

@@ -28,6 +28,7 @@ function layoutBox(target: HTMLElement, container: HTMLElement): Box | null {
 export function useGlide<T extends HTMLElement>(containerRef: RefObject<T | null>) {
   const ref = useRef<HTMLSpanElement | null>(null);
   const visible = useRef(false);
+  const tracked = useRef<HTMLElement | null>(null);
 
   const enter = useCallback(
     (target: HTMLElement | null) => {
@@ -38,7 +39,10 @@ export function useGlide<T extends HTMLElement>(containerRef: RefObject<T | null
       if (!at) return;
       const motion = motionFor(box);
       const was = measure(pill);
+      const arrived = tracked.current !== target;
+      tracked.current = target;
       set(pill, { x: [at.left], y: [at.top], width: [at.width], height: [at.height] });
+      if (!arrived) return;
       animate(pill, { opacity: [1], timing: { duration: motion.dur.fast, ease: motion.ease.standard } });
       const glided = visible.current && !motion.reduced && was.width > 0 && was.height > 0;
       visible.current = true;
@@ -49,6 +53,7 @@ export function useGlide<T extends HTMLElement>(containerRef: RefObject<T | null
 
   const leave = useCallback(() => {
     visible.current = false;
+    tracked.current = null;
     if (!ref.current) return;
     const motion = motionFor(containerRef.current);
     animate(ref.current, { opacity: [0], timing: { duration: motion.dur.fast, ease: motion.ease.exit } });

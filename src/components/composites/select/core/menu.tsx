@@ -9,6 +9,7 @@ import type { DisableableAnimation } from '../../../../motion/timing';
 import { useMotion, type MotionSpecs } from '../../../../motion/use-motion';
 import { motionFor, type MotionTransition } from '../../../../tokens/motion-tokens';
 import { menuSurfaceAttrs, type MenuSurfaceProps } from '../../../internal/menu/highlight';
+import { useReturnFocus } from '../../../internal/overlay/focus';
 import { OverlayPortal, useOutsidePress, useOverlayEntry } from '../../../internal/overlay/layer';
 import { useAnchorPosition } from '../../../internal/overlay/position';
 
@@ -63,6 +64,7 @@ function MenuSurface({
   const menuRef = useRef<HTMLDivElement>(null);
   const entry = useOverlayEntry({ nodeRef: menuRef, dismissible: true, requestClose });
   useMotion(menuRef, { animate, exit });
+  useReturnFocus(menuRef);
   useLayoutEffect(() => {
     const apply = () => {
       const t = triggerRef.current;

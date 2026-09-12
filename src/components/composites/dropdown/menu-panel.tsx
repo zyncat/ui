@@ -5,6 +5,7 @@ import '../../internal/menu/menu-surface.css';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
 
 import { GlidePill, useGlide } from '../../../motion/glide';
+import { Presence } from '../../../motion/presence';
 import { useMotion, type MotionSpecs } from '../../../motion/use-motion';
 import { edgeEnabled, matchPrefix, stepEnabled } from '../../internal/collection/collection';
 import { useTypeahead } from '../../internal/hooks/use-typeahead';
@@ -254,14 +255,16 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
     return (
       <>
         <GlidePill className="zc-menu-glide" glide={glide} />
-        {groups.length > 1 || groups[0]?.label
-          ? groups.map((group, gi) => (
-              <div className="zc-dropdown__group" role="group" aria-label={group.label || undefined} key={gi}>
-                {group.label && <div className="zc-menu-group-label">{group.label}</div>}
-                {group.items.map(renderRow)}
-              </div>
-            ))
-          : flat.map(renderRow)}
+        <Presence initial={false}>
+          {groups.length > 1 || groups[0]?.label
+            ? groups.map((group, gi) => (
+                <div className="zc-dropdown__group" role="group" aria-label={group.label || undefined} key={gi}>
+                  {group.label && <div className="zc-menu-group-label">{group.label}</div>}
+                  {group.items.map(renderRow)}
+                </div>
+              ))
+            : flat.map(renderRow)}
+        </Presence>
       </>
     );
   }

@@ -7,7 +7,7 @@ import type { HTMLAttributes, ReactNode } from 'react';
 import type { DataAttributes } from '../../../dom-props';
 import type { DisableableAnimation } from '../../../motion/timing';
 import { useControllable } from '../../internal/hooks/use-controllable';
-import type { MenuWeight } from '../../internal/menu/highlight';
+import type { MenuSize, MenuWeight } from '../../internal/menu/highlight';
 import type { ActivateOn } from '../../internal/utils/activation';
 import { cx } from '../../internal/utils/cx';
 import { CheckGlyph } from '../../primitives/checkbox/check-glyph';
@@ -26,8 +26,11 @@ export interface MultiSelectProps {
   onChange?: (value: string[], toggled: SelectOption) => void;
   /** Trigger text when nothing is selected. @default 'Select options' */
   placeholder?: string;
-  /** Control height, and the vertical padding of the rows in the menu. @default 'md' */
+  /** Trigger height, type and padding. The menu follows it unless `menuSize` overrides. @default 'md' */
   size?: 'sm' | 'md' | 'lg';
+  /** Menu density on its own - row type, row padding, the filter field and the row checkbox. A row
+   *  carrying a description sits one step taller than a plain one at every step. @default the `size` value */
+  menuSize?: MenuSize;
   /** Weight of every option label in the menu. @default 'medium' */
   weight?: MenuWeight;
   /** Disabled - trigger is inert and the menu cannot open. @default false */
@@ -60,9 +63,9 @@ export interface MultiSelectProps {
   animation?: DisableableAnimation;
 }
 
-function CheckboxTick({ checked }: { checked: boolean }) {
+function CheckboxTick({ checked, size }: { checked: boolean; size: MenuSize }) {
   return (
-    <span className="zc-cbx" aria-hidden="true">
+    <span className={cx('zc-cbx', size === 'sm' && 'zc-cbx--sm')} aria-hidden="true">
       <CheckGlyph checked={checked} readOnly tabIndex={-1} />
     </span>
   );
@@ -75,6 +78,7 @@ export function MultiSelect({
   onChange,
   placeholder = 'Select options',
   size = 'md',
+  menuSize = size,
   disabled = false,
   invalid = false,
   loading = false,
@@ -145,11 +149,11 @@ export function MultiSelect({
         multiple
         highlight={highlight}
         rail={rail}
-        size={size}
+        size={menuSize}
         weight={weight}
         activateOn={activateOn}
         animation={animation}
-        check={(sel) => <CheckboxTick checked={sel} />}
+        check={(sel) => <CheckboxTick checked={sel} size={menuSize} />}
       />
     </div>
   );

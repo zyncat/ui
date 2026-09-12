@@ -58,11 +58,14 @@ export function SelectTrigger({
           show();
         }
       }}
-      {...activationProps<HTMLButtonElement>(() => (open ? requestClose() : show()), {
-        on: activateOn,
-        onPointerDown,
-        onClick,
-      })}
+      {...activationProps<HTMLButtonElement>(
+        () => {
+          if (triggerRef.current) triggerRef.current.focus({ preventScroll: true });
+          if (open) requestClose();
+          else show();
+        },
+        { on: activateOn, holdFocus: true, onPointerDown, onClick },
+      )}
       {...rest}
     >
       {leading && (

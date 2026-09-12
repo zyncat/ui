@@ -25,6 +25,16 @@ export interface SelectGroup {
 
 export type NormalizedGroup = CollectionGroup<SelectOption>;
 
+export interface ListRow {
+  option: SelectOption;
+  index: number;
+}
+export interface ListSection {
+  key: string;
+  label?: string;
+  rows: ListRow[];
+}
+
 export const normalize = (
   options: SelectOption[] | SelectGroup[],
 ): { groups: NormalizedGroup[]; flat: SelectOption[] } =>

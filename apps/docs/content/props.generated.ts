@@ -1261,7 +1261,14 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       name: 'size',
       type: "'sm' | 'md' | 'lg'",
       default: "'md'",
-      description: 'Control height, and the vertical padding of the rows in the menu.',
+      description: 'Trigger height, type and padding. The menu follows it unless `menuSize` overrides.',
+    },
+    {
+      name: 'menuSize',
+      type: 'MenuSize',
+      default: 'the `size` value',
+      description:
+        'Menu density on its own - row type, row padding and the filter field. A row carrying a description sits one step taller than a plain one at every step.',
     },
     {
       name: 'weight',
@@ -1377,7 +1384,14 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       name: 'size',
       type: "'sm' | 'md' | 'lg'",
       default: "'md'",
-      description: 'Control height, and the vertical padding of the rows in the menu.',
+      description: 'Trigger height, type and padding. The menu follows it unless `menuSize` overrides.',
+    },
+    {
+      name: 'menuSize',
+      type: 'MenuSize',
+      default: 'the `size` value',
+      description:
+        'Menu density on its own - row type, row padding, the filter field and the row checkbox. A row carrying a description sits one step taller than a plain one at every step.',
     },
     {
       name: 'weight',
@@ -2259,7 +2273,8 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       name: 'size',
       type: 'MenuSize',
       default: "'md'",
-      description: 'Row density - the vertical padding on every row, submenus included.',
+      description:
+        'Menu density - row type and padding on every row, submenus included; a row carrying a description sits one step taller than a plain one. The trigger is your own node, so this never touches it.',
     },
     { name: 'weight', type: 'MenuWeight', default: "'medium'", description: 'Weight of every row label.' },
     {
