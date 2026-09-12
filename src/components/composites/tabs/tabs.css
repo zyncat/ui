@@ -152,7 +152,7 @@
     max-width: 100%;
     padding: var(--space-1);
     border-radius: calc(var(--tabs-pill-radius) + var(--space-1));
-    background: var(--bg-inset);
+    background: var(--bg-muted);
   }
   .zc-tabs--pill::after {
     content: none;

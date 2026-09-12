@@ -7,6 +7,7 @@
     --radio-group-dot: 18px;
     --radio-group-dot-gap: 4px;
     --radio-group-dot-inner: calc(var(--radio-group-dot) - 2 * (var(--border-hairline) + var(--radio-group-dot-gap)));
+    --radio-group-hover-wash: color-mix(in oklab, var(--neutral-wash) 60%, transparent);
 
     display: grid;
     border: 0;
@@ -89,7 +90,7 @@
     left: 0;
     z-index: 0;
     border-radius: var(--radius-md);
-    background: var(--neutral-wash);
+    background: var(--radio-group-hover-wash);
     pointer-events: none;
   }
   .zc-rg-opt__control,
@@ -211,6 +212,9 @@
       transform var(--duration-fast) var(--ease-standard);
     outline: var(--ring-rest);
   }
+  .zc-rg--cards .zc-rg-opt.zc-is-selected {
+    z-index: 1;
+  }
   .zc-rg--cards .zc-rg-opt:active:not(.zc-is-disabled) {
     transform: translateY(var(--space-px));
     box-shadow: var(--shadow-xs);
@@ -235,15 +239,15 @@
 
     inset: calc(-1 * var(--border-hairline));
     z-index: 1;
-    border: var(--border-hairline) solid var(--accent);
+    border: var(--border-hairline) solid var(--accent-border);
     border-radius: var(--radius-lg);
-    background: var(--accent-subtle);
+    background: var(--accent-wash);
     pointer-events: none;
   }
 
   .zc-rg--cards .zc-rg-opt:hover:not(.zc-is-disabled):not(.zc-is-selected) {
     border-color: var(--border-strong);
-    background: var(--neutral-wash);
+    background: var(--radio-group-hover-wash);
   }
   .zc-rg--cards .zc-rg-opt > .zc-rg-opt__icon,
   .zc-rg--cards .zc-rg-opt > .zc-rg-opt__control,
