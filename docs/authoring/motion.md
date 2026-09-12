@@ -90,6 +90,13 @@
 - Focus directly in an effect, never deferred. By effect time the element is in the document with layout, and an in-flight entrance does not make it unfocusable.
 - A timeout that makes focus "work" means the bug is elsewhere.
 
+## Entrance work lands before the first frame
+
+- An animation created in a layout effect does not start counting there. Its start time stays unresolved until the timeline produces a time at the next rendering opportunity, so main-thread work _before_ the first painted frame costs latency; the same work _after_ it costs dropped frames.
+- Everything that decides the first painted frame of an entrance resolves in a layout effect in that same commit: a seeded active index, a scroll position, measured geometry, a glide placement. A passive effect that sets state moves its render to the far side of the first paint by definition, and that render lands inside the running entrance.
+- A state update from a layout effect is flushed before paint, so a second pass there is free. A second pass after paint is not.
+- This trades jank for latency; it does not remove the work. Shrink the subtree that blocks. Never add delay to buy a clean entrance - a deliberate delay is a timer in disguise.
+
 ## Named presets and space tokens
 
 - `src/motion/presets.ts`: `popIn(scale, timing)`, `popOut(scale, timing)`, `slideIn(x, timing)`. Presets take numbers fed from tokens, never literals.
