@@ -77,6 +77,14 @@ export function OtpField({
       caretEnd(el);
     }
   };
+  const fill = (i: number, digits: string) => {
+    if (!digits) return;
+    const start = Math.max(0, Math.min(i, length - digits.length));
+    const a = chars.slice();
+    for (let k = 0; k < digits.length && start + k < length; k++) a[start + k] = digits[k];
+    emit(a.join(''));
+    go(Math.min(start + digits.length, length - 1));
+  };
 
   const cls = cx('zc-otp', size === 'sm' && 'zc-otp--sm', error && 'zc-is-error', className);
 
@@ -102,9 +110,11 @@ export function OtpField({
           go(i);
         }}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          const ch = e.target.value.replace(/[^\d]/g, '').slice(-1);
-          setAt(i, ch);
-          if (ch && i < length - 1) go(i + 1);
+          const digits = e.target.value.replace(/[^\d]/g, '');
+          if (!digits) return setAt(i, '');
+          const prev = chars[i].trim();
+          const added = prev && digits.startsWith(prev) ? digits.slice(prev.length) : digits;
+          fill(i, added || prev);
         }}
         onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
           if (e.key === 'Backspace' && !chars[i].trim() && i > 0) {
@@ -121,9 +131,7 @@ export function OtpField({
         }}
         onPaste={(e: ClipboardEvent<HTMLInputElement>) => {
           e.preventDefault();
-          const d = (e.clipboardData.getData('text') || '').replace(/[^\d]/g, '');
-          emit(chars.slice(0, i).join('') + d);
-          refs.current[Math.min(i + d.length, length - 1)]?.focus();
+          fill(i, (e.clipboardData.getData('text') || '').replace(/[^\d]/g, ''));
         }}
       />,
     );
