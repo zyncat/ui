@@ -77,8 +77,13 @@ for (const m of documented) {
 
 const TYPES_BY_SUBPATH = typesFileBySubpath();
 
+const SHAPE_RE = /(?:interface|type)\s+(\w+)(?:<[^>]*>)?\s*(?:extends\s+([^{]+))?=?\s*\{([\s\S]*?)\n\}/g;
+const KEY_RE = /^\s+([a-zA-Z][a-zA-Z0-9]*)\??[:(]/gm;
+const PROPS_SHAPE_RE = /(?:Props|Config)$/;
+
 function declaredProps(subpath) {
   const props = new Set();
+  const shapes = new Map();
   const seen = new Set();
   const queue = [TYPES_BY_SUBPATH.get(subpath)].filter(Boolean);
   while (queue.length) {
@@ -94,14 +99,22 @@ function declaredProps(subpath) {
       const base = join(dirname(file), spec.replace(/\.js$/, ''));
       queue.push(`${base}.d.ts`, join(base, 'index.d.ts'));
     }
-    for (const block of src.matchAll(
-      /(?:interface|type)\s+\w*(?:Props|Config)(?:<[^>]*>)?\s*(?:extends[^{]+)?=?\s*\{([\s\S]*?)\n\}/g,
-    ))
-      for (const key of block[1].matchAll(/^\s+([a-zA-Z][a-zA-Z0-9]*)\??[:(]/gm)) props.add(key[1]);
+    for (const shape of src.matchAll(SHAPE_RE))
+      shapes.set(shape[1], { body: shape[3], bases: [...(shape[2] ?? '').matchAll(/\w+/g)].map((m) => m[0]) });
     for (const fn of src.matchAll(/declare function \w+\(\{[^}]*\}:\s*\{([\s\S]*?)\n\}\)/g))
       for (const key of fn[1].matchAll(/([a-zA-Z][a-zA-Z0-9]*)\??:/g)) props.add(key[1]);
     for (const pick of src.matchAll(/Pick<.*$/gm))
       for (const key of pick[0].matchAll(/'([a-zA-Z][a-zA-Z0-9]*)'/g)) props.add(key[1]);
+  }
+  const pending = [...shapes.keys()].filter((name) => PROPS_SHAPE_RE.test(name));
+  const taken = new Set();
+  while (pending.length) {
+    const name = pending.pop();
+    if (taken.has(name) || !shapes.has(name)) continue;
+    taken.add(name);
+    const shape = shapes.get(name);
+    for (const key of shape.body.matchAll(KEY_RE)) props.add(key[1]);
+    pending.push(...shape.bases);
   }
   return props;
 }
