@@ -72,7 +72,7 @@ import { defineTheme, ZyncatTheme } from '@zyncat/ui/theme';
 const light = defineTheme({
   color: { accent: 'oklch(0.58 0.19 292)' },
   shape: { radius: '0.75rem' },
-  components: { odometer: { accent: 'var(--warning)' } },
+  components: { odometer: { ink: 'var(--warning)' } },
 });
 const dark = defineTheme({ color: { accent: 'oklch(0.72 0.14 292)' }, custom: { '--shadow-strength': 2.5 } });
 
@@ -102,14 +102,14 @@ your own scrollers `scroll-padding: var(--ring-width)` and anything flush with a
 ## Level 2 - retune one component
 
 Expressive and compound components publish scoped `--<component>-<name>` properties as their public
-contract, each with a doc line: `--odometer-size/-accent/-gap`, `--typing-lines-caret-ink/-blink`,
+contract, each with a doc line: `--odometer-size/-ink/-gap`, `--typing-lines-caret-ink/-blink`,
 `--lens-surface/-fringe-warm`, `--morphing-text-size/-smear`, `--weight-field-peak-weight/-hover-padding`,
 `--flow-field-ramp-0..11`, `--confetti-paper-1..5`, `--support-rail-width/-accent/-row-pad-block`. Set
 them on any ancestor or inline via `style`. The canvas simulations sample theirs at their next measure -
 FlowField on resize and on a theme attribute change, Confetti on the next `fire()`.
 
 Both reaches are typed. In a theme they are `components`, grouped like the theme:
-`components.odometer.accent` is `--odometer-accent`, `components.typingLines.caret.ink` is
+`components.odometer.ink` is `--odometer-ink`, `components.typingLines.caret.ink` is
 `--typing-lines-caret-ink`, `components.confetti.paper[3]` is `--confetti-paper-3`. On one instance
 they are the component's own `style` prop, which accepts the design tokens plus that component's knobs
 and nothing from another component - `<Odometer style={{ '--odometer-size': '3rem' }} />`.

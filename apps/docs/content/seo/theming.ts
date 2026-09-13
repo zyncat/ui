@@ -45,7 +45,7 @@ const seo: PageSeo = {
     },
     {
       q: 'How do I restyle just one component?',
-      a: "Expressive and compound components publish scoped --<component>-<name> custom properties as their public contract: <Odometer value={total} style={{ '--odometer-size': '3rem', '--odometer-accent': 'var(--danger)' }} />. Each component's style prop is typed to its own knobs, so another component's property is a compile error. Set the same properties on any ancestor to reach every instance underneath.",
+      a: "Expressive and compound components publish scoped --<component>-<name> custom properties as their public contract: <Odometer value={total} style={{ '--odometer-size': '3rem', '--odometer-ink': 'var(--danger)' }} />. Each component's style prop is typed to its own knobs, so another component's property is a compile error. Set the same properties on any ancestor to reach every instance underneath.",
     },
     {
       q: 'Does it work with Tailwind CSS?',

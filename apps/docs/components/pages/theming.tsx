@@ -212,12 +212,7 @@ const SCOPED_PROPERTY_COLUMNS: TableColumn<ScopedPropertyRow>[] = [
 ];
 
 const SCOPED_PROPERTIES: ScopedPropertyRow[] = [
-  {
-    component: 'Odometer',
-    subpath: 'odometer',
-    count: 6,
-    sample: '--odometer-size, --odometer-accent, --odometer-gap',
-  },
+  { component: 'Odometer', subpath: 'odometer', count: 5, sample: '--odometer-size, --odometer-ink, --odometer-gap' },
   {
     component: 'TypingLines',
     subpath: 'typing-lines',
@@ -303,7 +298,7 @@ export const light = defineTheme({
   shape: { radius: '0.75rem' },
   type: { font: { body: "'Inter', system-ui, sans-serif" } },
   motion: { duration: { base: '180ms' } },
-  components: { odometer: { accent: 'var(--warning)' }, supportRail: { width: '22rem' } },
+  components: { odometer: { ink: 'var(--warning)' }, supportRail: { width: '22rem' } },
 });
 
 // a delta over light - only what differs on dark surfaces
@@ -346,19 +341,19 @@ setPolarity('system'); // follows the OS, live
 </section>`;
 
 const TYPED_STYLE_CODE = `{/* this component's knobs are typed on its style prop */}
-<Odometer value={total} style={{ '--odometer-size': '3rem', '--odometer-accent': 'var(--danger)' }} />
+<Odometer value={total} style={{ '--odometer-size': '3rem', '--odometer-ink': 'var(--danger)' }} />
 
 {/* another component's knob: compile error */}
 <Odometer value={total} style={{ '--lens-ink': 'red' }} />
 
 {/* private state: compile error */}
-<Odometer value={total} style={{ '--_odometer-velocity': '1' }} />`;
+<Odometer value={total} style={{ '--_odometer-cell': '1em' }} />`;
 
 const LEVEL_2_CODE = `{/* one instance */}
-<Odometer value={total} style={{ '--odometer-size': 'var(--size-display-lg)', '--odometer-accent': 'var(--danger)' }} />
+<Odometer value={total} style={{ '--odometer-size': 'var(--size-display-lg)', '--odometer-ink': 'var(--danger)' }} />
 
 {/* every instance in the app */}
-defineTheme({ components: { odometer: { size: 'var(--size-display-lg)', accent: 'var(--danger)' } } });
+defineTheme({ components: { odometer: { size: 'var(--size-display-lg)', ink: 'var(--danger)' } } });
 
 /* every instance under one element */
 .metrics-panel {
@@ -408,7 +403,7 @@ const playgroundCode = (
 const light = defineTheme({
   color: { accent: 'oklch(0.63 0.118 ${hue})' },
   shape: { radius: '${CORNERS[corner]}' },
-  components: { odometer: { accent: 'var(--${ink})' } },
+  components: { odometer: { ink: 'var(--${ink})' } },
 });
 
 // once, at the app root
@@ -427,7 +422,7 @@ export function ThemingPlayground() {
   const light = defineTheme({
     color: { accent: `oklch(0.63 0.118 ${hue})` },
     shape: { radius: CORNERS[corner] },
-    components: { odometer: { accent: `var(--${ink})` } },
+    components: { odometer: { ink: `var(--${ink})` } },
   });
 
   return (
@@ -439,7 +434,7 @@ export function ThemingPlayground() {
           <KnobRange label="accent hue" value={hue} onChange={setHue} min={0} max={360} format={(v) => `${v}°`} />
           <KnobSegment label="radius" value={corner} onChange={setCorner} options={['sharp', 'default', 'round']} />
           <KnobSegment label="theme" value={polarity} onChange={setPolarity} options={['light', 'dark']} />
-          <KnobSegment label="odometer.accent" value={ink} onChange={setInk} options={['accent', 'warning']} />
+          <KnobSegment label="odometer.ink" value={ink} onChange={setInk} options={['accent', 'warning']} />
         </>
       }
       stage="fill"
@@ -702,7 +697,7 @@ export function ThemingDoc() {
               value={count}
               style={{
                 '--odometer-size': 'var(--size-display-lg)',
-                '--odometer-accent': 'var(--danger)',
+                '--odometer-ink': 'var(--danger)',
                 '--odometer-gap': '0.12em',
               }}
             />
