@@ -313,6 +313,11 @@
       "types": "./dist/types/components/primitives/spinner/Spinner.d.ts",
       "import": "./dist/spinner.js"
     },
+    "./motion": {
+      "source": "./src/motion/motion.ts",
+      "types": "./dist/types/motion/motion.d.ts",
+      "import": "./dist/motion.js"
+    },
     "./styles.css": "./src/styles.css",
     "./tailwind.css": "./tailwind.css",
     "./next": {

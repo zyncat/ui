@@ -72,6 +72,7 @@
       "@zyncat/ui/weight-field": ["../../src/components/expressive/weight-field/WeightField.tsx"],
       "@zyncat/ui/youtube": ["../../src/components/expressive/youtube/YouTube.tsx"],
       "@zyncat/ui/toast-store": ["../../src/components/composites/toast/toast-store.ts"],
+      "@zyncat/ui/motion": ["../../src/motion/motion.ts"],
       "@zyncat/ui/motion-tokens": ["../../src/tokens/motion-tokens.ts"],
       "@zyncat/ui/motion-devtools": ["../../src/components/dev/MotionDevtools.tsx"],
       "@zyncat/ui/glide": ["../../src/motion/glide.tsx"],

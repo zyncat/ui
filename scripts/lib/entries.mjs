@@ -21,6 +21,7 @@ export const NAME_OVERRIDES = {
 
 export const EXPLICIT_ENTRIES = {
   'toast-store': 'src/components/composites/toast/toast-store.ts',
+  motion: 'src/motion/motion.ts',
   'motion-tokens': 'src/tokens/motion-tokens.ts',
   'motion-devtools': 'src/components/dev/MotionDevtools.tsx',
   glide: 'src/motion/glide.tsx',

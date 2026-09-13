@@ -15,6 +15,7 @@ StatusBadge - @zyncat/ui/status-badge - Canonical post status - tone + one-word 
 CountBadge - @zyncat/ui/count-badge - Mono tabular count; `roll` animates digits like an odometer.
 Glide / GlidePill - @zyncat/ui/glide - A persistent background pill that glides smoothly between hovered/active elements.
 Spinner - @zyncat/ui/spinner - Indeterminate loader; three looks, no JavaScript, no layout of its own.
+Motion / Presence - @zyncat/ui/motion - The React layer over the engine: animate an element you render, and hold a leaving one mounted until its exit finishes.
 
 == Forms ==
 Every form field takes label, helper/error/warning/success, size sm|md|lg, disabled.
