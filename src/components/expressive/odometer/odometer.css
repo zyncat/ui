@@ -8,8 +8,6 @@
     --odometer-gap: 0.02em;
     /* Digit ink. */
     --odometer-ink: var(--text-strong);
-    /* The tint digits take while they roll fast. */
-    --odometer-accent: var(--accent);
     /* The thousands separator. */
     --odometer-separator-ink: var(--text-muted);
     /* Digit size. */
@@ -20,7 +18,6 @@
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: var(--odometer-gap);
     font-family: var(--font-body);
     font-size: var(--odometer-size);
     font-weight: var(--odometer-weight);
@@ -39,20 +36,19 @@
   }
 
   .zc-odometer__col {
+    --_odometer-reveal: 1;
+
     display: block;
-    width: var(--_odometer-digit);
+    width: calc(var(--_odometer-digit) * var(--_odometer-reveal));
     height: var(--_odometer-cell);
+    padding-inline: calc(var(--odometer-gap) / 2 * var(--_odometer-reveal));
     overflow: hidden;
+    opacity: var(--_odometer-reveal);
   }
 
   .zc-odometer__strip {
-    --_odometer-velocity: 0;
-    --_odometer-blur: 0;
-
     display: block;
-    will-change: translate, filter;
-    filter: blur(calc(var(--_odometer-blur) * 1px));
-    color: color-mix(in oklab, var(--odometer-accent) calc(var(--_odometer-velocity) * 100%), var(--odometer-ink));
+    will-change: translate;
   }
 
   .zc-odometer__cell {
@@ -62,6 +58,16 @@
   }
 
   .zc-odometer__separator {
+    --_odometer-reveal: 1;
+
+    display: block;
+    font-size: calc(1em * var(--_odometer-reveal));
+    opacity: var(--_odometer-reveal);
     color: var(--odometer-separator-ink);
+  }
+
+  .zc-odometer__col[data-lead],
+  .zc-odometer__separator[data-lead] {
+    --_odometer-reveal: 0;
   }
 }

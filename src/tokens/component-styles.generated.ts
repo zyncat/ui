@@ -109,8 +109,6 @@ export interface OdometerStyle extends CSSProperties {
   '--odometer-gap'?: string | number;
   /** `--odometer-ink` - Digit ink. Default: `var(--text-strong)`. */
   '--odometer-ink'?: string | number;
-  /** `--odometer-accent` - The tint digits take while they roll fast. Default: `var(--accent)`. */
-  '--odometer-accent'?: string | number;
   /** `--odometer-separator-ink` - The thousands separator. Default: `var(--text-muted)`. */
   '--odometer-separator-ink'?: string | number;
   /** `--odometer-size` - Digit size. Default: `var(--size-display)`. */

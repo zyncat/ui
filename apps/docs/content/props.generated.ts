@@ -204,7 +204,8 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       name: 'value',
       type: 'number',
       required: true,
-      description: 'The number to roll to. Every digit column carries its own spring, so digits arrive out of sync.',
+      description:
+        'The number to roll to. Digits roll up when it rises and down when it falls, and the odometer counts from zero the first time it is scrolled into view.',
     },
     {
       name: 'format',
@@ -2441,11 +2442,6 @@ export const GENERATED_TYPES: Record<string, NestedType[]> = {
           name: '--odometer-ink',
           type: 'string | number',
           description: '`--odometer-ink` - Digit ink. Default: `var(--text-strong)`.',
-        },
-        {
-          name: '--odometer-accent',
-          type: 'string | number',
-          description: '`--odometer-accent` - The tint digits take while they roll fast. Default: `var(--accent)`.',
         },
         {
           name: '--odometer-separator-ink',

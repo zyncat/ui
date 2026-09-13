@@ -288,8 +288,6 @@ export interface OdometerTokens {
   gap?: string | number;
   /** `--odometer-ink` - Digit ink. Default: `var(--text-strong)`. */
   ink?: string | number;
-  /** `--odometer-accent` - The tint digits take while they roll fast. Default: `var(--accent)`. */
-  accent?: string | number;
   /** `--odometer-separator-ink` - The thousands separator. Default: `var(--text-muted)`. */
   separatorInk?: string | number;
   /** `--odometer-size` - Digit size. Default: `var(--size-display)`. */

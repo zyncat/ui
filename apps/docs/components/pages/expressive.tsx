@@ -41,12 +41,13 @@ export function OdometerPlayground() {
     `<Odometer value={value} speed={${speed}}${ODOMETER_FORMATS[format].code} />`,
     '',
     `setValue(value + 4444);`,
+    `setValue(value - 4444);`,
   ].join('\n');
 
   return (
     <Playground
       code={code}
-      note="Fire again mid-roll - every digit column keeps its spring state."
+      note="A rise rolls the digits up, a fall rolls them down. Fire again mid-roll - every column carries on from where it is."
       rail={
         <>
           <KnobSegment label="format" value={format} onChange={setFormat} options={['plain', 'grouped', 'padded']} />
@@ -56,18 +57,20 @@ export function OdometerPlayground() {
     >
       <div style={{ ...COLUMN, alignItems: 'center', gap: 'var(--space-6)' }}>
         <Odometer value={value} speed={speed} format={ODOMETER_FORMATS[format].fn} style={ODOMETER_LOUD} />
-        <div style={ROW}>
+        <div style={{ ...ROW, justifyContent: 'center' }}>
+          <Button size="sm" variant="secondary" onClick={() => setValue((v) => Math.max(0, v - 4444))}>
+            −4,444
+          </Button>
+          <Button size="sm" variant="secondary" onClick={() => setValue((v) => Math.max(0, v - 9))}>
+            −9
+          </Button>
           <Button size="sm" variant="secondary" onClick={() => setValue((v) => v + 9)}>
             +9
           </Button>
           <Button size="sm" variant="secondary" onClick={() => setValue((v) => v + 4444)}>
             +4,444
           </Button>
-          <Button
-            size="sm"
-            variant="secondary"
-            onClick={() => setValue((v) => v + 1000 + Math.floor(Math.random() * 88000))}
-          >
+          <Button size="sm" variant="secondary" onClick={() => setValue(10000 + Math.floor(Math.random() * 89999))}>
             Jump
           </Button>
         </div>
