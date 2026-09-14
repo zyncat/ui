@@ -58,16 +58,6 @@
       "types": "./dist/types/components/primitives/badge/Badge.d.ts",
       "import": "./dist/badge.js"
     },
-    "./status-badge": {
-      "source": "./src/components/primitives/badge/StatusBadge.tsx",
-      "types": "./dist/types/components/primitives/badge/StatusBadge.d.ts",
-      "import": "./dist/status-badge.js"
-    },
-    "./count-badge": {
-      "source": "./src/components/primitives/badge/CountBadge.tsx",
-      "types": "./dist/types/components/primitives/badge/CountBadge.d.ts",
-      "import": "./dist/count-badge.js"
-    },
     "./avatar": {
       "source": "./src/components/primitives/avatar/Avatar.tsx",
       "types": "./dist/types/components/primitives/avatar/Avatar.d.ts",

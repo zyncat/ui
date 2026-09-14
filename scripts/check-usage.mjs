@@ -68,8 +68,8 @@ for (const m of documented) {
     );
   if (!m.usage.examples.length) fail(`${m.usagePath} has no \`\`\` example - show the common case.`);
   if (m.usage.docs) {
-    const slug = m.usage.docs.match(/^https:\/\/ui\.zyncat\.app\/([a-z0-9-]+)$/)?.[1];
-    if (!slug) fail(`${m.usagePath} Docs must be https://ui.zyncat.app/<slug>, got "${m.usage.docs}".`);
+    const slug = m.usage.docs.match(/^https:\/\/ui\.zyncat\.app\/([a-z0-9-]+)(?:#[a-z0-9-]+)?$/)?.[1];
+    if (!slug) fail(`${m.usagePath} Docs must be https://ui.zyncat.app/<slug>[#section], got "${m.usage.docs}".`);
     else if (registrySlugs && !registrySlugs.has(slug))
       fail(`${m.usagePath} Docs points at /${slug}, which is not a registry slug.`);
   }

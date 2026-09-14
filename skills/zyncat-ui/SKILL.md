@@ -61,9 +61,9 @@ overlays & feedback, expressive, compound, replicas, dev tools. The full index i
 | Transient hint on hover/focus                    | **Tooltip**                                                                                        |
 | Persistent in-flow status                        | **Alert**                                                                                          |
 | Transient notification                           | **toast()** - needs `<Toaster />` mounted once                                                     |
-| Ambient status chip                              | **Badge** / **StatusBadge** (canonical post status)                                                |
+| Ambient status chip                              | **Badge** - one `value`, animated whenever it changes                                              |
 | User-owned removable label                       | **Tag**                                                                                            |
-| Rolling number                                   | **CountBadge roll** (inline) / **Odometer** (display size)                                         |
+| Rolling number                                   | **Badge** with a numeric `value` (inline) / **Odometer** (display size)                            |
 | Persistent support entry point                   | **SupportRail** (edge tab)                                                                         |
 | Social post mock                                 | **InstagramFeed / FacebookFeed / TikTok / YouTube** - pixel-pinned replicas, unthemeable by design |
 

@@ -25,8 +25,6 @@
       "@zyncat/ui/avatar": ["../../src/components/primitives/avatar/Avatar.tsx"],
       "@zyncat/ui/avatar-group": ["../../src/components/primitives/avatar/AvatarGroup.tsx"],
       "@zyncat/ui/badge": ["../../src/components/primitives/badge/Badge.tsx"],
-      "@zyncat/ui/count-badge": ["../../src/components/primitives/badge/CountBadge.tsx"],
-      "@zyncat/ui/status-badge": ["../../src/components/primitives/badge/StatusBadge.tsx"],
       "@zyncat/ui/button": ["../../src/components/primitives/button/Button.tsx"],
       "@zyncat/ui/checkbox": ["../../src/components/primitives/checkbox/Checkbox.tsx"],
       "@zyncat/ui/collapse": ["../../src/components/primitives/collapse/Collapse.tsx"],

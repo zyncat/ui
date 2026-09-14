@@ -7,19 +7,17 @@
     --badge-sheen: rgb(255 255 255 / calc(0.5 * var(--sheen-strength)));
     --badge-sheen-hover: rgb(255 255 255 / calc(0.6 * var(--sheen-strength)));
 
+    position: relative;
+    isolation: isolate;
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
     padding-block: var(--space-1);
     padding-inline: var(--space-2);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
 
-    font-family: var(--font-code);
-    font-size: var(--size-micro);
-    line-height: var(--leading-micro);
-    font-weight: var(--weight-medium);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0;
+    font: var(--type-micro);
+    letter-spacing: var(--tracking-normal);
     white-space: nowrap;
     vertical-align: middle;
     color: var(--badge-fg);
@@ -27,9 +25,17 @@
     -webkit-user-select: none;
   }
 
+  .zc-badge--soft {
+    background: var(--badge-fill);
+  }
+
+  .zc-badge--num {
+    font-family: var(--font-code);
+    font-variant-numeric: tabular-nums;
+  }
+
   .zc-badge--sm {
-    padding-block: var(--space-px);
-    gap: var(--space-px);
+    padding-block: calc(2 * var(--space-px));
   }
 
   .zc-badge--pill {
@@ -83,33 +89,36 @@
 
   .zc-badge--neutral {
     --badge-fg: var(--text-muted);
+    --badge-fill: var(--bg-muted);
     --badge-tint: var(--glass-tint-neutral);
     --badge-dot: var(--text-subtle);
   }
   .zc-badge--info {
     --badge-fg: var(--info-text);
+    --badge-fill: var(--info-subtle);
     --badge-tint: var(--glass-tint-info);
     --badge-dot: var(--info);
   }
   .zc-badge--success {
     --badge-fg: var(--success-text);
+    --badge-fill: var(--success-subtle);
     --badge-tint: var(--glass-tint-success);
     --badge-dot: var(--success);
   }
   .zc-badge--warning {
     --badge-fg: var(--warning-text);
+    --badge-fill: var(--warning-subtle);
     --badge-tint: var(--glass-tint-warning);
     --badge-dot: var(--warning);
   }
   .zc-badge--danger {
     --badge-fg: var(--danger-text);
+    --badge-fill: var(--danger-subtle);
     --badge-tint: var(--glass-tint-danger);
     --badge-dot: var(--danger);
   }
 
   .zc-badge--outline {
-    position: relative;
-    isolation: isolate;
     background: color-mix(in oklab, var(--badge-fg) 6%, transparent);
     box-shadow:
       inset 0 0 0 var(--border-hairline) color-mix(in oklab, var(--badge-fg) 30%, transparent),

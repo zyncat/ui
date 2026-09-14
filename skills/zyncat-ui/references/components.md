@@ -10,9 +10,7 @@ Call get_component (it accepts a list) before writing any JSX.
 == Primitives ==
 Button - @zyncat/ui/button - One control for every click; exactly one primary per view.
 Collapse - @zyncat/ui/collapse - Layout-transition primitive; eases height open/closed, never teleports.
-Badge - @zyncat/ui/badge - Glass or outline chip for ambient status - toned, dotted, live or pill.
-StatusBadge - @zyncat/ui/status-badge - Canonical post status - tone + one-word label.
-CountBadge - @zyncat/ui/count-badge - Mono tabular count; `roll` animates digits like an odometer.
+Badge - @zyncat/ui/badge - Soft, glass or outline chip for ambient status - a label, a status or a count.
 Glide / GlidePill - @zyncat/ui/glide - A persistent background pill that glides smoothly between hovered/active elements.
 Spinner - @zyncat/ui/spinner - Indeterminate loader; three looks, no JavaScript, no layout of its own.
 Motion / Presence - @zyncat/ui/motion - The React layer over the engine: animate an element you render, and hold a leaving one mounted until its exit finishes.
