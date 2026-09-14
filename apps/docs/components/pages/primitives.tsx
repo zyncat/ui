@@ -2,12 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { Badge, type BadgeProps, type BadgeTone } from '@zyncat/ui/badge';
+import { Badge, type BadgeAnimation, type BadgeProps, type BadgeTone } from '@zyncat/ui/badge';
 import { Button, type ButtonProps } from '@zyncat/ui/button';
 import { Collapse, type CollapseProps } from '@zyncat/ui/collapse';
-import { CountBadge } from '@zyncat/ui/count-badge';
 import { Spinner, type SpinnerProps } from '@zyncat/ui/spinner';
-import { StatusBadge, type PostStatus } from '@zyncat/ui/status-badge';
 
 import { Icon, type IconProps } from '../icon';
 import { KnobSegment, Playground } from '../playground';
@@ -28,8 +26,9 @@ const BUTTON_SIZES: readonly ButtonSize[] = ['sm', 'md', 'lg', 'icon'];
 const ICON_SIZES: readonly IconSize[] = ['sm', 'md', 'lg'];
 const ICON_WEIGHTS: readonly IconWeight[] = ['thin', 'light', 'regular', 'bold', 'fill', 'duotone'];
 const BADGE_TONES: readonly BadgeTone[] = ['neutral', 'info', 'success', 'warning', 'danger'];
-const BADGE_VARIANTS: readonly BadgeVariant[] = ['glass', 'outline'];
+const BADGE_VARIANTS: readonly BadgeVariant[] = ['soft', 'glass', 'outline'];
 const BADGE_SIZES: readonly BadgeSize[] = ['sm', 'md'];
+const BADGE_ANIMATIONS: readonly BadgeAnimation[] = ['auto', 'roll', 'morph', 'none'];
 
 const SPINNER_VARIANTS: readonly SpinnerVariant[] = ['arc', 'dots', 'pulse'];
 const SPINNER_SIZES: readonly SpinnerSize[] = ['inherit', 'sm', 'md', 'lg'];
@@ -157,75 +156,31 @@ export function CollapsePlayground() {
   );
 }
 
+const BADGE_KINDS = ['text', 'number'] as const;
+type BadgeKind = (typeof BADGE_KINDS)[number];
+const BADGE_LABELS = ['Queued', 'Processing', 'Published', 'Failed'];
+
 export function BadgePlayground() {
-  const [tone, setTone] = useState<BadgeTone>('info');
-  const [variant, setVariant] = useState<BadgeVariant>('glass');
-  const [size, setSize] = useState<BadgeSize>('md');
-
-  const code = `<Badge tone="${tone}" variant="${variant}" size="${size}">New Release</Badge>`;
-
-  return (
-    <Playground
-      code={code}
-      rail={
-        <>
-          <KnobSegment label="tone" value={tone} onChange={setTone} options={BADGE_TONES} />
-          <KnobSegment label="variant" value={variant} onChange={setVariant} options={BADGE_VARIANTS} />
-          <KnobSegment label="size" value={size} onChange={setSize} options={BADGE_SIZES} />
-        </>
-      }
-    >
-      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-        <Badge tone={tone} variant={variant} size={size}>
-          New Release
-        </Badge>
-        <Badge tone={tone} variant={variant} size={size} dot>
-          Active
-        </Badge>
-      </div>
-    </Playground>
-  );
-}
-
-const STATUSES: PostStatus[] = ['draft', 'scheduled', 'processing', 'published', 'failed'];
-
-export function StatusBadgePlayground() {
-  const [status, setStatus] = useState<PostStatus>('scheduled');
-  const [variant, setVariant] = useState<BadgeVariant>('glass');
-  const [size, setSize] = useState<BadgeSize>('md');
-
-  const code = `<StatusBadge status="${status}" variant="${variant}" size="${size}" morph />`;
-
-  return (
-    <Playground
-      code={code}
-      note="Switch status with the knob - morph re-letters the chip in place instead of swapping it."
-      rail={
-        <>
-          <KnobSegment label="status" value={status} onChange={setStatus} options={STATUSES} />
-          <KnobSegment label="variant" value={variant} onChange={setVariant} options={BADGE_VARIANTS} />
-          <KnobSegment label="size" value={size} onChange={setSize} options={BADGE_SIZES} />
-        </>
-      }
-    >
-      <StatusBadge status={status} variant={variant} size={size} morph />
-    </Playground>
-  );
-}
-
-export function CountBadgePlayground() {
-  const [tone, setTone] = useState<BadgeTone>('info');
-  const [variant, setVariant] = useState<BadgeVariant>('glass');
-  const [size, setSize] = useState<BadgeSize>('md');
+  const [kind, setKind] = useState<BadgeKind>('text');
+  const [step, setStep] = useState(2);
   const [count, setCount] = useState(12);
+  const [animate, setAnimate] = useState<BadgeAnimation>('auto');
+  const [tone, setTone] = useState<BadgeTone>('info');
+  const [variant, setVariant] = useState<BadgeVariant>('soft');
+  const [size, setSize] = useState<BadgeSize>('md');
 
-  const code = `<CountBadge value={count} roll tone="${tone}" variant="${variant}" size="${size}" />`;
+  const value = kind === 'number' ? count : BADGE_LABELS[step % BADGE_LABELS.length];
+  const literal = kind === 'number' ? `{${count}}` : `"${value}"`;
+  const code = `<Badge value=${literal} tone="${tone}" variant="${variant}" size="${size}" />`;
 
   return (
     <Playground
       code={code}
+      note="One chip, one value. Change it and the chip animates itself - digits roll, words re-letter in place. There is nothing to wire up."
       rail={
         <>
+          <KnobSegment label="value" value={kind} onChange={setKind} options={BADGE_KINDS} />
+          <KnobSegment label="animate" value={animate} onChange={setAnimate} options={BADGE_ANIMATIONS} />
           <KnobSegment label="tone" value={tone} onChange={setTone} options={BADGE_TONES} />
           <KnobSegment label="variant" value={variant} onChange={setVariant} options={BADGE_VARIANTS} />
           <KnobSegment label="size" value={size} onChange={setSize} options={BADGE_SIZES} />
@@ -233,9 +188,13 @@ export function CountBadgePlayground() {
       }
     >
       <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
-        <CountBadge value={count} roll tone={tone} variant={variant} size={size} />
-        <Button size="sm" variant="secondary" onClick={() => setCount((c) => c + 1)}>
-          +1 Count
+        <Badge value={value} animate={animate} tone={tone} variant={variant} size={size} glint />
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => (kind === 'number' ? setCount((c) => c + 1) : setStep((s) => s + 1))}
+        >
+          Change value
         </Button>
       </div>
     </Playground>

@@ -119,9 +119,10 @@ const COLUMNS: TableColumn<PostRow>[] = [
     key: 'status',
     label: 'Status',
     render: (r: PostRow) => (
-      <Badge tone={r.status === 'Published' ? 'success' : r.status === 'Scheduled' ? 'info' : 'warning'}>
-        {r.status}
-      </Badge>
+      <Badge
+        value={r.status}
+        tone={r.status === 'Published' ? 'success' : r.status === 'Scheduled' ? 'info' : 'warning'}
+      />
     ),
   },
   {

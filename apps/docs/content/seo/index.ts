@@ -5,7 +5,6 @@ import button from './button';
 import checkbox from './checkbox';
 import collapse from './collapse';
 import confetti from './confetti';
-import countBadge from './count-badge';
 import dateField from './date-field';
 import dateRange from './date-range';
 import datetimeField from './datetime-field';
@@ -28,7 +27,6 @@ import popover from './popover';
 import radioGroup from './radio-group';
 import select from './select';
 import sheet from './sheet';
-import statusBadge from './status-badge';
 import supportRail from './support-rail';
 import table from './table';
 import tag from './tag';
@@ -51,7 +49,6 @@ export const SEO: Record<string, PageSeo> = {
   checkbox,
   collapse,
   confetti,
-  'count-badge': countBadge,
   'date-field': dateField,
   'date-range': dateRange,
   'datetime-field': datetimeField,
@@ -74,7 +71,6 @@ export const SEO: Record<string, PageSeo> = {
   'radio-group': radioGroup,
   select,
   sheet,
-  'status-badge': statusBadge,
   'support-rail': supportRail,
   table,
   tag,

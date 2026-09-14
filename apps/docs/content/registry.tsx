@@ -25,7 +25,7 @@ export interface TocItem {
   level: number;
 }
 
-export const NEW_SLUGS = new Set(['count-badge', 'emoji-picker', 'date-range', 'multi-select', 'theme-switcher']);
+export const NEW_SLUGS = new Set(['emoji-picker', 'date-range', 'multi-select', 'theme-switcher']);
 
 export interface Doc {
   slug: string;
@@ -149,23 +149,9 @@ export const GROUPS: DocGroup[] = [
       {
         slug: 'badge',
         label: 'Badge',
-        blurb: 'Glass or outline. Status hues reserved for genuine status.',
+        blurb: 'One chip, one value. Change it and the chip animates itself - digits roll, words re-letter.',
         Playground: P.BadgePlayground,
-        heroCode: `import { Badge } from '@zyncat/ui/badge';\n\n<Badge tone="info" pill>New Release</Badge>`,
-      },
-      {
-        slug: 'status-badge',
-        label: 'StatusBadge',
-        blurb: 'Canonical status - tone + one-word label; morph animates in place.',
-        Playground: P.StatusBadgePlayground,
-        heroCode: `import { StatusBadge } from '@zyncat/ui/status-badge';\n\n<StatusBadge status="scheduled" morph />`,
-      },
-      {
-        slug: 'count-badge',
-        label: 'CountBadge',
-        blurb: 'Mono, tabular counts; roll animates digits like an odometer.',
-        Playground: P.CountBadgePlayground,
-        heroCode: `import { CountBadge } from '@zyncat/ui/count-badge';\n\n<CountBadge value={count} roll tone="info" />`,
+        heroCode: `import { Badge } from '@zyncat/ui/badge';\n\n<Badge value="New Release" tone="info" pill />\n<Badge value="Scheduled" tone="info" dot />\n<Badge value={12} />`,
       },
     ],
   },

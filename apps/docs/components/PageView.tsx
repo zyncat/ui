@@ -127,11 +127,7 @@ export function PageView({ doc, seo }: { doc: Doc; seo?: PageSeo }) {
                 className="plate-tabs"
               />
               <div className="hero-preview__actions">
-                {NEW_SLUGS.has(slug) ? (
-                  <Badge tone="info" size="sm">
-                    New in 0.11
-                  </Badge>
-                ) : null}
+                {NEW_SLUGS.has(slug) ? <Badge value="New in 0.11" tone="info" size="sm" /> : null}
                 <Tooltip content="Replay the demo" placement="bottom">
                   <Button
                     variant="ghost"

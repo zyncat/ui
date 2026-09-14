@@ -5,7 +5,6 @@ import { useState, type CSSProperties, type ReactNode } from 'react';
 import { Badge } from '@zyncat/ui/badge';
 import { Button } from '@zyncat/ui/button';
 import { Odometer } from '@zyncat/ui/odometer';
-import { StatusBadge } from '@zyncat/ui/status-badge';
 import { Table, type TableColumn } from '@zyncat/ui/table';
 import { TextField } from '@zyncat/ui/text-field';
 import { defineTheme, ZyncatTheme } from '@zyncat/ui/theme';
@@ -450,8 +449,8 @@ export function ThemingPlayground() {
             </Button>
           </div>
           <div className="theming-cell__row">
-            <Badge tone="info">Draft</Badge>
-            <StatusBadge status="published" />
+            <Badge value="Draft" tone="info" />
+            <Badge value="Published" tone="success" dot />
             <Odometer value={total} style={{ '--odometer-size': 'var(--size-title-lg)' }} />
           </div>
           <TextField label="Workspace" placeholder="Acme Marketing" />
@@ -532,8 +531,8 @@ export function ThemingDoc() {
             <span className="theming-cell__label">Default tokens</span>
             <div className="theming-cell__row">
               <Button variant="primary">Publish</Button>
-              <Badge tone="info">Draft</Badge>
-              <StatusBadge status="published" />
+              <Badge value="Draft" tone="info" />
+              <Badge value="Published" tone="success" dot />
             </div>
             <TextField label="Workspace" placeholder="Acme Marketing" />
           </div>
@@ -541,8 +540,8 @@ export function ThemingDoc() {
             <span className="theming-cell__label">Two tokens repointed</span>
             <div className="theming-cell__row">
               <Button variant="primary">Publish</Button>
-              <Badge tone="info">Draft</Badge>
-              <StatusBadge status="published" />
+              <Badge value="Draft" tone="info" />
+              <Badge value="Published" tone="success" dot />
             </div>
             <TextField label="Workspace" placeholder="Acme Marketing" />
           </div>

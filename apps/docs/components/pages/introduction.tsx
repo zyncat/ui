@@ -147,8 +147,8 @@ export function IntroductionDoc() {
                 Badge
               </Link>
               ,{' '}
-              <Link href="/count-badge" className="doc-link">
-                CountBadge
+              <Link href="/spinner" className="doc-link">
+                Spinner
               </Link>
               .
             </p>

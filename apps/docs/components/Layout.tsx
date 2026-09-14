@@ -165,11 +165,7 @@ export function DocsShell({ children }: { children: ReactNode }) {
                               aria-current={isActive ? 'page' : undefined}
                             >
                               <span className="nav__link-label">{d.label}</span>
-                              {isNew ? (
-                                <Badge tone="info" size="sm">
-                                  New
-                                </Badge>
-                              ) : null}
+                              {isNew ? <Badge value="New" tone="info" size="sm" /> : null}
                             </Link>
                           );
                         })}

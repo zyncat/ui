@@ -26,21 +26,7 @@ export const primitives: Record<string, ComponentDoc> = {
   badge: {
     example: `import { Badge } from '@zyncat/ui/badge';
 
-<Badge tone="success" pill>Published</Badge>
-<Badge tone="warning" dot>Review pending</Badge>`,
-  },
-
-  'status-badge': {
-    example: `import { StatusBadge } from '@zyncat/ui/status-badge';
-
-<StatusBadge status="scheduled" />
-<StatusBadge status={currentStatus} morph />`,
-  },
-
-  'count-badge': {
-    example: `import { CountBadge } from '@zyncat/ui/count-badge';
-
-<CountBadge value="7 / 10" />
-<CountBadge value={queued} roll tone="info" />`,
+<Badge value="Published" tone="success" pill />
+<Badge value="Review pending" tone="warning" dot />`,
   },
 };
