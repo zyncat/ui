@@ -323,6 +323,13 @@ const build = (run: Run, { change, current, settings, factory }: Plan) => {
     overlay.root.setAttribute('data-kind', scene.kind);
     overlay.root.setAttribute('data-direction', scene.direction);
   }
+  const washOrigin = effect.washOrigin;
+  if (washOrigin) {
+    const [x, y] = washOrigin;
+    overlay.root.setAttribute('data-wash', 'radial');
+    overlay.root.style.setProperty('--theme-transition-origin', `${x.toFixed(1)}px ${y.toFixed(1)}px`);
+    overlay.root.style.setProperty('--theme-transition-spread', String(effect.washSpread ?? 0));
+  }
   const reveal = overlay.root.animate(
     effect.clips.map((clipPath, index) => {
       if (!wash) return { clipPath };

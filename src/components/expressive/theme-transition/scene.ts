@@ -17,6 +17,8 @@ export interface Effect {
   duration: number;
   clips: readonly string[];
   wash?: readonly (readonly [front: number, exit: number])[];
+  washOrigin?: readonly [x: number, y: number];
+  washSpread?: number;
 }
 
 export type EffectFactory = (scene: Scene) => Effect;

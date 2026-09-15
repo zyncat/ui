@@ -20,6 +20,7 @@ const BLOB_WAVES: readonly [lobes: number, depth: number, phase: number, drift: 
 interface Outline {
   vertices: number;
   innermost: number;
+  outermost?: number;
   radial(theta: number, progress: number): number;
   turn(progress: number): number;
 }
@@ -45,6 +46,7 @@ const OUTLINES: Record<Exclude<BloomShape, 'circle'>, (relief: number) => Outlin
     return {
       vertices: CURVE_VERTICES,
       innermost: 1 - BLOB_WAVES.reduce((sum, [, depth]) => sum + depth * swell, 0),
+      outermost: 1 + BLOB_WAVES.reduce((sum, [, depth]) => sum + depth * swell, 0),
       radial: (theta, progress) =>
         BLOB_WAVES.reduce(
           (r, [lobes, depth, phase, drift]) => r + depth * swell * Math.sin(lobes * theta + phase + drift * progress),
@@ -78,11 +80,29 @@ export const bloom: EffectFactory = (scene) => {
   );
   const ease = kind === 'polarity' ? easeInOut : easeOut;
   const outline = shape === 'circle' ? null : OUTLINES[shape](relief);
-  const reach = (farthest * COVER_MARGIN) / (outline?.innermost ?? 1);
+  const innermost = outline?.innermost ?? 1;
+  const reach = (farthest * COVER_MARGIN) / innermost;
   const at = ` at ${ox.toFixed(1)}px ${oy.toFixed(1)}px)`;
   const clipAt = (p: number) => {
     const e = ease(p);
     return outline ? polygonAt(outline, reach * e, e, ox, oy) : `circle(${(reach * e).toFixed(1)}px${at}`;
   };
-  return { duration: DURATION[kind], clips: sample(DURATION[kind], SAMPLE_MS, clipAt) };
+
+  if (kind === 'polarity') {
+    return { duration: DURATION.polarity, clips: sample(DURATION.polarity, SAMPLE_MS, clipAt) };
+  }
+  const outermost = outline?.outermost ?? 1;
+  const exitSpan = farthest * (COVER_MARGIN - 1);
+  const front = (p: number) => innermost * reach * ease(p);
+  return {
+    duration: DURATION.palette,
+    clips: sample(DURATION.palette, SAMPLE_MS, clipAt),
+    wash: sample(
+      DURATION.palette,
+      SAMPLE_MS,
+      (p) => [front(p), clamp((front(p) - farthest) / exitSpan, 0, 1)] as const,
+    ),
+    washOrigin: [ox, oy] as const,
+    washSpread: (outermost - innermost) / innermost,
+  };
 };

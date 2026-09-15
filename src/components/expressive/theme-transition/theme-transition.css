@@ -63,6 +63,14 @@
       transparent calc(var(--theme-transition-front) + 1px)
     );
   }
+  .zc-theme-transition[data-kind='palette'][data-wash='radial']::after {
+    background: radial-gradient(
+      circle at var(--theme-transition-origin),
+      transparent calc(var(--theme-transition-front) - var(--theme-transition-trail)),
+      var(--theme-transition-wash) var(--theme-transition-front),
+      transparent calc(var(--theme-transition-front) * (1 + var(--theme-transition-spread)) + 1px)
+    );
+  }
   .zc-theme-transition *,
   .zc-theme-transition *::before,
   .zc-theme-transition *::after {
