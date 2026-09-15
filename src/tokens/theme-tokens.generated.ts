@@ -60,9 +60,9 @@ export interface ColorBorderTokens {
 
 /** The hues, and the neutral roles a light or dark theme sets directly. */
 export interface ColorTokens {
-  /** `--accent` - The brand hue - hover, active, lift, subtle, border, wash, the focus ring and info follow. Default: `oklch(0.63 0.118 198)`. */
+  /** `--accent` - The brand hue - hover, active, lift, subtle, border, wash, the focus ring and info follow. Default: `oklch(0.7 0.118 198)`. */
   accent?: string | number;
-  /** `--neutral` - The middle of the gray ramp - every rung holds its hue distance from this one, so moving it retints the whole ramp. Stripe's gray-500; point it at --accent to share the brand temperature. Default: `oklch(0.553 0.031 260.3)`. */
+  /** `--neutral` - The middle of the gray ramp - every rung holds its hue distance from this one, so moving it retints the whole ramp. Stripe's gray-500 lightness and chroma over the accent's hue, so the grays carry the brand temperature; give it a literal hue for a ramp that does not follow. Default: `oklch(from var(--accent) 0.553 0.031 h)`. */
   neutral?: string | number;
   /** `--success` - Positive status - its subtle, text and wash follow. Default: `oklch(0.548 0.122 152)`. */
   success?: string | number;
@@ -411,7 +411,7 @@ export interface ComponentTokens {
  * `custom` in a theme and behind the `style` prop of every component.
  */
 export interface TokenProperties {
-  /** `--accent` - The brand hue - hover, active, lift, subtle, border, wash, the focus ring and info follow. Default: `oklch(0.63 0.118 198)`. */
+  /** `--accent` - The brand hue - hover, active, lift, subtle, border, wash, the focus ring and info follow. Default: `oklch(0.7 0.118 198)`. */
   '--accent'?: string | number;
   /** `--success` - Positive status - its subtle, text and wash follow. Default: `oklch(0.548 0.122 152)`. */
   '--success'?: string | number;
@@ -419,7 +419,7 @@ export interface TokenProperties {
   '--warning'?: string | number;
   /** `--danger` - Destructive actions and errors - the danger button ladder, ring, subtle, text and wash follow. Default: `oklch(0.545 0.196 27)`. */
   '--danger'?: string | number;
-  /** `--neutral` - The middle of the gray ramp - every rung holds its hue distance from this one, so moving it retints the whole ramp. Stripe's gray-500; point it at --accent to share the brand temperature. Default: `oklch(0.553 0.031 260.3)`. */
+  /** `--neutral` - The middle of the gray ramp - every rung holds its hue distance from this one, so moving it retints the whole ramp. Stripe's gray-500 lightness and chroma over the accent's hue, so the grays carry the brand temperature; give it a literal hue for a ramp that does not follow. Default: `oklch(from var(--accent) 0.553 0.031 h)`. */
   '--neutral'?: string | number;
   /** `--radius` - Roundness - every --radius-<step> is a fixed ratio of it, 0 squaring every corner. Default: `0.5rem`. */
   '--radius'?: string | number;
