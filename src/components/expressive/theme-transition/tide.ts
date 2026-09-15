@@ -1,4 +1,4 @@
-import { easeInOut, easeOut, sample, SAMPLE_MS, TAU, type EffectFactory } from './scene';
+import { clamp, easeInOut, easeOut, sample, SAMPLE_MS, TAU, type EffectFactory } from './scene';
 
 const DURATION = { polarity: 1250, palette: 560 };
 const POINTS = 72;
@@ -35,17 +35,21 @@ export const tide: EffectFactory = (scene) => {
     return waveOf(points, down ? `L${W} 0 L0 0Z` : `L${W} ${H} L0 ${H}Z`);
   };
 
+  if (kind === 'polarity') {
+    return { duration: DURATION.polarity, clips: sample(DURATION.polarity, SAMPLE_MS, polarityFrame) };
+  }
+
+  const swell = Math.min(W * PALETTE_WAVE.widthShare, PALETTE_WAVE.maxAmplitude) * intensity;
+  const tilt = H * PALETTE_WAVE.tiltShare;
+  const margin = swell + tilt / 2 + PALETTE_WAVE.margin;
+  const reach = (p: number) => easeOut(p) * (W + 2 * margin) - margin;
+
   const paletteFrame = (p: number, t: number) => {
     const points: string[] = [];
-    const e = easeOut(p);
     const env = Math.sin(Math.PI * p);
-    const A0 = Math.min(W * PALETTE_WAVE.widthShare, PALETTE_WAVE.maxAmplitude) * intensity;
-    const amp = A0 * (REST_AMPLITUDE + (1 - REST_AMPLITUDE) * env);
-    const tilt = H * PALETTE_WAVE.tiltShare;
-    const m = A0 + tilt / 2 + PALETTE_WAVE.margin;
-    const span = W + 2 * m;
+    const amp = swell * (REST_AMPLITUDE + (1 - REST_AMPLITUDE) * env);
     const right = direction === 'right';
-    const front = right ? -m + e * span : W + m - e * span;
+    const front = right ? reach(p) : W - reach(p);
     const sign = right ? 1 : -1;
     for (let i = 0; i <= POINTS; i++) {
       const v = i / POINTS;
@@ -59,7 +63,8 @@ export const tide: EffectFactory = (scene) => {
   };
 
   return {
-    duration: DURATION[kind],
-    clips: sample(DURATION[kind], SAMPLE_MS, kind === 'polarity' ? polarityFrame : paletteFrame),
+    duration: DURATION.palette,
+    clips: sample(DURATION.palette, SAMPLE_MS, paletteFrame),
+    wash: sample(DURATION.palette, SAMPLE_MS, (p) => [reach(p), clamp((reach(p) - W) / margin, 0, 1)] as const),
   };
 };

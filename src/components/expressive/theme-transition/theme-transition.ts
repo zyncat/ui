@@ -318,8 +318,21 @@ const build = (run: Run, { change, current, settings, factory }: Plan) => {
   const effect = factory(scene);
   const total = effect.duration / settings.speed;
   const overlay = buildOverlay(next, effect.clips[0], ramp);
+  const wash = effect.wash;
+  if (wash) {
+    overlay.root.setAttribute('data-kind', scene.kind);
+    overlay.root.setAttribute('data-direction', scene.direction);
+  }
   const reveal = overlay.root.animate(
-    effect.clips.map((clipPath) => ({ clipPath })),
+    effect.clips.map((clipPath, index) => {
+      if (!wash) return { clipPath };
+      const [front, exit] = wash[index];
+      return {
+        clipPath,
+        '--theme-transition-front': `${front.toFixed(1)}px`,
+        '--theme-transition-exit': exit.toFixed(4),
+      };
+    }),
     { duration: total, easing: 'linear', fill: 'both' },
   );
 

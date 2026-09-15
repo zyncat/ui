@@ -1,5 +1,17 @@
 @layer zyncat.reset, zyncat.tokens, zyncat.base, zyncat.components;
 
+@property --theme-transition-front {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --theme-transition-exit {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
 @layer zyncat.components {
   .zc-theme-transition {
     /* The z-index the arriving page paints at, above every panel it covers. */
@@ -21,6 +33,35 @@
   }
   .zc-theme-transition__inner {
     box-sizing: border-box;
+    z-index: 0;
+  }
+
+  .zc-theme-transition[data-kind='palette'] {
+    --theme-transition-band: 320px;
+    --theme-transition-wash: color-mix(in oklab, var(--accent) 26%, transparent);
+  }
+  .zc-theme-transition[data-kind='palette']::after {
+    --theme-transition-trail: calc(var(--theme-transition-band) * (1 - var(--theme-transition-exit)));
+
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      transparent calc(var(--theme-transition-front) - var(--theme-transition-trail)),
+      var(--theme-transition-wash) var(--theme-transition-front),
+      transparent calc(var(--theme-transition-front) + 1px)
+    );
+  }
+  .zc-theme-transition[data-kind='palette'][data-direction='left']::after {
+    background: linear-gradient(
+      270deg,
+      transparent calc(var(--theme-transition-front) - var(--theme-transition-trail)),
+      var(--theme-transition-wash) var(--theme-transition-front),
+      transparent calc(var(--theme-transition-front) + 1px)
+    );
   }
   .zc-theme-transition *,
   .zc-theme-transition *::before,

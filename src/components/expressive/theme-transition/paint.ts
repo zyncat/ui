@@ -1,4 +1,5 @@
 import { clamp, sample, TAU, type EffectFactory } from './scene';
+import { tide } from './tide';
 
 const DURATION = { polarity: 2200, palette: 800 };
 const PLANS = {
@@ -80,6 +81,7 @@ const controlPoints = (Q: Float32Array, pn: number) => {
 };
 
 export const paint: EffectFactory = (scene) => {
+  if (scene.kind === 'palette') return tide(scene);
   const { width: W, height: H, kind } = scene;
   const P = PLANS[kind];
   const rnd = Math.random;
