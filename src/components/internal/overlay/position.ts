@@ -3,6 +3,7 @@
 import { useLayoutEffect, type RefObject } from 'react';
 
 import { tokenPx } from '../utils/token-px';
+import { trackAnchorMove } from './track-anchor';
 
 const GLIDE = 'left var(--duration-fast) var(--ease-standard), top var(--duration-fast) var(--ease-standard)';
 
@@ -21,7 +22,7 @@ interface UseAnchorPositionProps {
 
 export function useAnchorPosition({ side, align, arrow, anchor, triggerRef, panelRef }: UseAnchorPositionProps) {
   useLayoutEffect(() => {
-    const place = (moved: boolean) => {
+    const place = (animate: boolean) => {
       const t = anchor ?? triggerRef.current;
       const p = panelRef.current;
       if (!t || !p) return;
@@ -47,9 +48,11 @@ export function useAnchorPosition({ side, align, arrow, anchor, triggerRef, pane
       };
 
       const vertical = side === 'top' || side === 'bottom';
+      const needed = (vertical ? ph : pw) + gap + edge;
 
+      const prevSide = p.getAttribute('data-side');
       let s = side;
-      if (room[s] < (vertical ? ph : pw) + gap && room[opposite[s]] > room[s]) {
+      if (room[s] < needed && room[opposite[s]] > room[s]) {
         s = opposite[s];
       }
 
@@ -76,7 +79,7 @@ export function useAnchorPosition({ side, align, arrow, anchor, triggerRef, pane
       const left = Math.round(x) + 'px';
       const top = Math.round(y) + 'px';
       if (p.style.left !== left || p.style.top !== top) {
-        p.style.transition = moved && p.style.left ? GLIDE : '';
+        p.style.transition = animate && prevSide === s && p.style.left ? GLIDE : '';
         p.style.left = left;
         p.style.top = top;
       }
@@ -101,18 +104,26 @@ export function useAnchorPosition({ side, align, arrow, anchor, triggerRef, pane
 
     place(true);
 
-    const track = () => place(false);
+    const measured = anchor ?? triggerRef.current;
+    const mover = measured instanceof Element ? trackAnchorMove(measured, () => place(false)) : null;
+
+    const track = () => {
+      place(false);
+      mover?.resync();
+    };
 
     window.addEventListener('scroll', track, true);
     window.addEventListener('resize', track);
 
-    const ro = new ResizeObserver(track);
-    ro.observe(panelRef.current!);
+    const ro = new ResizeObserver(() => place(true));
+    ro.observe(panelRef.current!, { box: 'border-box' });
+    if (measured instanceof Element) ro.observe(measured, { box: 'border-box' });
 
     return () => {
       window.removeEventListener('scroll', track, true);
       window.removeEventListener('resize', track);
       ro.disconnect();
+      mover?.stop();
     };
   }, [side, align, arrow, anchor]); // eslint-disable-line react-hooks/exhaustive-deps
 }

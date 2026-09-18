@@ -66,13 +66,15 @@ function MenuSurface({
   useMotion(menuRef, { animate, exit });
   useReturnFocus(menuRef);
   useLayoutEffect(() => {
+    const trigger = triggerRef.current;
     const apply = () => {
-      const t = triggerRef.current;
-      if (t && menuRef.current) menuRef.current.style.minWidth = t.getBoundingClientRect().width + 'px';
+      if (trigger && menuRef.current) menuRef.current.style.minWidth = trigger.getBoundingClientRect().width + 'px';
     };
     apply();
-    window.addEventListener('resize', apply);
-    return () => window.removeEventListener('resize', apply);
+    if (!trigger) return undefined;
+    const ro = new ResizeObserver(apply);
+    ro.observe(trigger, { box: 'border-box' });
+    return () => ro.disconnect();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useAnchorPosition({ side: 'bottom', align: 'start', arrow: false, triggerRef, panelRef: menuRef });
   useOutsidePress({ entry, refs: [menuRef, triggerRef], enabled: true, onPress: requestClose });
