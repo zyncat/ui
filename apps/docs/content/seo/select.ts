@@ -44,6 +44,10 @@ const seo: PageSeo = {
       a: "Yes. Each SelectOption takes an icon node, a description line under the label, disabled and searchText, and passing SelectGroup[] instead of a flat array renders labelled sections. leadingIcon pins your own icon on the trigger; without it the trigger shows the selected option's icon.",
     },
     {
+      q: 'Can I use my own button as the select trigger?',
+      a: 'Yes - the trigger prop replaces the built-in one. Pass an element, <Select trigger={<Button>Filter</Button>} options={options} />, or a function of the selection state, trigger={({ open, selected }) => ...}, where selected is the full SelectOption or null. Your element is cloned with the whole combobox contract - role="combobox", aria-expanded, aria-controls, aria-activedescendant, the arrow keys, the open and close press, and the anchor the menu measures and matches its width to - so it has to render one focusable element that forwards its props and its ref. placeholder, leadingIcon and triggerProps stop applying once you supply one; size still sets the menu density, loading still blocks opening and disabled still makes it inert.',
+    },
+    {
       q: 'Which keys does it support, and does it run in Next.js?',
       a: "Arrow Down or Arrow Up opens it from the trigger; inside, the arrows, Home and End move the active option, Enter commits, Escape closes and returns focus, and Tab closes. With searchable off, Space commits and typing jumps to an option by prefix. It ships as compiled ESM with its 'use client' directive intact for the Next.js App Router, has zero runtime dependencies, and collapses every duration to 1ms under prefers-reduced-motion.",
     },

@@ -8,6 +8,10 @@
     font-family: var(--font-body);
   }
 
+  .zc-select[data-custom-trigger='true'] {
+    width: auto;
+  }
+
   .zc-select__trigger {
     appearance: none;
     margin: 0;

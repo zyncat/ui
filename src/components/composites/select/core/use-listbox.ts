@@ -37,7 +37,7 @@ export function useListbox({
   const [activeIdx, setActiveIdx] = useState(-1);
   const typeahead = useTypeahead();
 
-  const triggerRef = useRef<HTMLButtonElement>(null),
+  const triggerRef = useRef<HTMLElement>(null),
     listRef = useRef<HTMLDivElement>(null),
     contentRef = useRef<HTMLDivElement>(null),
     searchRef = useRef<HTMLInputElement>(null);

@@ -11,7 +11,14 @@ import type { MenuSize, MenuWeight } from '../../internal/menu/highlight';
 import type { ActivateOn } from '../../internal/utils/activation';
 import { cx } from '../../internal/utils/cx';
 import { CheckGlyph } from '../../primitives/checkbox/check-glyph';
-import { ListboxPanel, SelectTrigger, useListbox, type SelectGroup, type SelectOption } from './core';
+import {
+  ListboxPanel,
+  SelectTrigger,
+  useListbox,
+  type CustomTrigger,
+  type SelectGroup,
+  type SelectOption,
+} from './core';
 
 export type { SelectOption, SelectGroup } from './core';
 
@@ -61,6 +68,10 @@ export interface MultiSelectProps {
   activateOn?: ActivateOn;
   /** Menu open/close timing - motion tokens only, or `null` to disable. @default duration 'base' + ease 'entrance'/'exit' */
   animation?: DisableableAnimation;
+  /** Your own element in place of the built-in trigger. It is cloned with the combobox wiring - role,
+   *  aria, open/close, arrow keys, and the anchor the menu measures - so it must render one focusable
+   *  element that forwards its props and ref. Pass a function to read `{ open, selected }`. */
+  trigger?: CustomTrigger<SelectOption[]>;
 }
 
 function CheckboxTick({ checked, size }: { checked: boolean; size: MenuSize }) {
@@ -93,6 +104,7 @@ export function MultiSelect({
   htmlProps,
   activateOn = 'pointerdown',
   animation,
+  trigger,
 }: MultiSelectProps) {
   const [value, setValue] = useControllable<string[], SelectOption>(
     controlledValue,
@@ -117,6 +129,7 @@ export function MultiSelect({
 
   const selectedOptions = lb.flat.filter((o) => isSelected(o.value));
   const isPlaceholder = !loading && selectedOptions.length === 0;
+  const customTrigger = typeof trigger === 'function' ? trigger({ open: lb.open, selected: selectedOptions }) : trigger;
 
   return (
     <div
@@ -124,6 +137,7 @@ export function MultiSelect({
       className={cx('zc-select', htmlProps?.className)}
       data-multiple="true"
       data-size={size}
+      data-custom-trigger={customTrigger ? 'true' : undefined}
       data-open={lb.open ? 'true' : undefined}
       data-disabled={disabled ? 'true' : undefined}
       data-invalid={invalid ? 'true' : undefined}
@@ -131,6 +145,7 @@ export function MultiSelect({
     >
       <SelectTrigger
         lb={lb}
+        node={customTrigger}
         disabled={disabled}
         invalid={invalid}
         ariaLabel={ariaLabel}

@@ -14,6 +14,7 @@ import {
   ListboxPanel,
   SelectTrigger,
   useListbox,
+  type CustomTrigger,
   type SelectGroup,
   type SelectOption,
   type SelectTriggerHtmlProps,
@@ -69,8 +70,12 @@ export interface SelectProps {
   animation?: DisableableAnimation;
   /** Standard <button> attributes (className, style, aria-*, data-*, ...) merged onto the trigger.
    *  `onClick` and `onKeyDown` run before the built-in open/close and arrow-key handling, which
-   *  cannot be replaced - the trigger is the combobox. */
+   *  cannot be replaced - the trigger is the combobox. Ignored when `trigger` replaces it. */
   triggerProps?: SelectTriggerHtmlProps;
+  /** Your own element in place of the built-in trigger. It is cloned with the combobox wiring - role,
+   *  aria, open/close, arrow keys, and the anchor the menu measures - so it must render one focusable
+   *  element that forwards its props and ref. Pass a function to read `{ open, selected }`. */
+  trigger?: CustomTrigger<SelectOption | null>;
   /** Show check icon on selected value */
   showCheck?: boolean;
 }
@@ -98,6 +103,7 @@ export function Select({
   activateOn = 'pointerdown',
   animation,
   triggerProps,
+  trigger,
   showCheck = true,
 }: SelectProps) {
   const [value, setValue] = useControllable<string | null, SelectOption>(controlledValue, defaultValue, onChange);
@@ -116,12 +122,14 @@ export function Select({
 
   const selected = lb.flat.find((o) => o.value === value) || null;
   const isPlaceholder = !loading && !selected;
+  const customTrigger = typeof trigger === 'function' ? trigger({ open: lb.open, selected }) : trigger;
 
   return (
     <div
       {...htmlProps}
       className={cx('zc-select', htmlProps?.className)}
       data-size={size}
+      data-custom-trigger={customTrigger ? 'true' : undefined}
       data-open={lb.open ? 'true' : undefined}
       data-disabled={disabled ? 'true' : undefined}
       data-invalid={invalid ? 'true' : undefined}
@@ -129,6 +137,7 @@ export function Select({
     >
       <SelectTrigger
         lb={lb}
+        node={customTrigger}
         disabled={disabled}
         invalid={invalid}
         ariaLabel={ariaLabel}

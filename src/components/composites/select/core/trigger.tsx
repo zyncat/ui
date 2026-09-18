@@ -1,15 +1,18 @@
 'use client';
 
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, KeyboardEvent, ReactElement, ReactNode } from 'react';
 
 import type { DataAttributes } from '../../../../dom-props';
 import { Icon } from '../../../internal/icon/Icon';
 import { IconSlot } from '../../../internal/icon/IconSlot';
+import { ovCloneTrigger } from '../../../internal/overlay/layer';
 import { activationProps, type ActivateOn } from '../../../internal/utils/activation';
 import { cx } from '../../../internal/utils/cx';
 import type { ListboxState } from './use-listbox';
 
 export type SelectTriggerHtmlProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> & DataAttributes;
+
+export type CustomTrigger<Selected> = ReactElement | ((state: { open: boolean; selected: Selected }) => ReactElement);
 
 export interface SelectTriggerProps extends SelectTriggerHtmlProps {
   lb: ListboxState;
@@ -20,6 +23,7 @@ export interface SelectTriggerProps extends SelectTriggerHtmlProps {
   isPlaceholder?: boolean;
   count?: number;
   activateOn?: ActivateOn;
+  node?: ReactElement | null;
 }
 
 export function SelectTrigger({
@@ -32,16 +36,51 @@ export function SelectTrigger({
   count,
   className,
   activateOn,
+  disabled,
+  node,
   onClick,
   onPointerDown,
   onKeyDown,
   ...rest
 }: SelectTriggerProps) {
   const { triggerRef, baseId, open, adId, show, requestClose } = lb;
+
+  const toggle = () => {
+    if (triggerRef.current) triggerRef.current.focus({ preventScroll: true });
+    if (open) requestClose();
+    else show();
+  };
+  const openOnArrow = (e: KeyboardEvent<HTMLElement>) => {
+    if (open || (e.key !== 'ArrowDown' && e.key !== 'ArrowUp')) return;
+    e.preventDefault();
+    show();
+  };
+
+  if (node)
+    return ovCloneTrigger(node, {
+      open,
+      onPress: toggle,
+      onKeyDown: openOnArrow,
+      panelId: lb.listId,
+      haspopup: 'listbox',
+      triggerRef,
+      activateOn,
+      holdFocus: true,
+      attrs: {
+        role: 'combobox',
+        'aria-activedescendant': adId,
+        ...(ariaLabel && { 'aria-label': ariaLabel }),
+        ...(invalid && { 'aria-invalid': true }),
+        ...(disabled && { 'aria-disabled': true }),
+      },
+    });
+
   return (
     <button
       type="button"
-      ref={triggerRef}
+      ref={(el) => {
+        triggerRef.current = el;
+      }}
       id={baseId + '-trigger'}
       className={cx('zc-select__trigger', className)}
       role="combobox"
@@ -51,21 +90,12 @@ export function SelectTrigger({
       aria-activedescendant={adId}
       aria-label={ariaLabel}
       aria-invalid={invalid || undefined}
+      disabled={disabled}
       onKeyDown={(e) => {
         onKeyDown?.(e);
-        if (!open && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
-          e.preventDefault();
-          show();
-        }
+        openOnArrow(e);
       }}
-      {...activationProps<HTMLButtonElement>(
-        () => {
-          if (triggerRef.current) triggerRef.current.focus({ preventScroll: true });
-          if (open) requestClose();
-          else show();
-        },
-        { on: activateOn, holdFocus: true, onPointerDown, onClick },
-      )}
+      {...activationProps<HTMLButtonElement>(toggle, { on: activateOn, holdFocus: true, onPointerDown, onClick })}
       {...rest}
     >
       {leading && (

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { Button } from '@zyncat/ui/button';
 import { Checkbox, type CheckboxProps } from '@zyncat/ui/checkbox';
 import { MultiSelect, type MultiSelectProps } from '@zyncat/ui/multi-select';
 import { NumberField, type NumberFieldProps } from '@zyncat/ui/number-field';
@@ -34,6 +35,16 @@ const BOX_SIZES: readonly BoxSize[] = ['sm', 'md'];
 const TEXT_FIELD_TYPES: readonly TextFieldType[] = ['text', 'search', 'email', 'url', 'password'];
 
 const W = 320;
+
+const SELECT_TRIGGER_CODE = `
+  trigger={({ selected }) => (
+    <Button variant="secondary">{selected ? selected.label : 'Choose timezone'}</Button>
+  )}`;
+
+const MULTI_TRIGGER_CODE = `
+  trigger={({ selected }) => (
+    <Button variant="secondary">{selected.length ? selected.length + ' channels' : 'Choose channels'}</Button>
+  )}`;
 
 type Option = { value: string; label: string; description?: string; icon?: string; disabled?: boolean };
 
@@ -314,6 +325,7 @@ export function SelectPlayground() {
   const [disabled, setDisabled] = useState(false);
   const [highlight, setHighlight] = useState<SelectHighlight>('neutral');
   const [rail, setRail] = useState(false);
+  const [customTrigger, setCustomTrigger] = useState(false);
   const [tz, setTz] = useState<string | null>('nyc');
 
   const code = `<Select
@@ -327,7 +339,7 @@ export function SelectPlayground() {
   invalid={${invalid}}
   disabled={${disabled}}
   highlight="${highlight}"
-  rail={${rail}}
+  rail={${rail}}${customTrigger ? SELECT_TRIGGER_CODE : ''}
 />`;
 
   return (
@@ -343,10 +355,11 @@ export function SelectPlayground() {
           <KnobSwitch label="disabled" checked={disabled} onChange={setDisabled} />
           <KnobSegment label="highlight" value={highlight} onChange={setHighlight} options={HIGHLIGHTS} />
           <KnobSwitch label="rail" checked={rail} onChange={setRail} />
+          <KnobSwitch label="custom trigger" checked={customTrigger} onChange={setCustomTrigger} />
         </>
       }
     >
-      <div style={{ width: '100%', maxWidth: W }}>
+      <div style={{ width: '100%', maxWidth: W, textAlign: 'center' }}>
         <Select
           ariaLabel="Timezone"
           placeholder="Choose timezone"
@@ -360,6 +373,15 @@ export function SelectPlayground() {
           disabled={disabled}
           highlight={highlight}
           rail={rail}
+          trigger={
+            customTrigger
+              ? ({ selected }) => (
+                  <Button variant="secondary" size={size}>
+                    {selected ? selected.label : 'Choose timezone'}
+                  </Button>
+                )
+              : undefined
+          }
         />
       </div>
     </Playground>
@@ -370,6 +392,7 @@ export function MultiSelectPlayground() {
   const [size, setSize] = useState<MultiSelectSize>('md');
   const [highlight, setHighlight] = useState<SelectHighlight>('neutral');
   const [rail, setRail] = useState(false);
+  const [customTrigger, setCustomTrigger] = useState(false);
   const [channels, setChannels] = useState(['tw', 'li']);
 
   const code = `<MultiSelect
@@ -381,7 +404,7 @@ export function MultiSelectPlayground() {
   options={CHANNELS}
   highlight="${highlight}"
   rail={${rail}}
-  searchable
+  searchable${customTrigger ? MULTI_TRIGGER_CODE : ''}
 />`;
 
   return (
@@ -392,10 +415,11 @@ export function MultiSelectPlayground() {
           <KnobSegment label="size" value={size} onChange={setSize} options={FIELD_SIZES} />
           <KnobSegment label="highlight" value={highlight} onChange={setHighlight} options={HIGHLIGHTS} />
           <KnobSwitch label="rail" checked={rail} onChange={setRail} />
+          <KnobSwitch label="custom trigger" checked={customTrigger} onChange={setCustomTrigger} />
         </>
       }
     >
-      <div style={{ width: '100%', maxWidth: W }}>
+      <div style={{ width: '100%', maxWidth: W, textAlign: 'center' }}>
         <MultiSelect
           ariaLabel="Connected channels"
           placeholder="Select channels..."
@@ -406,6 +430,15 @@ export function MultiSelectPlayground() {
           highlight={highlight}
           rail={rail}
           searchable
+          trigger={
+            customTrigger
+              ? ({ selected }) => (
+                  <Button variant="secondary" size={size}>
+                    {selected.length ? selected.length + ' channels' : 'Choose channels'}
+                  </Button>
+                )
+              : undefined
+          }
         />
       </div>
     </Playground>

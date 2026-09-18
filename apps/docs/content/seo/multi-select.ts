@@ -44,6 +44,10 @@ const multiSelect: PageSeo = {
       a: 'The native <select multiple> needs Ctrl or Cmd-click to add to a selection, renders as a scrolling box rather than a dropdown, and barely takes styling. This is a custom listbox instead: one click toggles a row, the menu stays put, and the size, highlight and rail props restyle it on top of the same design tokens as the rest of the library. It is MIT, needs no jQuery plugin and no Tailwind config, and ships zero runtime dependencies.',
     },
     {
+      q: 'Can I replace the trigger with my own button?',
+      a: 'Yes - trigger takes your own element, or a function receiving { open, selected } where selected is the full SelectOption[] in option order, so a trigger that reads "3 channels" instead of the first +N label is one line. The element is cloned with the combobox wiring - role, aria-expanded, aria-controls, aria-activedescendant, the arrow keys and the anchor the menu measures - so it must be one focusable element that forwards its props and its ref. placeholder and leadingIcon stop applying; the menu keeps its size, its filter field and its checkbox rows, and toggling a row still leaves it open.',
+    },
+    {
       q: 'Is the multi select keyboard and screen reader accessible?',
       a: 'Yes. The trigger is a role="combobox" button wired with aria-haspopup, aria-expanded, aria-controls and aria-activedescendant, the list is a role="listbox" with aria-multiselectable, and each row is a role="option" carrying aria-selected. Arrow keys move the active option, Home and End jump to the ends, Enter toggles it - so does Space, unless searchable has put the caret in the filter field - Escape closes and returns focus to the trigger, and disabled options are skipped by keyboard nav and typeahead alike.',
     },

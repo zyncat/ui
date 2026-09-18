@@ -1317,7 +1317,13 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       name: 'triggerProps',
       type: 'SelectTriggerHtmlProps',
       description:
-        'Standard <button> attributes (className, style, aria-*, data-*, ...) merged onto the trigger. `onClick` and `onKeyDown` run before the built-in open/close and arrow-key handling, which cannot be replaced - the trigger is the combobox.',
+        'Standard <button> attributes (className, style, aria-*, data-*, ...) merged onto the trigger. `onClick` and `onKeyDown` run before the built-in open/close and arrow-key handling, which cannot be replaced - the trigger is the combobox. Ignored when `trigger` replaces it.',
+    },
+    {
+      name: 'trigger',
+      type: 'CustomTrigger<SelectOption | null>',
+      description:
+        'Your own element in place of the built-in trigger. It is cloned with the combobox wiring - role, aria, open/close, arrow keys, and the anchor the menu measures - so it must render one focusable element that forwards its props and ref. Pass a function to read `{ open, selected }`.',
     },
     { name: 'showCheck', type: 'boolean', description: 'Show check icon on selected value' },
   ],
@@ -1435,6 +1441,12 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       type: 'DisableableAnimation',
       default: "duration 'base' + ease 'entrance'/'exit'",
       description: 'Menu open/close timing - motion tokens only, or `null` to disable.',
+    },
+    {
+      name: 'trigger',
+      type: 'CustomTrigger<SelectOption[]>',
+      description:
+        'Your own element in place of the built-in trigger. It is cloned with the combobox wiring - role, aria, open/close, arrow keys, and the anchor the menu measures - so it must render one focusable element that forwards its props and ref. Pass a function to read `{ open, selected }`.',
     },
   ],
   avatar: [

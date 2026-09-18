@@ -42,7 +42,7 @@ export interface SelectMenuProps extends MenuSurfaceProps {
   open: boolean;
   menuId: string;
   requestClose: () => void;
-  triggerRef: RefObject<HTMLButtonElement | null>;
+  triggerRef: RefObject<HTMLElement | null>;
   multiple?: boolean;
   animation?: DisableableAnimation;
   children?: ReactNode;
