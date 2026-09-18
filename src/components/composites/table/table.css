@@ -7,6 +7,7 @@
   }
 
   .zc-tbl {
+    --_tbl-row-hover: color-mix(in oklab, var(--bg-subtle) 55%, var(--bg-surface));
     --tbl-pad-y: var(--space-3);
     --tbl-head-py: var(--space-3);
     --tbl-head-h: calc(var(--leading-caption) + 2 * var(--tbl-head-py));
@@ -96,17 +97,21 @@
     padding-inline-end: var(--space-4);
   }
 
+  [data-polarity='dark'] .zc-tbl {
+    --_tbl-row-hover: var(--bg-subtle);
+  }
+
   .zc-tbl__row {
     --row-bg: var(--bg-surface);
   }
   .zc-tbl__row:hover {
-    --row-bg: var(--bg-subtle);
+    --row-bg: var(--_tbl-row-hover);
   }
   .zc-tbl__row[data-selected] {
     --row-bg: color-mix(in oklab, var(--accent) 5%, var(--bg-surface));
   }
   .zc-tbl__row[data-selected]:hover {
-    --row-bg: color-mix(in oklab, var(--accent) 5%, var(--bg-subtle));
+    --row-bg: color-mix(in oklab, var(--accent) 5%, var(--_tbl-row-hover));
   }
   .zc-tbl--clickable tbody .zc-tbl__row {
     cursor: pointer;
