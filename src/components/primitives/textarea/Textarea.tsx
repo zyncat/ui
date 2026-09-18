@@ -16,6 +16,7 @@ import {
 
 import type { DataAttributes } from '../../../dom-props';
 import { cx } from '../../internal/utils/cx';
+import { Collapse } from '../collapse/Collapse';
 import {
   FieldLabel,
   FieldMessage,
@@ -24,8 +25,7 @@ import {
   resolveFieldMessage,
   type FieldMessagingProps,
 } from '../input/field-chrome';
-
-const RING_C = (2 * Math.PI * 7).toFixed(2);
+import { CharMeter } from './char-meter';
 
 type TextareaNative = Pick<
   TextareaHTMLAttributes<HTMLTextAreaElement>,
@@ -94,8 +94,9 @@ export function Textarea({
   const text = value ?? '';
   const count = text.length;
   const over = max ? Math.max(count - max, 0) : 0;
-  const remaining = max ? max - count : 0;
-  const meterState = over ? 'zc-is-over' : max && remaining <= warnAt ? 'zc-is-near' : '';
+  const lastMax = useRef(max);
+  if (max) lastMax.current = max;
+  const meterMax = max ?? lastMax.current;
 
   const { state, msg, msgIcon } = resolveFieldMessage(error, warning, success, helper);
   const autoId = useId();
@@ -173,25 +174,14 @@ export function Textarea({
             aria-describedby={joinIds(msgId, htmlProps?.['aria-describedby'])}
           />
         </div>
-        {(max || hint) && (
+        <Collapse open={!!(max || hint)}>
           <div className="zc-txa__bar">
             {hint && <span className="zc-txa__hint">{hint}</span>}
-            {max && (
-              <span className={cx('zc-txa__meter', meterState)}>
-                <span className="zc-txa__count">{over || remaining <= warnAt ? remaining : `${count} / ${max}`}</span>
-                <svg
-                  className="zc-txa__ring"
-                  viewBox="0 0 16 16"
-                  aria-hidden="true"
-                  style={{ '--txa-ring-c': RING_C, '--txa-ring-p': Math.min(count / max, 1) } as CSSProperties}
-                >
-                  <circle className="zc-txa__ring-trk" cx="8" cy="8" r="7" />
-                  <circle className="zc-txa__ring-prg" cx="8" cy="8" r="7" />
-                </svg>
-              </span>
-            )}
+            <Collapse open={!!max} axis="width" fade className="zc-txa__meter-slot">
+              {meterMax ? <CharMeter count={count} max={meterMax} warnAt={warnAt} /> : null}
+            </Collapse>
           </div>
-        )}
+        </Collapse>
       </div>
       <FieldMessage id={msgId} message={msg} icon={msgIcon} />
     </div>
