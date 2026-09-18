@@ -63,6 +63,13 @@
     outline-color: var(--ring-color-accent);
   }
 
+  /* Both rules above skip tabindex="-1", so a programmatic focus target - a listbox scroller, a menu
+     surface, a modal panel - would otherwise fall through to the UA outline. Its indicator is the
+     active descendant, not the container. */
+  :where([tabindex='-1']):focus {
+    outline: none;
+  }
+
   /* Chrome forces both at paint time, so neither color nor background-color reaches them. */
   :is(:autofill, :-webkit-autofill) {
     -webkit-text-fill-color: var(--text-strong);
