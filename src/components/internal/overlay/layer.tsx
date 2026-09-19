@@ -138,8 +138,9 @@ function ovCloneTrigger(
     onClick?: (e: ReactMouseEvent<HTMLElement>) => void;
     onPointerDown?: (e: ReactPointerEvent<HTMLElement>) => void;
     onKeyDown?: (e: ReactKeyboardEvent<HTMLElement>) => void;
+    ref?: Ref<HTMLElement>;
   };
-  const ownRef = (trigger as ReactElement & { ref?: Ref<HTMLElement> }).ref;
+  const ownRef = own.ref;
   const keys = onKeyDown && {
     onKeyDown: (e: ReactKeyboardEvent<HTMLElement>) => {
       own.onKeyDown?.(e);
