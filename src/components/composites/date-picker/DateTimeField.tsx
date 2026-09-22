@@ -64,6 +64,7 @@ export function DateTimeField({
   invalid = false,
   message,
   disabled = false,
+  size = 'md',
   className = '',
   htmlProps,
   activateOn = 'pointerdown',
@@ -121,6 +122,7 @@ export function DateTimeField({
       invalid={invalid}
       message={message}
       icon="calendar"
+      size={size}
       className={className}
       htmlProps={htmlProps}
     >

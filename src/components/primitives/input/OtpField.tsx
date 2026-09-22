@@ -30,8 +30,8 @@ interface OtpFieldOwnProps {
   error?: boolean;
   /** Disable every slot. */
   disabled?: boolean;
-  /** Compact slot sizing. Only `sm`; omit for default. */
-  size?: 'sm';
+  /** Slot width, height and digit type. @default 'md' */
+  size?: 'sm' | 'md';
   /** Extra class(es) appended to the root wrapper. */
   className?: string;
   /** Inline styles merged onto the root wrapper. */
@@ -50,7 +50,7 @@ export function OtpField({
   group,
   error,
   disabled,
-  size,
+  size = 'md',
   className = '',
   style,
   htmlProps,

@@ -6,7 +6,7 @@ import { Button } from '@zyncat/ui/button';
 import { Checkbox, type CheckboxProps } from '@zyncat/ui/checkbox';
 import { MultiSelect, type MultiSelectProps } from '@zyncat/ui/multi-select';
 import { NumberField, type NumberFieldProps } from '@zyncat/ui/number-field';
-import { OtpField } from '@zyncat/ui/otp-field';
+import { OtpField, type OtpFieldProps } from '@zyncat/ui/otp-field';
 import { RadioGroup, type RadioGroupProps, type RadioOption } from '@zyncat/ui/radio-group';
 import { Select, type SelectProps } from '@zyncat/ui/select';
 import { TextField, type TextFieldProps } from '@zyncat/ui/text-field';
@@ -26,12 +26,14 @@ type NumberSize = NonNullable<NumberFieldProps['size']>;
 type TextareaSize = NonNullable<TextareaProps['size']>;
 type MultiSelectSize = NonNullable<MultiSelectProps['size']>;
 type SelectHighlight = NonNullable<SelectProps['highlight']>;
-type OtpSize = 'default' | 'sm';
+type OtpSize = NonNullable<OtpFieldProps['size']>;
 type TextFieldType = NonNullable<TextFieldProps['type']>;
 
 const FIELD_SIZES: readonly FieldSize[] = ['sm', 'md', 'lg'];
 const HIGHLIGHTS: readonly SelectHighlight[] = ['neutral', 'accent'];
 const BOX_SIZES: readonly BoxSize[] = ['sm', 'md'];
+const OTP_SIZES: readonly OtpSize[] = ['sm', 'md'];
+const TEXTAREA_SIZES: readonly TextareaSize[] = ['sm', 'md', 'lg'];
 const TEXT_FIELD_TYPES: readonly TextFieldType[] = ['text', 'search', 'email', 'url', 'password'];
 
 const W = 320;
@@ -162,18 +164,18 @@ export function NumberFieldPlayground() {
 }
 
 export function OtpFieldPlayground() {
-  const [size, setSize] = useState<OtpSize>('default');
+  const [size, setSize] = useState<OtpSize>('md');
   const [value, setValue] = useState('492');
 
-  const code = `<OtpField length={6} group={3}${size === 'sm' ? ' size="sm"' : ''} value={code} onChange={setCode} />`;
+  const code = `<OtpField length={6} group={3} size="${size}" value={code} onChange={setCode} />`;
 
   return (
     <Playground
       code={code}
-      note="sm is the only size token - omit the prop entirely for the standard slot."
-      rail={<KnobSegment label="size" value={size} onChange={setSize} options={['default', 'sm']} />}
+      note="Two steps - sm for a dense form, md for the standard code cell."
+      rail={<KnobSegment label="size" value={size} onChange={setSize} options={OTP_SIZES} />}
     >
-      <OtpField length={6} group={3} size={size === 'sm' ? 'sm' : undefined} value={value} onChange={setValue} />
+      <OtpField length={6} group={3} size={size} value={value} onChange={setValue} />
     </Playground>
   );
 }
@@ -196,8 +198,8 @@ export function TextareaPlayground() {
   return (
     <Playground
       code={code}
-      note="lg is the prominent composer - taller rhythm, larger type."
-      rail={<KnobSegment label="size" value={size} onChange={setSize} options={['md', 'lg']} />}
+      note="sm drops into a dense form row; lg is the prominent composer - taller rhythm, larger type."
+      rail={<KnobSegment label="size" value={size} onChange={setSize} options={TEXTAREA_SIZES} />}
     >
       <div style={{ width: '100%', maxWidth: 440 }}>
         <Textarea

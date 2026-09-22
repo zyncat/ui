@@ -201,6 +201,16 @@
     outline: var(--ring-success);
   }
 
+  .zc-fld--txa.zc-fld--sm .zc-txa {
+    --txa-pad-y: var(--space-2);
+    --txa-pad-x: var(--space-3);
+    --txa-lh: var(--leading-caption);
+  }
+  .zc-fld--txa.zc-fld--sm .zc-txa__input,
+  .zc-fld--txa.zc-fld--sm .zc-txa__mirror {
+    font: var(--type-caption);
+  }
+
   .zc-fld--txa.zc-fld--lg .zc-txa {
     --txa-pad-y: var(--space-4);
     --txa-lh: var(--leading-body-lg);

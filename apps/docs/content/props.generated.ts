@@ -1008,7 +1008,7 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     { name: 'group', type: 'number', description: 'Insert a separator every N slots (e.g. 3 - "-------").' },
     { name: 'error', type: 'boolean', description: 'Error state (red slots + ring).' },
     { name: 'disabled', type: 'boolean', description: 'Disable every slot.' },
-    { name: 'size', type: "'sm'", description: 'Compact slot sizing. Only `sm`; omit for default.' },
+    { name: 'size', type: "'sm' | 'md'", default: "'md'", description: 'Slot width, height and digit type.' },
     { name: 'className', type: 'string', description: 'Extra class(es) appended to the root wrapper.' },
     { name: 'style', type: 'CSSProperties', description: 'Inline styles merged onto the root wrapper.' },
   ],
@@ -1045,7 +1045,12 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       description: 'Remaining-chars threshold that flips the meter amber. Default 20.',
     },
     { name: 'hint', type: 'ReactNode', description: 'Footer hint, left of the meter - e.g. a ⌘↵ affordance.' },
-    { name: 'size', type: "'md' | 'lg'", description: 'md (default) - lg (prominent composer).' },
+    {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description: 'Field type and padding: `sm` for a dense form row, `lg` for a prominent composer.',
+    },
     { name: 'className', type: 'string', description: 'Extra class(es) merged onto the field root.' },
     { name: 'style', type: 'CSSProperties', description: 'Inline styles merged onto the field root.' },
     {
@@ -1680,6 +1685,13 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     },
     { name: 'message', type: 'string', description: 'Helper / error text under the field.' },
     { name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the field.' },
+    {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description:
+        'Control height, type and padding - the same scale as `TextField`, so a form row can hold one size throughout.',
+    },
     { name: 'className', type: 'string', description: 'Extra class on the field shell root.' },
     {
       name: 'htmlProps',
@@ -1742,6 +1754,13 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     },
     { name: 'message', type: 'string', description: 'Helper / error text under the field.' },
     { name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the field.' },
+    {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description:
+        'Control height, type and padding - the same scale as `TextField`, so a form row can hold one size throughout.',
+    },
     { name: 'className', type: 'string', description: 'Extra class on the field shell root.' },
     {
       name: 'htmlProps',
@@ -1798,6 +1817,13 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     },
     { name: 'message', type: 'string', description: 'Helper / error text under the field.' },
     { name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the field.' },
+    {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description:
+        'Control height, type and padding - the same scale as `TextField`, so a form row can hold one size throughout.',
+    },
     { name: 'className', type: 'string', description: 'Extra class on the field shell root.' },
     {
       name: 'htmlProps',
@@ -1849,6 +1875,13 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     },
     { name: 'message', type: 'string', description: 'Helper / error text under the field.' },
     { name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the field.' },
+    {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description:
+        'Control height, type and padding - the same scale as `TextField`, so a form row can hold one size throughout.',
+    },
     { name: 'className', type: 'string', description: 'Extra class on the field shell root.' },
     {
       name: 'htmlProps',
@@ -1905,6 +1938,13 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       name: 'variant',
       type: "'underline' | 'pill'",
       description: 'Skin: an underline that reaches across (default), or a segmented pill riding an inset track.',
+    },
+    {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'sm'",
+      description:
+        "Tab height, type and padding. `'md'` and `'lg'` match `Button`'s steps; the default row sits just under them.",
     },
     {
       name: 'fill',

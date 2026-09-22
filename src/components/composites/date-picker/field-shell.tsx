@@ -22,6 +22,9 @@ export interface DateFieldBaseProps {
   message?: string;
   /** Disable the field. @default false */
   disabled?: boolean;
+  /** Control height, type and padding - the same scale as `TextField`, so a form row can hold one
+   *  size throughout. @default 'md' */
+  size?: 'sm' | 'md' | 'lg';
   /** Extra class on the field shell root. */
   className?: string;
   /** Standard <div> attributes (style, data-*, aria-*, ...) forwarded to the field shell root. */
@@ -35,6 +38,7 @@ export interface DateFieldBaseProps {
 
 export interface FieldShellProps {
   variant: string;
+  size?: 'sm' | 'md' | 'lg';
   label?: string;
   required?: boolean;
   invalid?: boolean;
@@ -47,6 +51,7 @@ export interface FieldShellProps {
 
 export function FieldShell({
   variant,
+  size,
   label,
   required,
   invalid,
@@ -56,7 +61,15 @@ export function FieldShell({
   htmlProps,
   children,
 }: FieldShellProps) {
-  const cls = cx('zc-fld', variant, 'zc-fld--has-lead', invalid && 'zc-is-error', className, htmlProps?.className);
+  const cls = cx(
+    'zc-fld',
+    variant,
+    'zc-fld--has-lead',
+    size === 'sm' ? 'zc-fld--sm' : size === 'lg' ? 'zc-fld--lg' : '',
+    invalid && 'zc-is-error',
+    className,
+    htmlProps?.className,
+  );
   return (
     <div {...htmlProps} className={cls}>
       <FieldLabel label={label} required={required} />

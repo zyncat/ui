@@ -40,6 +40,7 @@ export function DateField({
   invalid = false,
   message,
   disabled = false,
+  size = 'md',
   className = '',
   htmlProps,
   activateOn = 'pointerdown',
@@ -57,6 +58,7 @@ export function DateField({
       invalid={invalid}
       message={message}
       icon="calendar"
+      size={size}
       className={className}
       htmlProps={htmlProps}
     >

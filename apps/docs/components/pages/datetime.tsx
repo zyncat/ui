@@ -12,6 +12,9 @@ import { KnobSegment, Playground } from '../playground';
 
 const W = 320;
 
+type FieldSize = NonNullable<DateTimeFieldProps['size']>;
+const FIELD_SIZES: readonly FieldSize[] = ['sm', 'md', 'lg'];
+
 export function DateFieldHero() {
   const [val, setVal] = useState<string | null>('2026-08-21');
   return (
@@ -28,11 +31,13 @@ export function DateTimeFieldPlayground() {
   const [val, setVal] = useState<string | null>('2026-08-21T14:30');
   const [format, setFormat] = useState<TimeFormat>('24h');
   const [minuteStep, setMinuteStep] = useState<MinuteStep>('5');
+  const [size, setSize] = useState<FieldSize>('md');
 
   const code = `<DateTimeField
   label="Publish timestamp"
   format="${format}"
   minuteStep={${minuteStep}}
+  size="${size}"
   value={value}
   onChange={setValue}
 />`;
@@ -45,6 +50,7 @@ export function DateTimeFieldPlayground() {
         <>
           <KnobSegment label="format" value={format} onChange={setFormat} options={['24h', '12h']} />
           <KnobSegment label="minute step" value={minuteStep} onChange={setMinuteStep} options={['1', '5', '15']} />
+          <KnobSegment label="size" value={size} onChange={setSize} options={FIELD_SIZES} />
         </>
       }
     >
@@ -53,6 +59,7 @@ export function DateTimeFieldPlayground() {
           label="Publish timestamp"
           format={format}
           minuteStep={Number(minuteStep)}
+          size={size}
           value={val}
           onChange={setVal}
         />
@@ -73,17 +80,23 @@ export function DateRangeFieldHero() {
 export function TimeFieldPlayground() {
   const [format, setFormat] = useState<TimeFormat>('24h');
   const [time, setTime] = useState<string | null>('09:00');
+  const [size, setSize] = useState<FieldSize>('md');
 
-  const code = `<TimeField label="Broadcast time" format="${format}" value={time} onChange={setTime} />`;
+  const code = `<TimeField label="Broadcast time" format="${format}" size="${size}" value={time} onChange={setTime} />`;
 
   return (
     <Playground
       code={code}
       note="Display only - the committed value stays canonical 24h 'HH:mm' either way."
-      rail={<KnobSegment label="format" value={format} onChange={setFormat} options={['24h', '12h']} />}
+      rail={
+        <>
+          <KnobSegment label="format" value={format} onChange={setFormat} options={['24h', '12h']} />
+          <KnobSegment label="size" value={size} onChange={setSize} options={FIELD_SIZES} />
+        </>
+      }
     >
       <div style={{ width: '100%', maxWidth: W }}>
-        <TimeField label="Broadcast time" format={format} value={time} onChange={setTime} />
+        <TimeField label="Broadcast time" format={format} size={size} value={time} onChange={setTime} />
       </div>
     </Playground>
   );
@@ -103,9 +116,12 @@ const TAB_COPY: Record<string, string> = {
 };
 
 type TabsVariant = NonNullable<TabsProps['variant']>;
+type TabsSize = NonNullable<TabsProps['size']>;
+const TABS_SIZES: readonly TabsSize[] = ['sm', 'md', 'lg'];
 
 export function TabsPlayground() {
   const [variant, setVariant] = useState<TabsVariant>('underline');
+  const [size, setSize] = useState<TabsSize>('sm');
   const [active, setActive] = useState('overview');
   const [dir, setDir] = useState<1 | -1 | 0>(0);
 
@@ -113,6 +129,7 @@ export function TabsPlayground() {
   items={items}
   value={active}
   variant="${variant}"
+  size="${size}"
   onChange={(next, d) => { setActive(next); setDir(d); }}
   name="views"
   ariaLabel="Workspace sections"
@@ -125,13 +142,19 @@ export function TabsPlayground() {
     <Playground
       code={code}
       note="The ink reaches then releases either way - an underline that spans the tab, or a pill riding an inset track."
-      rail={<KnobSegment label="variant" value={variant} onChange={setVariant} options={['underline', 'pill']} />}
+      rail={
+        <>
+          <KnobSegment label="variant" value={variant} onChange={setVariant} options={['underline', 'pill']} />
+          <KnobSegment label="size" value={size} onChange={setSize} options={TABS_SIZES} />
+        </>
+      }
     >
       <div style={{ width: '100%', maxWidth: 440 }}>
         <Tabs
           items={TAB_ITEMS}
           value={active}
           variant={variant}
+          size={size}
           onChange={(v, d) => {
             setActive(v);
             setDir(d);

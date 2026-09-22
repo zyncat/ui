@@ -45,6 +45,7 @@ export function DateRangeField({
   invalid = false,
   message,
   disabled = false,
+  size = 'md',
   className = '',
   htmlProps,
   activateOn = 'pointerdown',
@@ -80,6 +81,7 @@ export function DateRangeField({
       invalid={invalid}
       message={message}
       icon="calendar"
+      size={size}
       className={className}
       htmlProps={htmlProps}
     >

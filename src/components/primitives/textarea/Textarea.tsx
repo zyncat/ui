@@ -49,8 +49,8 @@ interface TextareaOwnProps extends FieldMessagingProps, TextareaNative {
   warnAt?: number;
   /** Footer hint, left of the meter - e.g. a ⌘↵ affordance. */
   hint?: ReactNode;
-  /** md (default) - lg (prominent composer). */
-  size?: 'md' | 'lg';
+  /** Field type and padding: `sm` for a dense form row, `lg` for a prominent composer. @default 'md' */
+  size?: 'sm' | 'md' | 'lg';
   /** Extra class(es) merged onto the field root. */
   className?: string;
   /** Inline styles merged onto the field root. */
@@ -81,7 +81,7 @@ export function Textarea({
   maxRows = 10,
   warnAt = 20,
   hint,
-  size,
+  size = 'md',
   disabled,
   readOnly,
   className = '',
@@ -141,7 +141,13 @@ export function Textarea({
     onKeyDown?.(e);
   };
 
-  const cls = cx('zc-fld', 'zc-fld--txa', size === 'lg' && 'zc-fld--lg', state, className);
+  const cls = cx(
+    'zc-fld',
+    'zc-fld--txa',
+    size === 'sm' ? 'zc-fld--sm' : size === 'lg' ? 'zc-fld--lg' : '',
+    state,
+    className,
+  );
   const boxCls = cx('zc-txa', disabled && 'zc-is-disabled', readOnly && 'zc-is-readonly');
 
   return (

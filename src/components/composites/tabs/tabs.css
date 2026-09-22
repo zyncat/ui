@@ -5,7 +5,20 @@
     /* 2px, not --border-emphasis: 1.5px renders as sub-pixel fuzz on 1x screens. */
     --tabs-ink-h: 2px;
     --tabs-pill-radius: var(--radius-md);
+    --_tabs-tab-h: var(--control-height-sm);
+    --_tabs-tab-pad: var(--space-2);
+    --_tabs-tab-type: var(--type-caption);
     position: relative;
+  }
+  .zc-tabs[data-size='md'] {
+    --_tabs-tab-h: var(--control-height);
+    --_tabs-tab-pad: var(--space-3);
+    --_tabs-tab-type: var(--type-label);
+  }
+  .zc-tabs[data-size='lg'] {
+    --_tabs-tab-h: var(--control-height-lg);
+    --_tabs-tab-pad: var(--space-4);
+    --_tabs-tab-type: var(--type-label);
   }
   .zc-tabs::after {
     content: '';
@@ -71,10 +84,11 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    height: var(--control-height-sm);
-    padding-inline: var(--space-2);
+    height: var(--_tabs-tab-h);
+    padding-inline: var(--_tabs-tab-pad);
     border-radius: var(--radius-md);
-    font: var(--type-micro);
+    font: var(--_tabs-tab-type);
+    font-weight: var(--weight-medium);
     line-height: 1;
     white-space: nowrap;
     color: var(--text-subtle);
@@ -182,7 +196,7 @@
   .zc-tabs--pill .zc-tabs__ink {
     top: var(--space-1);
     bottom: auto;
-    height: var(--control-height-sm);
+    height: var(--_tabs-tab-h);
     border-radius: var(--tabs-pill-radius);
     background: var(--bg-surface);
     box-shadow: var(--shadow-xs);

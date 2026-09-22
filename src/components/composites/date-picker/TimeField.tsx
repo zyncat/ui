@@ -40,6 +40,7 @@ export function TimeField({
   invalid = false,
   message,
   disabled = false,
+  size = 'md',
   className = '',
   htmlProps,
 }: TimeFieldProps) {
@@ -60,6 +61,7 @@ export function TimeField({
       invalid={invalid}
       message={message}
       icon="clock"
+      size={size}
       className={className}
       htmlProps={htmlProps}
     >

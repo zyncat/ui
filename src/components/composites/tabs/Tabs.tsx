@@ -55,6 +55,9 @@ interface TabsOwnProps {
   activateOn?: ActivateOn;
   /** Skin: an underline that reaches across (default), or a segmented pill riding an inset track. */
   variant?: 'underline' | 'pill';
+  /** Tab height, type and padding. `'md'` and `'lg'` match `Button`'s steps; the default row sits
+   *  just under them. @default 'sm' */
+  size?: 'sm' | 'md' | 'lg';
   /** Stretch the row to its container and split it evenly between the tabs. */
   fill?: boolean;
   /** Extra class(es) merged onto the root. */
@@ -79,6 +82,7 @@ export function Tabs({
   ariaLabel,
   activateOn = 'pointerdown',
   variant = 'underline',
+  size = 'sm',
   fill = false,
   className = '',
   style,
@@ -200,6 +204,7 @@ export function Tabs({
       className={cx('zc-tabs', pill && 'zc-tabs--pill', fill && 'zc-tabs--fill', className)}
       style={style}
       {...htmlProps}
+      data-size={size}
     >
       <div
         className="zc-tabs__list"
