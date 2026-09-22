@@ -25,14 +25,6 @@
     color: var(--menu-active-ink, var(--text-strong));
   }
 
-  .zc-dropdown__item[data-danger='true'],
-  .zc-dropdown__item[data-danger='true'][data-active='true'] {
-    color: var(--danger-text);
-  }
-  .zc-dropdown__item[data-danger='true'] .zc-menu-row__icon {
-    color: var(--danger);
-  }
-
   .zc-dropdown__item-caret {
     flex: 0 0 auto;
     color: var(--text-subtle);
@@ -49,6 +41,18 @@
   .zc-dropdown__item[data-selected='true'] .zc-menu-row__label,
   .zc-dropdown__item[data-selected='true'] .zc-menu-row__icon {
     color: var(--text-accent);
+  }
+
+  .zc-dropdown__item[data-danger='true'] {
+    color: var(--danger-text);
+  }
+  .zc-dropdown__item[data-danger='true'] .zc-menu-row__label {
+    color: var(--danger-text);
+  }
+  .zc-dropdown__item[data-danger='true'] .zc-menu-row__icon,
+  .zc-dropdown__item[data-danger='true'] .zc-dropdown__item-check,
+  .zc-dropdown__item[data-danger='true'] .zc-dropdown__item-caret {
+    color: var(--danger);
   }
 
   .zc-dropdown__item[data-disabled='true'] {
