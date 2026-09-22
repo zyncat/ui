@@ -1,7 +1,8 @@
 'use client';
 
-import { useLayoutEffect, useRef, type ReactNode, type RefObject } from 'react';
+import { useRef, type HTMLAttributes, type ReactNode, type RefObject } from 'react';
 
+import type { DataAttributes } from '../../../../dom-props';
 import type { Layer } from '../../../../engine';
 import { resolveMotionTiming } from '../../../../motion/motion-timing';
 import { Presence } from '../../../../motion/presence';
@@ -9,9 +10,13 @@ import type { DisableableAnimation } from '../../../../motion/timing';
 import { useMotion, type MotionSpecs } from '../../../../motion/use-motion';
 import { motionFor, type MotionTransition } from '../../../../tokens/motion-tokens';
 import { menuSurfaceAttrs, type MenuSurfaceProps } from '../../../internal/menu/highlight';
+import { useAnchorWidth } from '../../../internal/menu/use-anchor-width';
 import { useReturnFocus } from '../../../internal/overlay/focus';
 import { OverlayPortal, useOutsidePress, useOverlayEntry } from '../../../internal/overlay/layer';
 import { useAnchorPosition } from '../../../internal/overlay/position';
+import { cx } from '../../../internal/utils/cx';
+
+export type SelectMenuHtmlProps = HTMLAttributes<HTMLDivElement> & DataAttributes;
 
 const SELECT_MENU_TIMING = {
   open: { duration: 'base', ease: 'entrance' },
@@ -45,6 +50,7 @@ export interface SelectMenuProps extends MenuSurfaceProps {
   triggerRef: RefObject<HTMLElement | null>;
   multiple?: boolean;
   animation?: DisableableAnimation;
+  menuProps?: SelectMenuHtmlProps;
   children?: ReactNode;
 }
 
@@ -57,6 +63,8 @@ function MenuSurface({
   rail,
   size,
   weight,
+  width = 'trigger',
+  menuProps,
   animate,
   exit,
   children,
@@ -65,28 +73,19 @@ function MenuSurface({
   const entry = useOverlayEntry({ nodeRef: menuRef, dismissible: true, requestClose });
   useMotion(menuRef, { animate, exit });
   useReturnFocus(menuRef);
-  useLayoutEffect(() => {
-    const trigger = triggerRef.current;
-    const apply = () => {
-      if (trigger && menuRef.current) menuRef.current.style.minWidth = trigger.getBoundingClientRect().width + 'px';
-    };
-    apply();
-    if (!trigger) return undefined;
-    const ro = new ResizeObserver(apply);
-    ro.observe(trigger, { box: 'border-box' });
-    return () => ro.disconnect();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useAnchorWidth(triggerRef, menuRef, width === 'trigger');
   useAnchorPosition({ side: 'bottom', align: 'start', arrow: false, triggerRef, panelRef: menuRef });
   useOutsidePress({ entry, refs: [menuRef, triggerRef], enabled: true, onPress: requestClose });
 
   return (
     <div
+      {...menuProps}
       ref={menuRef}
-      className="zc-menu-surface zc-select__menu"
+      className={cx('zc-menu-surface zc-select__menu', menuProps?.className)}
       id={menuId}
       role="presentation"
       data-multiple={multiple ? 'true' : undefined}
-      {...menuSurfaceAttrs({ highlight, rail, size, weight })}
+      {...menuSurfaceAttrs({ highlight, rail, size, weight, width })}
     >
       {children}
     </div>
@@ -103,7 +102,9 @@ export function SelectMenu({
   rail,
   size,
   weight,
+  width,
   animation,
+  menuProps,
   children,
 }: SelectMenuProps) {
   return (
@@ -122,6 +123,8 @@ export function SelectMenu({
             rail={rail}
             size={size}
             weight={weight}
+            width={width}
+            menuProps={menuProps}
           >
             {children}
           </MenuSurface>

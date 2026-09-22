@@ -7,6 +7,7 @@
     inset: auto;
     z-index: var(--layer-overlay);
     width: max-content;
+    min-width: var(--menu-floor);
     max-width: var(--menu-max-width, min(22rem, 92vw));
     padding: var(--space-1);
     padding-block-end: 0;
@@ -16,6 +17,7 @@
     box-shadow: var(--shadow-lg);
     outline: none;
     font-family: var(--font-body);
+    --menu-floor: 11rem;
     --menu-rail-width: 2px;
     --menu-rail-length: var(--icon-sm);
     --menu-row-padding: var(--space-1);
@@ -55,6 +57,23 @@
   }
   .zc-menu-surface[data-side='left'] {
     transform-origin: right var(--menu-origin);
+  }
+
+  .zc-menu-surface[data-width='trigger'] {
+    min-width: max(var(--menu-floor), var(--_menu-anchor-width, 0px));
+  }
+  .zc-menu-surface[data-width='sm'] {
+    --menu-width: 14rem;
+  }
+  .zc-menu-surface[data-width='md'] {
+    --menu-width: 18rem;
+  }
+  .zc-menu-surface[data-width='lg'] {
+    --menu-width: 24rem;
+  }
+  .zc-menu-surface:is([data-width='sm'], [data-width='md'], [data-width='lg']) {
+    width: var(--menu-width);
+    max-width: 92vw;
   }
 
   .zc-menu-surface[data-content='true'] {

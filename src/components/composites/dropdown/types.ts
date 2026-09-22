@@ -2,7 +2,7 @@ import type { HTMLAttributes, ReactNode, RefObject } from 'react';
 
 import type { DataAttributes } from '../../../dom-props';
 import { normalizeCollection, type NormalizedGroup } from '../../internal/collection/collection';
-import type { MenuHighlight, MenuSize, MenuWeight } from '../../internal/menu/highlight';
+import type { MenuHighlight, MenuSize, MenuWeight, MenuWidth } from '../../internal/menu/highlight';
 import type { ActivateOn } from '../../internal/utils/activation';
 
 export interface DropdownItem {
@@ -106,6 +106,7 @@ export interface MenuChain {
   rail: boolean;
   size: MenuSize;
   weight: MenuWeight;
+  width: MenuWidth;
   ariaLabel?: string;
   htmlProps?: HTMLAttributes<HTMLDivElement> & DataAttributes;
   seed: { key: string; focus: SeedFocus };

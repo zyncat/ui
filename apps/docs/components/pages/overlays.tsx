@@ -24,6 +24,8 @@ type PopoverAlign = NonNullable<PopoverProps['align']>;
 type DropdownSide = NonNullable<DropdownProps['side']>;
 type DropdownAlign = NonNullable<DropdownProps['align']>;
 type DropdownHighlight = NonNullable<DropdownProps['highlight']>;
+type DropdownWidth = NonNullable<DropdownProps['width']>;
+const MENU_WIDTHS: readonly DropdownWidth[] = ['auto', 'trigger', 'sm', 'md', 'lg'];
 type SheetSide = NonNullable<SheetProps['side']>;
 type TooltipPlacement = NonNullable<TooltipProps['placement']>;
 type ToastTone = 'default' | 'success' | 'info' | 'warning' | 'error' | 'loading';
@@ -458,6 +460,7 @@ export function DropdownPlayground() {
   const [align, setAlign] = useState<DropdownAlign>('start');
   const [highlight, setHighlight] = useState<DropdownHighlight>('neutral');
   const [rail, setRail] = useState(false);
+  const [width, setWidth] = useState<DropdownWidth>('auto');
   const [open, setOpen] = useState(false);
   const [visibility, setVisibility] = useState('public');
 
@@ -468,6 +471,7 @@ export function DropdownPlayground() {
   align="${align}"
   highlight="${highlight}"
   rail={${rail}}
+  width="${width}"
   onSelect={route}
   items={items}
 />`;
@@ -487,6 +491,7 @@ export function DropdownPlayground() {
           <KnobSegment label="align" value={align} onChange={setAlign} options={ALIGNS} />
           <KnobSegment label="highlight" value={highlight} onChange={setHighlight} options={HIGHLIGHTS} />
           <KnobSwitch label="rail" checked={rail} onChange={setRail} />
+          <KnobSegment label="width" value={width} onChange={setWidth} options={MENU_WIDTHS} />
         </>
       }
     >
@@ -501,6 +506,7 @@ export function DropdownPlayground() {
           align={align}
           highlight={highlight}
           rail={rail}
+          width={width}
           onSelect={(id) => toast.info(`Action: ${id}`)}
           items={[
             {

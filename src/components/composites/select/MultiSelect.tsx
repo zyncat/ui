@@ -7,7 +7,7 @@ import type { HTMLAttributes, ReactNode } from 'react';
 import type { DataAttributes } from '../../../dom-props';
 import type { DisableableAnimation } from '../../../motion/timing';
 import { useControllable } from '../../internal/hooks/use-controllable';
-import type { MenuSize, MenuWeight } from '../../internal/menu/highlight';
+import type { MenuSize, MenuWeight, MenuWidth } from '../../internal/menu/highlight';
 import type { ActivateOn } from '../../internal/utils/activation';
 import { cx } from '../../internal/utils/cx';
 import { CheckGlyph } from '../../primitives/checkbox/check-glyph';
@@ -17,6 +17,7 @@ import {
   useListbox,
   type CustomTrigger,
   type SelectGroup,
+  type SelectMenuHtmlProps,
   type SelectOption,
 } from './core';
 
@@ -40,6 +41,9 @@ export interface MultiSelectProps {
   menuSize?: MenuSize;
   /** Weight of every option label in the menu. @default 'medium' */
   weight?: MenuWeight;
+  /** Menu width. `trigger` is never narrower than the trigger, `auto` fits the options, and
+   *  `sm` | `md` | `lg` are fixed steps with long labels ellipsizing. @default 'trigger' */
+  width?: MenuWidth;
   /** Disabled - trigger is inert and the menu cannot open. @default false */
   disabled?: boolean;
   /** Danger ring + border. @default false */
@@ -63,6 +67,9 @@ export interface MultiSelectProps {
   ariaLabel?: string;
   /** Standard <div> attributes (className, style, data-*, ...) forwarded to the select root. */
   htmlProps?: HTMLAttributes<HTMLDivElement> & DataAttributes;
+  /** Standard attributes (className, style, data-*, ...) forwarded to the menu panel, which portals
+   *  to <body> and inherits nothing from the root. */
+  menuProps?: SelectMenuHtmlProps;
   /** Whether the trigger and the options fire on `pointerdown` (snappier) or wait for `click`.
    *  @default 'pointerdown' */
   activateOn?: ActivateOn;
@@ -98,10 +105,12 @@ export function MultiSelect({
   highlight = 'neutral',
   rail = false,
   weight = 'medium',
+  width = 'trigger',
   leadingIcon = null,
   id,
   ariaLabel,
   htmlProps,
+  menuProps,
   activateOn = 'pointerdown',
   animation,
   trigger,
@@ -166,8 +175,10 @@ export function MultiSelect({
         rail={rail}
         size={menuSize}
         weight={weight}
+        width={width}
         activateOn={activateOn}
         animation={animation}
+        menuProps={menuProps}
         check={(sel) => <CheckboxTick checked={sel} size={menuSize} />}
       />
     </div>

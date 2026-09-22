@@ -11,7 +11,7 @@ import { Icon } from '../../../internal/icon/Icon';
 import type { MenuSurfaceProps } from '../../../internal/menu/highlight';
 import { MenuGroupLabel, MenuRow } from '../../../internal/menu/menu-row';
 import { activationProps, type ActivateOn } from '../../../internal/utils/activation';
-import { SelectMenu } from './menu';
+import { SelectMenu, type SelectMenuHtmlProps } from './menu';
 import type { ListRow } from './types';
 import type { ListboxState } from './use-listbox';
 
@@ -24,6 +24,7 @@ export interface ListboxPanelProps extends MenuSurfaceProps {
   multiple?: boolean;
   activateOn?: ActivateOn;
   animation?: DisableableAnimation;
+  menuProps?: SelectMenuHtmlProps;
   check?: (selected: boolean) => ReactNode;
 }
 
@@ -57,8 +58,10 @@ export function ListboxPanel({
   rail,
   size,
   weight,
+  width,
   activateOn,
   animation,
+  menuProps,
   check = defaultCheck,
 }: ListboxPanelProps) {
   const grouped = lb.sections.some((s) => s.label);
@@ -99,7 +102,9 @@ export function ListboxPanel({
       rail={rail}
       size={size}
       weight={weight}
+      width={width}
       animation={animation}
+      menuProps={menuProps}
     >
       {searchable && !loading && (
         <div className="zc-select__search">

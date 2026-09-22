@@ -1249,6 +1249,13 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       description: 'Weight of every option label in the menu.',
     },
     {
+      name: 'width',
+      type: 'MenuWidth',
+      default: "'trigger'",
+      description:
+        'Menu width. `trigger` is never narrower than the trigger, `auto` fits the options, and `sm` | `md` | `lg` are fixed steps with long labels ellipsizing.',
+    },
+    {
       name: 'disabled',
       type: 'boolean',
       default: 'false',
@@ -1305,6 +1312,12 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       name: 'htmlProps',
       type: 'HTMLAttributes<HTMLDivElement> & DataAttributes',
       description: 'Standard <div> attributes (className, style, data-*, ...) forwarded to the select root.',
+    },
+    {
+      name: 'menuProps',
+      type: 'SelectMenuHtmlProps',
+      description:
+        'Standard attributes (className, style, data-*, ...) forwarded to the menu panel, which portals to <body> and inherits nothing from the root.',
     },
     {
       name: 'activateOn',
@@ -1378,6 +1391,13 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       description: 'Weight of every option label in the menu.',
     },
     {
+      name: 'width',
+      type: 'MenuWidth',
+      default: "'trigger'",
+      description:
+        'Menu width. `trigger` is never narrower than the trigger, `auto` fits the options, and `sm` | `md` | `lg` are fixed steps with long labels ellipsizing.',
+    },
+    {
       name: 'disabled',
       type: 'boolean',
       default: 'false',
@@ -1434,6 +1454,12 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       name: 'htmlProps',
       type: 'HTMLAttributes<HTMLDivElement> & DataAttributes',
       description: 'Standard <div> attributes (className, style, data-*, ...) forwarded to the select root.',
+    },
+    {
+      name: 'menuProps',
+      type: 'SelectMenuHtmlProps',
+      description:
+        'Standard attributes (className, style, data-*, ...) forwarded to the menu panel, which portals to <body> and inherits nothing from the root.',
     },
     {
       name: 'activateOn',
@@ -2296,6 +2322,13 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
         'Menu density - row type and padding on every row, submenus included; a row carrying a description sits one step taller than a plain one. The trigger is your own node, so this never touches it.',
     },
     { name: 'weight', type: 'MenuWeight', default: "'medium'", description: 'Weight of every row label.' },
+    {
+      name: 'width',
+      type: 'MenuWidth',
+      default: "'auto'",
+      description:
+        'Width of the top-level menu. `auto` fits the rows, `trigger` is never narrower than the trigger, and `sm` | `md` | `lg` are fixed steps with long labels ellipsizing. Submenus always fit their rows.',
+    },
     {
       name: 'rail',
       type: 'boolean',

@@ -4,7 +4,6 @@
   .zc-dropdown__menu {
     --menu-max-width: min(20rem, 92vw);
     --menu-max-height: min(26rem, 70vh);
-    min-width: 11rem;
   }
 
   .zc-dropdown__menu[data-danger-active='true'] {

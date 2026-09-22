@@ -20,7 +20,7 @@ import { popIn, popOut } from '../../../motion/presets';
 import type { DisableableAnimation } from '../../../motion/timing';
 import { motionFor } from '../../../tokens/motion-tokens';
 import { useControllable } from '../../internal/hooks/use-controllable';
-import type { MenuSize, MenuWeight } from '../../internal/menu/highlight';
+import type { MenuSize, MenuWeight, MenuWidth } from '../../internal/menu/highlight';
 import { ovCloneTrigger, OverlayPortal } from '../../internal/overlay/layer';
 import { pressedByKeyboard, type ActivateOn } from '../../internal/utils/activation';
 import { MenuPanel } from './menu-panel';
@@ -75,6 +75,10 @@ export interface DropdownProps {
   size?: MenuSize;
   /** Weight of every row label. @default 'medium' */
   weight?: MenuWeight;
+  /** Width of the top-level menu. `auto` fits the rows, `trigger` is never narrower than the trigger,
+   *  and `sm` | `md` | `lg` are fixed steps with long labels ellipsizing. Submenus always fit their
+   *  rows. @default 'auto' */
+  width?: MenuWidth;
   /** Short accent bar on the leading edge of the highlight, marking the active row. @default false */
   rail?: boolean;
 
@@ -103,6 +107,7 @@ export function Dropdown({
   rail = false,
   size = 'md',
   weight = 'medium',
+  width = 'auto',
   id,
   ariaLabel,
   htmlProps,
@@ -148,6 +153,7 @@ export function Dropdown({
     rail,
     size,
     weight,
+    width,
     ariaLabel,
     htmlProps,
     seed,

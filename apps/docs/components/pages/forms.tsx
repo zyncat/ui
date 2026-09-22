@@ -26,11 +26,13 @@ type NumberSize = NonNullable<NumberFieldProps['size']>;
 type TextareaSize = NonNullable<TextareaProps['size']>;
 type MultiSelectSize = NonNullable<MultiSelectProps['size']>;
 type SelectHighlight = NonNullable<SelectProps['highlight']>;
+type MenuWidth = NonNullable<SelectProps['width']>;
 type OtpSize = NonNullable<OtpFieldProps['size']>;
 type TextFieldType = NonNullable<TextFieldProps['type']>;
 
 const FIELD_SIZES: readonly FieldSize[] = ['sm', 'md', 'lg'];
 const HIGHLIGHTS: readonly SelectHighlight[] = ['neutral', 'accent'];
+const MENU_WIDTHS: readonly MenuWidth[] = ['trigger', 'auto', 'sm', 'md', 'lg'];
 const BOX_SIZES: readonly BoxSize[] = ['sm', 'md'];
 const OTP_SIZES: readonly OtpSize[] = ['sm', 'md'];
 const TEXTAREA_SIZES: readonly TextareaSize[] = ['sm', 'md', 'lg'];
@@ -327,6 +329,7 @@ export function SelectPlayground() {
   const [disabled, setDisabled] = useState(false);
   const [highlight, setHighlight] = useState<SelectHighlight>('neutral');
   const [rail, setRail] = useState(false);
+  const [width, setWidth] = useState<MenuWidth>('trigger');
   const [customTrigger, setCustomTrigger] = useState(false);
   const [tz, setTz] = useState<string | null>('nyc');
 
@@ -341,7 +344,8 @@ export function SelectPlayground() {
   invalid={${invalid}}
   disabled={${disabled}}
   highlight="${highlight}"
-  rail={${rail}}${customTrigger ? SELECT_TRIGGER_CODE : ''}
+  rail={${rail}}
+  width="${width}"${customTrigger ? SELECT_TRIGGER_CODE : ''}
 />`;
 
   return (
@@ -357,6 +361,7 @@ export function SelectPlayground() {
           <KnobSwitch label="disabled" checked={disabled} onChange={setDisabled} />
           <KnobSegment label="highlight" value={highlight} onChange={setHighlight} options={HIGHLIGHTS} />
           <KnobSwitch label="rail" checked={rail} onChange={setRail} />
+          <KnobSegment label="width" value={width} onChange={setWidth} options={MENU_WIDTHS} />
           <KnobSwitch label="custom trigger" checked={customTrigger} onChange={setCustomTrigger} />
         </>
       }
@@ -375,6 +380,7 @@ export function SelectPlayground() {
           disabled={disabled}
           highlight={highlight}
           rail={rail}
+          width={width}
           trigger={
             customTrigger
               ? ({ selected }) => (
@@ -394,6 +400,7 @@ export function MultiSelectPlayground() {
   const [size, setSize] = useState<MultiSelectSize>('md');
   const [highlight, setHighlight] = useState<SelectHighlight>('neutral');
   const [rail, setRail] = useState(false);
+  const [width, setWidth] = useState<MenuWidth>('trigger');
   const [customTrigger, setCustomTrigger] = useState(false);
   const [channels, setChannels] = useState(['tw', 'li']);
 
@@ -406,6 +413,7 @@ export function MultiSelectPlayground() {
   options={CHANNELS}
   highlight="${highlight}"
   rail={${rail}}
+  width="${width}"
   searchable${customTrigger ? MULTI_TRIGGER_CODE : ''}
 />`;
 
@@ -417,6 +425,7 @@ export function MultiSelectPlayground() {
           <KnobSegment label="size" value={size} onChange={setSize} options={FIELD_SIZES} />
           <KnobSegment label="highlight" value={highlight} onChange={setHighlight} options={HIGHLIGHTS} />
           <KnobSwitch label="rail" checked={rail} onChange={setRail} />
+          <KnobSegment label="width" value={width} onChange={setWidth} options={MENU_WIDTHS} />
           <KnobSwitch label="custom trigger" checked={customTrigger} onChange={setCustomTrigger} />
         </>
       }
@@ -431,6 +440,7 @@ export function MultiSelectPlayground() {
           options={CHANNELS}
           highlight={highlight}
           rail={rail}
+          width={width}
           searchable
           trigger={
             customTrigger

@@ -12,6 +12,7 @@ import { useTypeahead } from '../../internal/hooks/use-typeahead';
 import { Icon } from '../../internal/icon/Icon';
 import { menuSurfaceAttrs } from '../../internal/menu/highlight';
 import { MenuRow } from '../../internal/menu/menu-row';
+import { useAnchorWidth } from '../../internal/menu/use-anchor-width';
 import { useReturnFocus } from '../../internal/overlay/focus';
 import { useOutsidePress, useOverlayEntry } from '../../internal/overlay/layer';
 import { useAnchorPosition } from '../../internal/overlay/position';
@@ -78,6 +79,7 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
   const place = { side: nested ? 'right' : chain.side, align: nested ? 'start' : chain.align } as const;
   useMotion(panelRef, motion);
   useReturnFocus(panelRef);
+  useAnchorWidth(anchorRef, panelRef, !nested && chain.width === 'trigger');
   useAnchorPosition({ ...place, arrow: false, triggerRef: anchorRef, panelRef });
   useOutsidePress({ entry, refs: [panelRef, anchorRef], enabled: !nested, onPress: () => chain.dismiss(false) });
 
@@ -272,7 +274,7 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
   return (
     <div
       {...(nested ? undefined : chain.htmlProps)}
-      {...menuSurfaceAttrs(chain)}
+      {...menuSurfaceAttrs({ ...chain, width: nested ? 'auto' : chain.width })}
       ref={panelRef as unknown as RefObject<HTMLDivElement>}
       id={menuId}
       className={cx('zc-menu-surface zc-menu-scroller zc-dropdown__menu', !nested && chain.htmlProps?.className)}
