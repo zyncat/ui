@@ -60,7 +60,11 @@ export function flip(el: HTMLElement, from: Box, options: FlipOptions = {}): Pla
   const dx = from.left - to.left + pivot.x * (sx - 1);
   const dy = from.top - to.top + pivot.y * (sy - 1);
 
-  const timing = { ...options.timing, fill: 'none' as const };
+  const holdsStartThroughDelay = (options.timing?.delay ?? 0) > 0;
+  const timing: Timing = {
+    ...options.timing,
+    fill: options.timing?.fill ?? (holdsStartThroughDelay ? 'backwards' : 'none'),
+  };
   const layers: Layer[] = [{ x: [dx, 0], y: [dy, 0], timing, composite: 'add' }];
   if (scaling)
     layers.push({
