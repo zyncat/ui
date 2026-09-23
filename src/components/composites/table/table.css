@@ -164,7 +164,7 @@
     padding-inline-end: var(--space-3);
   }
   .zc-tbl__cell--end .zc-tbl__sort {
-    justify-content: flex-end;
+    flex-direction: row-reverse;
   }
   .zc-tbl__cell--center .zc-tbl__sort {
     justify-content: center;
