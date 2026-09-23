@@ -80,8 +80,9 @@
 
 ## Layout animation
 
-- `<Motion layout>` FLIPs from the previous box on every render. That box is read as the render begins, so a box an effect moved after the last commit starts the next FLIP where it truly is.
-- `<Motion layoutId="x">` FLIPs from wherever any element last held the id.
+- `<Motion layout>` FLIPs from the previous box whenever a render moves it. That box is read as the render begins, so a box an effect moved after the last commit starts the next FLIP where it truly is. A render that leaves the box in place never restarts a flight in progress.
+- `<Motion layoutId="x">` FLIPs from wherever any element last held the id. The node keeping the id does not FLIP its own moves, so an indicator stays on its container; add `layout` for a node that should.
+- `<Motion>` creates the FLIP after `animate` in the same commit, so its `composite: 'add'` translate stacks on an entrance: WAAPI composites in creation order.
 - `layoutTransition`: `size` is `'scale'` (cheap, distorts borders and radii), `'morph'` (real `width` / `height`, for a visible border or radius) or `'none'`, plus a `timing`.
 - Below components: `flip(el, from, options)` and `measure(el)`.
 
