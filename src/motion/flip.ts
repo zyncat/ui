@@ -15,11 +15,20 @@ import {
 import { sharedSlot } from '../shared-slot';
 import { UIMotion } from '../tokens/motion-tokens';
 
-export type FlipTuning = FlipOptions;
+export interface FlipTuning extends FlipOptions {
+  /** Keep the element that last held the `layoutId` on screen through the handoff: a copy of it takes the same path and fades out while this one fades in. */
+  crossfade?: boolean;
+}
 
 const SAME_BOX_PX = 0.5;
 
 const sharedOwner = sharedSlot('motion.flip-owner@1', () => new Map<string, HTMLElement>());
+
+let loadedCrossfade: typeof import('./crossfade') | null = null;
+
+const loadCrossfade = (): void => {
+  if (!loadedCrossfade) void import('./crossfade').then((module) => (loadedCrossfade = module));
+};
 
 const usable = (box: Box | null): box is Box => !!box && box.width > 0 && box.height > 0;
 
@@ -35,13 +44,16 @@ export function useFlip<T extends HTMLElement>(
   const playing = useRef<{ play: Playback; el: T } | null>(null);
   const interrupted = useRef<Box | null>(null);
   const origin = useRef<Box | null>(null);
-  const { size, timing } = tuning;
+  const latest = useRef(tuning);
+  latest.current = tuning;
+  const { size, timing, crossfade } = tuning;
   const enabled = inPlace || sharedId !== null;
   const lastCommitted = ref.current && (inPlace || playing.current) ? measure(ref.current) : null;
 
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el || !enabled) return;
+    if (crossfade) loadCrossfade();
     const live = playing.current;
     const midFlight = live?.el === el;
     const moved = !!lastCommitted && !sameBox(lastCommitted, measure(el));
@@ -66,9 +78,11 @@ export function useFlip<T extends HTMLElement>(
     return () => {
       const live = playing.current;
       let box: Box | null = live ? measure(live.el) : null;
+      if (!usable(box)) box = ref.current ? measure(ref.current) : null;
+      if (latest.current.crossfade && loadedCrossfade && ref.current && usable(box) && !UIMotion.reduced)
+        loadedCrossfade.keep(sharedId, ref.current, box, latest.current);
       live?.play.stop();
       playing.current = null;
-      if (!usable(box)) box = ref.current ? measure(ref.current) : null;
       if (usable(box)) keepShared(sharedId, box);
       const mine = readShared(sharedId);
       queueMicrotask(() => {
@@ -84,7 +98,11 @@ export function useFlip<T extends HTMLElement>(
     const from = origin.current;
     origin.current = null;
     if (!el || !usable(from) || UIMotion.reduced) return;
-    const next = flip(el, from, { size, timing });
+    const handoff =
+      sharedId !== null && crossfade && loadedCrossfade
+        ? loadedCrossfade.play(sharedId, el, from, { timing })
+        : undefined;
+    const next = handoff === undefined ? flip(el, from, { size, timing }) : handoff;
     if (!next) return;
     playing.current = { play: next, el };
     interrupted.current = from;

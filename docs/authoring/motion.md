@@ -84,6 +84,9 @@
 - `<Motion layoutId="x">` FLIPs from wherever any element last held the id. The node keeping the id does not FLIP its own moves, so an indicator stays on its container; add `layout` for a node that should.
 - `<Motion>` creates the FLIP after `animate` in the same commit, so its `composite: 'add'` translate stacks on an entrance: WAAPI composites in creation order.
 - `layoutTransition`: `size` is `'scale'` (cheap, distorts borders and radii), `'morph'` (real `width` / `height`, for a visible border or radius) or `'none'`, plus a `timing`.
+- `layoutTransition.crossfade: true` loads the crossfade code on the first commit that asks for it, and a handoff before it arrives plays the plain FLIP. The element leaving a `layoutId` stays on screen as an inert copy in a fixed layer on `<body>`. A copy no element claims in that commit fades out in place.
+- A crossfade handoff ignores `size` and moves only `translate`, `scale` and `opacity`, so nothing reflows and the compositor runs it. The copy and the incoming element travel centre to centre, scaled uniformly by the ratio of their widths. The copy is gone by 50% of eased progress, and the incoming element reaches its resting opacity by 45%.
+- The handoff cancels the incoming element's own `translate`, `scale` and `opacity` animations, so a mount `animate` on them does not play. The copy keeps its classes, inline styles, font, colour and a differing `data-theme` / `data-polarity`; styles it drew from its old ancestors are gone.
 - Below components: `flip(el, from, options)` and `measure(el)`.
 
 ## Focus and the first frame
