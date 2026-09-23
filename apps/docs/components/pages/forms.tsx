@@ -25,6 +25,7 @@ type RadioSize = NonNullable<RadioGroupProps['size']>;
 type NumberSize = NonNullable<NumberFieldProps['size']>;
 type TextareaSize = NonNullable<TextareaProps['size']>;
 type MultiSelectSize = NonNullable<MultiSelectProps['size']>;
+type MultiSelectMarker = NonNullable<MultiSelectProps['marker']>;
 type SelectHighlight = NonNullable<SelectProps['highlight']>;
 type MenuWidth = NonNullable<SelectProps['width']>;
 type OtpSize = NonNullable<OtpFieldProps['size']>;
@@ -33,6 +34,7 @@ type TextFieldType = NonNullable<TextFieldProps['type']>;
 const FIELD_SIZES: readonly FieldSize[] = ['sm', 'md', 'lg'];
 const HIGHLIGHTS: readonly SelectHighlight[] = ['neutral', 'accent'];
 const MENU_WIDTHS: readonly MenuWidth[] = ['trigger', 'auto', 'sm', 'md', 'lg'];
+const MARKERS: readonly MultiSelectMarker[] = ['checkbox', 'switch'];
 const BOX_SIZES: readonly BoxSize[] = ['sm', 'md'];
 const OTP_SIZES: readonly OtpSize[] = ['sm', 'md'];
 const TEXTAREA_SIZES: readonly TextareaSize[] = ['sm', 'md', 'lg'];
@@ -401,6 +403,7 @@ export function MultiSelectPlayground() {
   const [highlight, setHighlight] = useState<SelectHighlight>('neutral');
   const [rail, setRail] = useState(false);
   const [width, setWidth] = useState<MenuWidth>('trigger');
+  const [marker, setMarker] = useState<MultiSelectMarker>('checkbox');
   const [customTrigger, setCustomTrigger] = useState(false);
   const [channels, setChannels] = useState(['tw', 'li']);
 
@@ -414,6 +417,7 @@ export function MultiSelectPlayground() {
   highlight="${highlight}"
   rail={${rail}}
   width="${width}"
+  marker="${marker}"
   searchable${customTrigger ? MULTI_TRIGGER_CODE : ''}
 />`;
 
@@ -426,6 +430,7 @@ export function MultiSelectPlayground() {
           <KnobSegment label="highlight" value={highlight} onChange={setHighlight} options={HIGHLIGHTS} />
           <KnobSwitch label="rail" checked={rail} onChange={setRail} />
           <KnobSegment label="width" value={width} onChange={setWidth} options={MENU_WIDTHS} />
+          <KnobSegment label="marker" value={marker} onChange={setMarker} options={MARKERS} />
           <KnobSwitch label="custom trigger" checked={customTrigger} onChange={setCustomTrigger} />
         </>
       }
@@ -441,6 +446,7 @@ export function MultiSelectPlayground() {
           highlight={highlight}
           rail={rail}
           width={width}
+          marker={marker}
           searchable
           trigger={
             customTrigger

@@ -11,6 +11,7 @@ import type { MenuSize, MenuWeight, MenuWidth } from '../../internal/menu/highli
 import type { ActivateOn } from '../../internal/utils/activation';
 import { cx } from '../../internal/utils/cx';
 import { CheckGlyph } from '../../primitives/checkbox/check-glyph';
+import { SwitchGlyph } from '../../primitives/toggle/switch-glyph';
 import {
   ListboxPanel,
   SelectTrigger,
@@ -41,6 +42,10 @@ export interface MultiSelectProps {
   menuSize?: MenuSize;
   /** Weight of every option label in the menu. @default 'medium' */
   weight?: MenuWeight;
+  /** Glyph mirroring each option's selected state at the trailing edge: a checkbox, or a switch for a
+   *  settings-style menu where every option is an independent on/off. Decoration only - the option
+   *  semantics are the same either way. @default 'checkbox' */
+  marker?: 'checkbox' | 'switch';
   /** Menu width. `trigger` is never narrower than the trigger, `auto` fits the options, and
    *  `sm` | `md` | `lg` are fixed steps with long labels ellipsizing. @default 'trigger' */
   width?: MenuWidth;
@@ -81,7 +86,16 @@ export interface MultiSelectProps {
   trigger?: CustomTrigger<SelectOption[]>;
 }
 
-function CheckboxTick({ checked, size }: { checked: boolean; size: MenuSize }) {
+type MultiSelectMarker = NonNullable<MultiSelectProps['marker']>;
+
+function OptionMarker({ marker, checked, size }: { marker: MultiSelectMarker; checked: boolean; size: MenuSize }) {
+  if (marker === 'switch') {
+    return (
+      <span className={cx('zc-sw', size === 'sm' && 'zc-sw--sm')} aria-hidden="true">
+        <SwitchGlyph checked={checked} readOnly tabIndex={-1} />
+      </span>
+    );
+  }
   return (
     <span className={cx('zc-cbx', size === 'sm' && 'zc-cbx--sm')} aria-hidden="true">
       <CheckGlyph checked={checked} readOnly tabIndex={-1} />
@@ -105,6 +119,7 @@ export function MultiSelect({
   highlight = 'neutral',
   rail = false,
   weight = 'medium',
+  marker = 'checkbox',
   width = 'trigger',
   leadingIcon = null,
   id,
@@ -179,7 +194,7 @@ export function MultiSelect({
         activateOn={activateOn}
         animation={animation}
         menuProps={menuProps}
-        check={(sel) => <CheckboxTick checked={sel} size={menuSize} />}
+        check={(sel) => <OptionMarker marker={marker} checked={sel} size={menuSize} />}
       />
     </div>
   );

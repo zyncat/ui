@@ -253,18 +253,24 @@
   .zc-select__menu[data-multiple='true'] .zc-select__option-check {
     opacity: 1;
   }
-  .zc-select__menu[data-multiple='true'] .zc-select__option .zc-cbx {
+  .zc-select__menu[data-multiple='true'] .zc-select__option :is(.zc-cbx, .zc-sw) {
     padding: 0;
     gap: 0;
     pointer-events: none;
   }
-  .zc-select__menu[data-multiple='true'] .zc-select__option .zc-cbx__box {
+  .zc-select__menu[data-multiple='true'] .zc-select__option :is(.zc-cbx__box, .zc-sw__track) {
     margin-top: 0;
   }
 
-  /* .zc-cbx is pointer-events: none, so its own :active never fires; the row dips the box */
+  /* The glyph is pointer-events: none, so its own :active never fires; the row dips it */
   .zc-select__menu[data-multiple='true'] .zc-select__option:active:not([data-disabled='true']) .zc-cbx__box {
     transform: scale(0.86);
+  }
+  .zc-select__menu[data-multiple='true'] .zc-select__option:active:not([data-disabled='true']) .zc-sw__track {
+    transform: scale(0.96);
+  }
+  .zc-select__menu[data-multiple='true'] .zc-select__option:active:not([data-disabled='true']) .zc-sw__thumb {
+    --sw-sx: 1.16;
   }
   .zc-select__empty {
     padding: var(--space-4) var(--space-3);

@@ -14,6 +14,7 @@ import {
 import type { DataAttributes } from '../../../dom-props';
 import { useControllable } from '../../internal/hooks/use-controllable';
 import { cx } from '../../internal/utils/cx';
+import { SwitchGlyph } from './switch-glyph';
 
 interface ToggleOwnProps {
   /** Controlled checked state. Omit for uncontrolled (use `defaultChecked`). */
@@ -78,24 +79,14 @@ export function Toggle({
       onPointerLeave={press(false)}
       onPointerCancel={press(false)}
     >
-      <input
-        type="checkbox"
-        role="switch"
-        className="zc-sw__input"
+      <SwitchGlyph
+        pressed={pressed}
         disabled={disabled}
         checked={isOn}
         onChange={handleChange}
         {...htmlProps}
         defaultChecked={undefined}
       />
-      <span
-        className="zc-sw__track"
-        data-on={isOn ? 'true' : undefined}
-        data-pressed={pressed ? 'true' : undefined}
-        aria-hidden="true"
-      >
-        <span className="zc-sw__thumb"></span>
-      </span>
       {label || description ? (
         <span className="zc-sw__text">
           {label ? <span className="zc-sw__label">{label}</span> : null}

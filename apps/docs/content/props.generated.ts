@@ -1391,6 +1391,13 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       description: 'Weight of every option label in the menu.',
     },
     {
+      name: 'marker',
+      type: "'checkbox' | 'switch'",
+      default: "'checkbox'",
+      description:
+        "Glyph mirroring each option's selected state at the trailing edge: a checkbox, or a switch for a settings-style menu where every option is an independent on/off. Decoration only - the option semantics are the same either way.",
+    },
+    {
       name: 'width',
       type: 'MenuWidth',
       default: "'trigger'",
