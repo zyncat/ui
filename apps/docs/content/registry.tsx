@@ -10,6 +10,7 @@ import * as IG from '../components/pages/instagram-feed';
 import { InstallationDoc } from '../components/pages/installation';
 import { IntroductionDoc } from '../components/pages/introduction';
 import { McpDoc } from '../components/pages/mcp';
+import { MotionDoc } from '../components/pages/motion';
 import * as O from '../components/pages/overlays';
 import * as P from '../components/pages/primitives';
 import { ThemingDoc } from '../components/pages/theming';
@@ -97,6 +98,23 @@ export const GROUPS: DocGroup[] = [
           { id: 'level-2', title: 'Level 2 — One component', level: 2 },
           { id: 'level-3', title: 'Level 3 — One instance', level: 2 },
           { id: 'replicas', title: 'Replicas', level: 2 },
+        ],
+      },
+      {
+        slug: 'motion',
+        label: 'Motion',
+        blurb:
+          'Real interfaces built on layout and layoutId, each with the same knobs: how a resized box is reconciled, ' +
+          'the timing, and a crossfade for handoffs.',
+        Content: MotionDoc,
+        toc: [
+          { id: 'knobs', title: 'The knobs', level: 2 },
+          { id: 'files', title: 'File browser', level: 2 },
+          { id: 'inbox', title: 'Inbox', level: 2 },
+          { id: 'segmented', title: 'Segmented control', level: 2 },
+          { id: 'kanban', title: 'Kanban board', level: 2 },
+          { id: 'gallery', title: 'Photo lightbox', level: 2 },
+          { id: 'island', title: 'Dynamic island', level: 2 },
         ],
       },
       {

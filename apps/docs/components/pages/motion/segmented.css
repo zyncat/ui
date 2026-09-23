@@ -1,0 +1,36 @@
+.ml-seg {
+  display: inline-flex;
+  padding: var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--bg-muted);
+}
+
+.ml-seg__tab {
+  position: relative;
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--size-caption);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ml-seg__tab[aria-pressed='true'] {
+  color: var(--text-strong);
+}
+
+.ml-seg__pill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.ml-seg__label {
+  position: relative;
+}

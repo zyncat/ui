@@ -1,0 +1,78 @@
+.ml-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 30rem;
+}
+
+.ml-gallery__tile,
+.ml-gallery__slot {
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+}
+
+.ml-gallery__tile {
+  padding: 0;
+  border: 0;
+  cursor: zoom-in;
+}
+
+.ml-gallery__slot {
+  background: var(--bg-muted);
+}
+
+.ml-lightbox {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-5);
+  cursor: zoom-out;
+}
+
+.ml-lightbox__scrim {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklab, var(--bg-app) 82%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.ml-lightbox__figure {
+  position: relative;
+  display: grid;
+  gap: var(--space-3);
+  width: min(100%, 34rem);
+  margin: 0;
+}
+
+.ml-lightbox__photo {
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+}
+
+.ml-lightbox__caption {
+  color: var(--text-secondary);
+  font-size: var(--size-caption);
+}
+
+.ml-lightbox__caption strong {
+  margin-right: var(--space-2);
+  color: var(--text-strong);
+  font-weight: var(--weight-semibold);
+}
+
+.ml-lightbox__close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  border: var(--border-hairline) solid var(--border-default);
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+  color: var(--text-body);
+  font: inherit;
+  font-size: var(--size-caption);
+  cursor: pointer;
+}

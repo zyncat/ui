@@ -1,0 +1,62 @@
+.ml-inbox {
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 26rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ml-mail {
+  overflow: hidden;
+  border: var(--border-hairline) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+}
+
+.ml-mail:has(> [aria-expanded='true']) {
+  box-shadow: var(--shadow-md);
+}
+
+.ml-mail__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ml-mail__from {
+  color: var(--text-strong);
+  font-size: var(--size-caption);
+  font-weight: var(--weight-semibold);
+}
+
+.ml-mail__time {
+  color: var(--text-muted);
+  font-size: var(--size-micro);
+}
+
+.ml-mail__subject {
+  grid-column: 1 / -1;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--size-caption);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ml-mail__body {
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-4);
+  color: var(--text-body);
+  font-size: var(--size-caption);
+  line-height: var(--leading-body);
+}
