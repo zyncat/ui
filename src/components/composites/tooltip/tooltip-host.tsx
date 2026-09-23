@@ -6,8 +6,8 @@ import { createPortal } from 'react-dom';
 import { Motion } from '../../../motion/element';
 import { Presence } from '../../../motion/presence';
 import { popIn, popOut } from '../../../motion/presets';
+import { inheritedThemeAttrs } from '../../../theme-scope';
 import { motionFor } from '../../../tokens/motion-tokens';
-import { inheritedThemeAttrs } from '../../internal/overlay/layer';
 import { tokenPx } from '../../internal/utils/token-px';
 import { store, TOOLTIP_DOM_ID, type ActivePayload, type Placement } from './tooltip-store';
 

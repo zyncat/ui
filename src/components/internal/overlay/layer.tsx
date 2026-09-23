@@ -19,6 +19,7 @@ import {
 import { createPortal } from 'react-dom';
 
 import { sharedSlot } from '../../../shared-slot';
+import { inheritedThemeAttrs } from '../../../theme-scope';
 import { activationProps, type ActivateOn } from '../utils/activation';
 
 interface OverlayEntry {
@@ -176,26 +177,6 @@ function useHydrated() {
     () => true,
     () => false,
   );
-}
-
-const ovNearestTheme = (el: Element | null | undefined, attr: string): string | null =>
-  el?.closest(`[${attr}]`)?.getAttribute(attr) ?? null;
-
-const ovThemeDifferingFromPage = (scope: Element | null | undefined, attr: string): string | undefined => {
-  const own = ovNearestTheme(scope, attr);
-  return own !== null && own !== ovNearestTheme(document.body, attr) ? own : undefined;
-};
-
-export interface InheritedThemeAttrs {
-  'data-theme'?: string;
-  'data-polarity'?: string;
-}
-
-export function inheritedThemeAttrs(scope: Element | null | undefined): InheritedThemeAttrs {
-  return {
-    'data-theme': ovThemeDifferingFromPage(scope, 'data-theme'),
-    'data-polarity': ovThemeDifferingFromPage(scope, 'data-polarity'),
-  };
 }
 
 function OverlayPortal({
