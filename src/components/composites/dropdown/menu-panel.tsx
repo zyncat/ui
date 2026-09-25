@@ -2,7 +2,7 @@
 
 import '../../internal/menu/menu-surface.css';
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, type KeyboardEvent, type RefObject } from 'react';
 
 import { GlidePill, useGlide } from '../../../motion/glide';
 import { Presence } from '../../../motion/presence';
@@ -59,7 +59,8 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
     if (seed === 'selected') return flat.findIndex((item) => item.selected && !item.disabled);
     return edgeEnabled(flat, seed === 'last');
   };
-  const [activeIdx, setActiveIdx] = useState(seedIndex);
+  const activeIdx = useRef(-1);
+  const activeRow = useRef<HTMLElement | null>(null);
 
   const panelRef = refFor('panel:' + level.key);
   const rowFor = (i: number) => refFor('row:' + levelKey(depth, flat[i].id)) as unknown as RefObject<HTMLDivElement>;
@@ -71,7 +72,6 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
   const travel = useRef({ from: null as Point | null, active: false, hovered: -1 });
 
   const openIdx = openSubId != null ? (indexOf.get(openSubId) ?? -1) : -1;
-  const activeItem = activeIdx >= 0 ? flat[activeIdx] : undefined;
   const cancel = () => chain.cancel(depth);
   const closeSub = () => chain.closeSub(depth);
 
@@ -83,13 +83,20 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
   useAnchorPosition({ ...place, arrow: false, triggerRef: anchorRef, panelRef });
   useOutsidePress({ entry, refs: [panelRef, anchorRef], enabled: !nested, onPress: () => chain.dismiss(false) });
 
-  useLayoutEffect(() => {
-    const row = activeIdx >= 0 && activeIdx < flat.length ? rowFor(activeIdx).current : null;
+  function setActiveIdx(i: number) {
+    const row = i >= 0 && i < flat.length ? rowFor(i).current : null;
+    activeIdx.current = i;
+    if (activeRow.current) {
+      activeRow.current.tabIndex = -1;
+      activeRow.current.removeAttribute('data-active');
+    }
+    activeRow.current = row;
     if (!row) return glide.leave();
+    row.tabIndex = 0;
+    row.setAttribute('data-active', 'true');
     row.focus();
     glide.enter(row);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeIdx]);
+  }
 
   useLayoutEffect(() => {
     if (seed === 'none') return;
@@ -173,13 +180,14 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
       return i >= 0 ? moveTo(i) : undefined;
     }
     e.preventDefault();
+    const activeItem = activeIdx.current >= 0 ? flat[activeIdx.current] : undefined;
     const back = () => (openSubId != null ? closeSub() : cancel());
     const opens = activeItem && !activeItem.disabled && opensLevel(activeItem);
     switch (e.key) {
       case 'ArrowDown':
-        return moveTo(stepEnabled(flat, activeIdx, 1));
+        return moveTo(stepEnabled(flat, activeIdx.current, 1));
       case 'ArrowUp':
-        return moveTo(stepEnabled(flat, activeIdx, -1));
+        return moveTo(stepEnabled(flat, activeIdx.current, -1));
       case 'Home':
         return moveTo(edgeEnabled(flat, false));
       case 'End':
@@ -218,14 +226,13 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
         id={menuId + '-item-' + i}
         className="zc-dropdown__item"
         role={radio ? 'menuitemradio' : 'menuitem'}
-        tabIndex={i === activeIdx ? 0 : -1}
+        tabIndex={-1}
         aria-checked={radio ? item.selected : undefined}
         aria-disabled={item.disabled || undefined}
         aria-haspopup={popup ?? undefined}
         aria-expanded={popup ? subOpen : undefined}
         aria-controls={subOpen ? panelId(depth + 1) : undefined}
         aria-keyshortcuts={item.shortcut}
-        data-active={i === activeIdx ? 'true' : undefined}
         data-selected={item.selected ? 'true' : undefined}
         data-disabled={item.disabled ? 'true' : undefined}
         data-danger={item.danger ? 'true' : undefined}
@@ -284,7 +291,6 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
       aria-labelledby={nested ? panelId(depth - 1) + '-item-' + level.ownerIdx : undefined}
       data-nested={nested ? 'true' : undefined}
       data-content={contentLevel ? 'true' : undefined}
-      data-danger-active={activeItem && activeItem.danger ? 'true' : undefined}
       onKeyDown={contentLevel ? onContentKeyDown : onKeyDown}
       onPointerEnter={() => {
         if (hoverDepth.current > depth) travel.current.from = null;

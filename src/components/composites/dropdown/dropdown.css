@@ -6,7 +6,7 @@
     --menu-max-height: min(26rem, 70vh);
   }
 
-  .zc-dropdown__menu[data-danger-active='true'] {
+  .zc-dropdown__menu:has(.zc-dropdown__item[data-active='true'][data-danger='true']) {
     --menu-glide-fill: var(--danger-wash);
     --menu-glide-rail: var(--danger);
   }

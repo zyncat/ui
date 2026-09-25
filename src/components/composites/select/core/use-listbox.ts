@@ -33,8 +33,9 @@ export function useListbox({
   closeOnCommit,
 }: UseListboxArgs) {
   const [open, setOpen] = useState(false);
-  const [query, setQueryState] = useState('');
-  const [activeIdx, setActiveIdx] = useState(-1);
+  const [query, setQuery] = useState('');
+  const activeIdx = useRef(-1);
+  const activeRow = useRef<HTMLElement | null>(null);
   const typeahead = useTypeahead();
 
   const triggerRef = useRef<HTMLElement>(null),
@@ -63,14 +64,7 @@ export function useListbox({
     return { sections, navItems };
   }, [groups, query]);
 
-  const smoothScroll = useRef(false);
-  const setQuery = (next: string) => {
-    smoothScroll.current = false;
-    setQueryState(next);
-  };
-
   const show = () => {
-    smoothScroll.current = false;
     if (!disabled && !loading) setOpen(true);
   };
   const requestClose = () => setOpen(false);
@@ -86,15 +80,13 @@ export function useListbox({
   }
 
   useEffect(() => {
-    if (open) return;
-    setQuery('');
-    setActiveIdx(-1);
+    if (!open) setQuery('');
   }, [open]);
 
   useLayoutEffect(() => {
     if (!open) return;
-    if (query) setActiveIdx(edgeEnabled(navItems, false));
-    else setActiveIdx(navItems.findIndex((o) => isSelected(o.value) && !o.disabled));
+    if (query) activeIdx.current = edgeEnabled(navItems, false);
+    else activeIdx.current = navItems.findIndex((o) => isSelected(o.value) && !o.disabled);
   }, [open, query]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -115,7 +107,14 @@ export function useListbox({
     (behavior: ScrollBehavior) => {
       const list = listRef.current;
       const content = contentRef.current;
-      const row = rowAt(activeIdx);
+      const row = rowAt(activeIdx.current);
+      activeRow.current?.removeAttribute('data-active');
+      row?.setAttribute('data-active', 'true');
+      activeRow.current = row;
+      for (const host of [triggerRef.current, searchable ? searchRef.current : list]) {
+        if (row) host?.setAttribute('aria-activedescendant', row.id);
+        else host?.removeAttribute('aria-activedescendant');
+      }
       if (!list || !content || !row) return glide.leave();
       const inset = getComputedStyle(list);
       const rowTop = content.offsetTop + row.offsetTop;
@@ -125,11 +124,11 @@ export function useListbox({
       else if (list.scrollTop < below) list.scrollTo({ top: below, behavior });
       glide.enter(row);
     },
-    [rowAt, activeIdx, glide],
+    [rowAt, searchable, glide],
   );
 
   useLayoutEffect(() => {
-    follow(smoothScroll.current ? 'auto' : 'instant');
+    follow('instant');
   }, [follow, query]);
 
   useEffect(() => {
@@ -142,11 +141,11 @@ export function useListbox({
 
   function navigate(i: number) {
     if (i < 0) return;
-    smoothScroll.current = true;
-    setActiveIdx(i);
+    activeIdx.current = i;
+    follow('auto');
   }
   function moveActive(dir: number) {
-    navigate(stepEnabled(navItems, activeIdx, dir));
+    navigate(stepEnabled(navItems, activeIdx.current, dir));
   }
   function edgeActive(toEnd: boolean) {
     navigate(edgeEnabled(navItems, toEnd));
@@ -180,7 +179,7 @@ export function useListbox({
         break;
       case 'Enter':
         e.preventDefault();
-        if (activeIdx >= 0) commit(navItems[activeIdx]);
+        if (activeIdx.current >= 0) commit(navItems[activeIdx.current]);
         break;
       case 'Tab':
         requestClose();
@@ -189,7 +188,7 @@ export function useListbox({
         if (searchable) break;
         e.preventDefault();
         if (typeahead.buffered()) typeAhead(e.key);
-        else if (activeIdx >= 0) commit(navItems[activeIdx]);
+        else if (activeIdx.current >= 0) commit(navItems[activeIdx.current]);
         break;
       default:
         if (!searchable && e.key.length === 1 && !e.metaKey && !e.ctrlKey) typeAhead(e.key);
@@ -197,8 +196,6 @@ export function useListbox({
   }
 
   const optId = (value: string) => baseId + '-opt-' + encodeURIComponent(value);
-  const active = activeIdx >= 0 ? navItems[activeIdx] : undefined;
-  const adId = open && active ? optId(active.value) : undefined;
 
   return {
     open,
@@ -212,7 +209,6 @@ export function useListbox({
     menuId,
     listId,
     optId,
-    adId,
     groups,
     flat,
     sections,
@@ -222,8 +218,7 @@ export function useListbox({
     show,
     requestClose,
     commit,
-    activeIdx,
-    setActiveIdx,
+    navigate,
     onMenuKeyDown,
   };
 }

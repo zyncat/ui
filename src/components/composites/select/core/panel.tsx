@@ -78,9 +78,8 @@ export function ListboxPanel({
         aria-selected={isSel}
         aria-disabled={opt.disabled || undefined}
         data-selected={isSel ? 'true' : undefined}
-        data-active={row.index === lb.activeIdx ? 'true' : undefined}
         data-disabled={opt.disabled ? 'true' : undefined}
-        onMouseEnter={() => !opt.disabled && lb.setActiveIdx(row.index)}
+        onMouseEnter={() => !opt.disabled && lb.navigate(row.index)}
         onMouseDown={(e) => e.preventDefault()}
         {...activationProps<HTMLDivElement>(() => lb.commit(opt), { on: activateOn, holdFocus: true })}
         icon={opt.icon}
@@ -117,7 +116,6 @@ export function ListboxPanel({
             placeholder={searchPlaceholder}
             aria-label={searchPlaceholder}
             aria-controls={lb.listId}
-            aria-activedescendant={lb.adId}
             onChange={(e) => lb.setQuery(e.target.value)}
             onKeyDown={lb.onMenuKeyDown}
           />
@@ -132,7 +130,6 @@ export function ListboxPanel({
         aria-multiselectable={multiple || undefined}
         tabIndex={-1}
         aria-label={ariaLabel}
-        aria-activedescendant={searchable ? undefined : lb.adId}
         data-grouped={grouped ? 'true' : undefined}
         onKeyDown={searchable ? undefined : lb.onMenuKeyDown}
       >

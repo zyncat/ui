@@ -66,6 +66,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
       className={`${newsreader.variable} ${geist.variable} ${geistMono.variable}`}
     >
+      {process.env.NODE_ENV === 'development' && (
+        <head>
+          <script crossOrigin="anonymous" src="https://unpkg.com/react-scan/dist/auto.global.js" />
+        </head>
+      )}
       <body>
         <DocsTheme />
         <SiteJsonLd />

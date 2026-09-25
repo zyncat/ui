@@ -43,7 +43,7 @@ export function SelectTrigger({
   onKeyDown,
   ...rest
 }: SelectTriggerProps) {
-  const { triggerRef, baseId, open, adId, show, requestClose } = lb;
+  const { triggerRef, baseId, open, show, requestClose } = lb;
 
   const toggle = () => {
     if (triggerRef.current) triggerRef.current.focus({ preventScroll: true });
@@ -68,7 +68,6 @@ export function SelectTrigger({
       holdFocus: true,
       attrs: {
         role: 'combobox',
-        'aria-activedescendant': adId,
         ...(ariaLabel && { 'aria-label': ariaLabel }),
         ...(invalid && { 'aria-invalid': true }),
         ...(disabled && { 'aria-disabled': true }),
@@ -87,7 +86,6 @@ export function SelectTrigger({
       aria-haspopup="listbox"
       aria-expanded={open}
       aria-controls={baseId + '-list'}
-      aria-activedescendant={adId}
       aria-label={ariaLabel}
       aria-invalid={invalid || undefined}
       disabled={disabled}
