@@ -2,7 +2,8 @@
 
 import { useLayoutEffect, useRef, type RefObject } from 'react';
 
-import { animate, type Layer, type Playback } from '../engine';
+import { animate, measure, offscreen, type Layer, type Playback } from '../engine';
+import { beforePaint } from './before-paint';
 import { usePresence } from './presence-context';
 
 export type Plays = Playback | Playback[] | null | undefined | void;
@@ -15,6 +16,9 @@ export function run(spec: MotionSpec | undefined, el: HTMLElement): Playback[] {
   if (typeof spec === 'function') return toList(spec(el));
   return [Array.isArray(spec) ? animate(el, ...spec) : animate(el, spec)];
 }
+
+const landed = (layers: Layer[]): Layer[] =>
+  layers.map((layer) => ({ ...layer, timing: { duration: 0, fill: layer.timing?.fill } }));
 
 const sameDeps = (a: unknown[], b: unknown[]): boolean =>
   a.length === b.length && a.every((v, i) => Object.is(v, b[i]));
@@ -31,12 +35,19 @@ export interface MotionSpecs {
   initial?: boolean;
   /** Replay `animate` when these change. Must keep a stable length. @default [] */
   deps?: unknown[];
+  /** How far outside the viewport, in px, this element still animates; further out, `animate` and layout moves land on their end state at once. `Infinity` always animates. @default 320 */
+  offscreenMargin?: number;
 }
 
 /** Drives `<Motion>`; use it directly on elements you hold a ref to but do not render. */
-export function useMotion(ref: RefObject<HTMLElement | null>, { animate, exit, initial, deps }: MotionSpecs): void {
+export function useMotion(
+  ref: RefObject<HTMLElement | null>,
+  { animate, exit, initial, deps, offscreenMargin }: MotionSpecs,
+): void {
   const presence = usePresence();
   const playing = useRef<Playback[]>([]);
+  const pending = useRef<object | null>(null);
+  const mounted = useRef(false);
   const ran = useRef<unknown[] | null>(null);
   const exiting = useRef(false);
   const spec = useRef({ animate, exit, initial });
@@ -45,6 +56,7 @@ export function useMotion(ref: RefObject<HTMLElement | null>, { animate, exit, i
   const ownsExit = !!exit;
 
   const stop = () => {
+    pending.current = null;
     for (const play of playing.current) play.stop();
     playing.current = [];
   };
@@ -65,9 +77,23 @@ export function useMotion(ref: RefObject<HTMLElement | null>, { animate, exit, i
     const previous = ran.current;
     ran.current = current;
     const atMount = !previous || sameDeps(previous, current);
+    if (previous && atMount && (pending.current || playing.current.length)) return;
     if (atMount && (spec.current.initial ?? presence.initial) === false) return;
     stop();
-    playing.current = run(spec.current.animate, el);
+    const animation = spec.current.animate;
+    if (!animation || typeof animation === 'function') {
+      playing.current = run(animation, el);
+      return;
+    }
+    const token = {};
+    pending.current = token;
+    beforePaint(() => {
+      if (pending.current !== token) return;
+      const layers = offscreen(offscreenMargin, measure(el)) ? landed([animation].flat()) : animation;
+      return () => {
+        playing.current = run(layers, el);
+      };
+    });
   }, deps ?? []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useLayoutEffect(() => {
@@ -89,5 +115,13 @@ export function useMotion(ref: RefObject<HTMLElement | null>, { animate, exit, i
     });
   }, [presence.isPresent]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useLayoutEffect(() => stop, []);
+  useLayoutEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      queueMicrotask(() => {
+        if (!mounted.current) stop();
+      });
+    };
+  }, []);
 }

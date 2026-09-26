@@ -12,6 +12,7 @@ export interface Box {
 const MOVE_EPSILON = 0.5;
 const SCALE_EPSILON = 0.01;
 const TOP_LEFT = { x: 0, y: 0 };
+const OFFSCREEN_MARGIN_PX = 320;
 
 function transformOrigin(el: HTMLElement): { x: number; y: number } {
   const [x, y] = getComputedStyle(el).transformOrigin.split(' ');
@@ -21,6 +22,15 @@ function transformOrigin(el: HTMLElement): { x: number; y: number } {
 export function measure(el: HTMLElement): Box {
   const rect = el.getBoundingClientRect();
   return { left: rect.left + window.scrollX, top: rect.top + window.scrollY, width: rect.width, height: rect.height };
+}
+
+export function offscreen(margin = OFFSCREEN_MARGIN_PX, a: Box, b: Box = a): boolean {
+  const outside = (start: number, end: number, scroll: number, span: number): boolean =>
+    end < scroll - margin || start > scroll + span + margin;
+  return (
+    outside(Math.min(a.top, b.top), Math.max(a.top + a.height, b.top + b.height), window.scrollY, window.innerHeight) ||
+    outside(Math.min(a.left, b.left), Math.max(a.left + a.width, b.left + b.width), window.scrollX, window.innerWidth)
+  );
 }
 
 const shared = sharedSlot('engine.flip-shared@1', () => new Map<string, Box>());
@@ -44,7 +54,11 @@ export interface FlipOptions {
 }
 
 export function flip(el: HTMLElement, from: Box, options: FlipOptions = {}): Playback | null {
-  const to = measure(el);
+  const layers = flipLayers(el, from, measure(el), options);
+  return layers && animate(el, ...layers);
+}
+
+export function flipLayers(el: HTMLElement, from: Box, to: Box, options: FlipOptions = {}): Layer[] | null {
   if (!to.width || !to.height) return null;
 
   const size = options.size ?? 'scale';
@@ -77,5 +91,5 @@ export function flip(el: HTMLElement, from: Box, options: FlipOptions = {}): Pla
   if (resized && size === 'morph')
     layers.push({ width: [from.width, to.width], height: [from.height, to.height], timing });
 
-  return animate(el, ...layers);
+  return layers;
 }

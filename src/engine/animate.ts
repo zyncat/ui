@@ -118,12 +118,14 @@ function play(el: HTMLElement, layer: Layer): Playback | null {
   if (!keys.length) return null;
 
   const timing = layer.timing;
+  const fill = timing?.fill ?? 'both';
   const resolved = resolveTiming(timing);
 
   if (resolved.duration <= 0) {
     claim(el, keys, null);
-    if (timing?.fill !== 'none')
-      for (const key of keys) el.style.setProperty(cssName(key), frames[key][frames[key].length - 1]);
+    if (fill === 'both' || fill === 'forwards')
+      for (const key of keys)
+        el.style.setProperty(cssName(key), autoKeys.includes(key) ? 'auto' : frames[key][frames[key].length - 1]);
     return null;
   }
 
@@ -135,7 +137,7 @@ function play(el: HTMLElement, layer: Layer): Playback | null {
     duration: resolved.duration,
     delay: resolved.delay,
     easing: resolved.easing,
-    fill: timing?.fill ?? 'both',
+    fill,
     composite: layer.composite,
   });
   animation.playbackRate = 1 / clock.scale;

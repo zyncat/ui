@@ -1,7 +1,9 @@
-import { animate, measure, type Box, type FlipOptions, type Playback } from '../engine';
+import { animate, measure, offscreen, type Box, type FlipOptions, type Playback } from '../engine';
 import { claim } from '../engine/animate';
+import type { Timing } from '../engine/ease';
 import { sharedSlot } from '../shared-slot';
 import { inheritedThemeAttrs } from '../theme-scope';
+import { flushBeforePaint } from './before-paint';
 
 const SHOWN_BY = 0.45;
 const GONE_BY = 0.5;
@@ -26,7 +28,7 @@ function onto(el: HTMLElement, box: Box, target: Box): { x: number; y: number; s
   };
 }
 
-export function keep(id: string, el: HTMLElement, box: Box, { timing }: FlipOptions): void {
+export function keep(id: string, el: HTMLElement, box: Box, timing?: Timing, margin?: number): void {
   const copy = el.cloneNode(true) as HTMLElement;
   for (const node of [copy, ...copy.querySelectorAll('[id]')]) node.removeAttribute('id');
   for (const [name, value] of Object.entries(inheritedThemeAttrs(el))) if (value) copy.setAttribute(name, value);
@@ -53,9 +55,13 @@ export function keep(id: string, el: HTMLElement, box: Box, { timing }: FlipOpti
   const entry: Copy = { el: copy, box, of: el };
   kept.set(id, entry);
   queueMicrotask(() => {
-    if (kept.get(id) !== entry) return;
+    flushBeforePaint();
+    if (kept.get(id) !== entry) {
+      if (!entry.play) copy.remove();
+      return;
+    }
     kept.delete(id);
-    if (el.isConnected) copy.remove();
+    if (el.isConnected || offscreen(margin, box)) copy.remove();
     else animate(copy, { opacity: [0], timing }).finished.then(() => copy.remove());
   });
 }

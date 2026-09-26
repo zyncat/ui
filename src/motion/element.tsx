@@ -26,6 +26,7 @@ export function Motion({
   exit,
   initial,
   deps,
+  offscreenMargin,
   layout,
   layoutId,
   layoutTransition,
@@ -34,12 +35,12 @@ export function Motion({
   ...rest
 }: MotionProps) {
   const { isPresent } = usePresence();
-  const flip = useFlip<HTMLElement>(layoutId ?? null, layoutTransition, !!layout);
+  const flip = useFlip<HTMLElement>(layoutId ?? null, { ...layoutTransition, offscreenMargin }, !!layout);
   const host = useRef<HTMLElement | null>(null);
   const forwarded = useRef(ref);
   forwarded.current = ref;
 
-  useMotion(host, { animate, exit, initial, deps });
+  useMotion(host, { animate, exit, initial, deps, offscreenMargin });
   useLayoutEffect(flip.play);
 
   const attach = useCallback(
