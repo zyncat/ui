@@ -26,6 +26,7 @@ export interface FlipTuning extends FlipOptions {
 const SAME_BOX_PX = 0.5;
 
 const sharedOwner = sharedSlot('motion.flip-owner@1', () => new Map<string, HTMLElement>());
+const leaving = sharedSlot('motion.flip-leaving@1', () => new Map<HTMLElement, Box>());
 
 let loadedCrossfade: typeof import('./crossfade') | null = null;
 
@@ -55,10 +56,13 @@ export function useFlip<T extends HTMLElement>(
   const { size, timing, crossfade, offscreenMargin } = tuning;
   const enabled = inPlace || sharedId !== null;
   const lastCommitted = ref.current && (inPlace || playing.current) ? measure(ref.current) : null;
+  const holder = sharedId === null ? undefined : sharedOwner.get(sharedId);
+  if (holder && holder !== ref.current && holder.isConnected) leaving.set(holder, measure(holder));
 
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el || !enabled) return;
+    leaving.clear();
     if (crossfade) loadCrossfade();
     const live = playing.current;
     const midFlight = live?.el === el;
@@ -85,7 +89,7 @@ export function useFlip<T extends HTMLElement>(
     return () => {
       held.current = null;
       const live = playing.current;
-      let box: Box | null = live ? measure(live.el) : null;
+      let box: Box | null = (ref.current && leaving.get(ref.current)) ?? (live ? measure(live.el) : null);
       if (!usable(box)) box = ref.current ? measure(ref.current) : null;
       const painted = !origin.current;
       if (painted && latest.current.crossfade && loadedCrossfade && ref.current && usable(box) && !UIMotion.reduced)
