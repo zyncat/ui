@@ -1,4 +1,4 @@
-import { animate, measure, offscreen, type Box, type FlipOptions, type Playback } from '../engine';
+import { animate, measure, offscreen, type Box, type FlipOptions, type Layer, type Playback } from '../engine';
 import { claim } from '../engine/animate';
 import type { Timing } from '../engine/ease';
 import { sharedSlot } from '../shared-slot';
@@ -17,6 +17,7 @@ interface Copy {
 
 const kept = sharedSlot('motion.crossfade@2', () => new Map<string, Copy>());
 const riding = new WeakMap<HTMLElement, Copy>();
+const twins = new WeakMap<HTMLElement, HTMLElement>();
 
 function onto(el: HTMLElement, box: Box, target: Box): { x: number; y: number; scale: number } {
   const [px, py] = getComputedStyle(el).transformOrigin.split(' ').map(parseFloat);
@@ -28,11 +29,11 @@ function onto(el: HTMLElement, box: Box, target: Box): { x: number; y: number; s
   };
 }
 
-export function keep(id: string, el: HTMLElement, box: Box, timing?: Timing, margin?: number): void {
+function copyOf(el: HTMLElement, box: Box, look: HTMLElement = el): HTMLElement {
   const copy = el.cloneNode(true) as HTMLElement;
   for (const node of [copy, ...copy.querySelectorAll('[id]')]) node.removeAttribute('id');
   for (const [name, value] of Object.entries(inheritedThemeAttrs(el))) if (value) copy.setAttribute(name, value);
-  const { font, color, opacity } = getComputedStyle(el);
+  const { font, color, opacity } = getComputedStyle(look);
   Object.assign(copy.style, {
     position: 'fixed',
     left: `${box.left - window.scrollX}px`,
@@ -52,6 +53,12 @@ export function keep(id: string, el: HTMLElement, box: Box, timing?: Timing, mar
   copy.inert = true;
   copy.setAttribute('aria-hidden', 'true');
   document.body.append(copy);
+  return copy;
+}
+
+export function keep(id: string, el: HTMLElement, box: Box, timing?: Timing, margin?: number): void {
+  const twin = twins.get(el);
+  const copy = copyOf(el, box, twin?.isConnected ? twin : el);
   const entry: Copy = { el: copy, box, of: el };
   kept.set(id, entry);
   queueMicrotask(() => {
@@ -93,11 +100,18 @@ export function play(id: string, el: HTMLElement, from: Box, { timing }: FlipOpt
   run.finished.then(() => {
     if (copy.play === run) copy.el.remove();
   });
-  return animate(el, {
+  const arrive = (opacity: number[]): Layer => ({
     x: [back.x, 0],
     y: [back.y, 0],
     scale: [back.scale, 1],
-    opacity: [0, rest, rest],
+    opacity,
     timing: { fill: 'backwards', ...timing, times: [0, SHOWN_BY, 1] },
   });
+  const twin = copyOf(el, to);
+  twin.style.zIndex = 'var(--layer-infinity)';
+  twins.set(el, twin);
+  animate(twin, arrive([0, rest, rest]));
+  const flight = animate(el, arrive([0, 0, 0]));
+  flight.finished.then(() => twin.remove());
+  return flight;
 }

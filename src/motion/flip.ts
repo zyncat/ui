@@ -98,6 +98,7 @@ export function useFlip<T extends HTMLElement>(
       const mine = readShared(sharedId);
       queueMicrotask(() => {
         if (held.current === sharedId) return;
+        if (live && !live.el.isConnected) live.play.stop();
         if (readShared(sharedId) === mine) dropShared(sharedId);
         const owner = sharedOwner.get(sharedId);
         if (owner && !owner.isConnected) sharedOwner.delete(sharedId);
