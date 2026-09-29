@@ -8,7 +8,7 @@ import { Collapse, type CollapseProps } from '@zyncat/ui/collapse';
 import { Spinner, type SpinnerProps } from '@zyncat/ui/spinner';
 
 import { Icon, type IconProps } from '../icon';
-import { KnobSegment, Playground } from '../playground';
+import { KnobSegment, KnobSwitch, Playground } from '../playground';
 
 type ButtonVariant = NonNullable<ButtonProps['variant']>;
 type ButtonSize = NonNullable<ButtonProps['size']>;
@@ -22,7 +22,7 @@ type SpinnerSize = NonNullable<SpinnerProps['size']>;
 type SpinnerThickness = NonNullable<SpinnerProps['thickness']>;
 
 const BUTTON_VARIANTS: readonly ButtonVariant[] = ['primary', 'secondary', 'ghost', 'danger', 'link'];
-const BUTTON_SIZES: readonly ButtonSize[] = ['sm', 'md', 'lg', 'icon'];
+const BUTTON_SIZES: readonly ButtonSize[] = ['xs', 'sm', 'md', 'lg', 'xl'];
 const ICON_SIZES: readonly IconSize[] = ['sm', 'md', 'lg'];
 const ICON_WEIGHTS: readonly IconWeight[] = ['thin', 'light', 'regular', 'bold', 'fill', 'duotone'];
 const BADGE_TONES: readonly BadgeTone[] = ['neutral', 'info', 'success', 'warning', 'danger'];
@@ -39,6 +39,7 @@ const DEMO_REQUEST_MS = 2000;
 export function ButtonPlayground() {
   const [variant, setVariant] = useState<ButtonVariant>('primary');
   const [size, setSize] = useState<ButtonSize>('md');
+  const [iconOnly, setIconOnly] = useState(false);
   const [scheduling, setScheduling] = useState(false);
   const requestRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -49,10 +50,9 @@ export function ButtonPlayground() {
     requestRef.current = setTimeout(() => setScheduling(false), DEMO_REQUEST_MS);
   };
 
-  const code =
-    size === 'icon'
-      ? `<Button variant="${variant}" size="icon" loading={scheduling} onClick={schedule} aria-label="Schedule post">\n  <span className="zc-btn__icon">\n    <PlusIcon />\n  </span>\n</Button>`
-      : `<Button variant="${variant}" size="${size}" loading={scheduling} onClick={schedule}>\n  Schedule post\n</Button>`;
+  const code = iconOnly
+    ? `<Button variant="${variant}" size="${size}" iconOnly loading={scheduling} onClick={schedule} aria-label="Schedule post">\n  <PlusIcon />\n</Button>`
+    : `<Button variant="${variant}" size="${size}" loading={scheduling} onClick={schedule}>\n  <PlusIcon />\n  Schedule post\n</Button>`;
 
   return (
     <Playground
@@ -62,23 +62,20 @@ export function ButtonPlayground() {
         <>
           <KnobSegment label="variant" value={variant} onChange={setVariant} options={BUTTON_VARIANTS} />
           <KnobSegment label="size" value={size} onChange={setSize} options={BUTTON_SIZES} />
+          <KnobSwitch label="iconOnly" checked={iconOnly} onChange={setIconOnly} />
         </>
       }
     >
       <Button
         variant={variant}
         size={size}
+        iconOnly={iconOnly}
         loading={scheduling}
         onClick={schedule}
-        aria-label={size === 'icon' ? 'Schedule post' : undefined}
+        aria-label={iconOnly ? 'Schedule post' : undefined}
       >
-        {size === 'icon' ? (
-          <span className="zc-btn__icon">
-            <Icon name="plus" size="sm" />
-          </span>
-        ) : (
-          'Schedule post'
-        )}
+        <Icon name="plus" />
+        {iconOnly ? null : 'Schedule post'}
       </Button>
     </Playground>
   );

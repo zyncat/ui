@@ -157,7 +157,7 @@ import { Dropdown } from '@zyncat/ui/dropdown';
 <Dropdown
   ariaLabel="Row actions"
   trigger={
-    <Button size="icon" variant="ghost" aria-label="Actions">
+    <Button size="sm" iconOnly variant="ghost" aria-label="Actions">
       …
     </Button>
   }

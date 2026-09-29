@@ -6,18 +6,16 @@ import type { DataAttributes } from '../../../dom-props';
 import { usePressFeedback } from '../../internal/hooks/use-press-feedback';
 import { cx } from '../../internal/utils/cx';
 import { Spinner } from '../spinner/Spinner';
-import { buttonClass, type ButtonSize, type ButtonVariant } from './button-style';
+import { buttonClass, type ButtonStyleProps, type ButtonVariant } from './button-style';
 
 export { buttonClass } from './button-style';
 export type { ButtonSize, ButtonStyleProps, ButtonVariant } from './button-style';
 
-interface ButtonOwnProps {
+interface ButtonOwnProps extends Pick<ButtonStyleProps, 'size' | 'iconOnly' | 'fullWidth'> {
   /** Visual weight / intent. @default 'primary' */
   variant?: ButtonVariant;
   /** Forwarded to the underlying <button> (React 19 ref-as-prop). */
   ref?: Ref<HTMLButtonElement>;
-  /** Control height. sm 28px - md 32px (default) - lg 37px. @default 'md' */
-  size?: ButtonSize;
   /** `submit` / `reset` / `button`. @default 'button' */
   type?: 'button' | 'submit' | 'reset';
   /** Disable the control (also implied by `loading`). */
@@ -25,13 +23,11 @@ interface ButtonOwnProps {
   /** Loading - swaps the label for a spinner and makes the button inert. The label stays
    *  mounted but invisible, so the button holds its width. */
   loading?: boolean;
-  /** Stretch to fill the container width. */
-  fullWidth?: boolean;
   /** Extra class(es) merged onto the button. */
   className?: string;
   /** Inline styles merged onto the button. */
   style?: CSSProperties;
-  /** Button label. */
+  /** Button label. An svg child takes the size's glyph; a class or style of your own on it wins. */
   children?: ReactNode;
 }
 
@@ -53,6 +49,7 @@ export interface ButtonProps extends ButtonOwnProps, ButtonRestProps {
 export function Button({
   variant = 'primary',
   size = 'md',
+  iconOnly = false,
   type = 'button',
   disabled = false,
   loading = false,
@@ -66,7 +63,7 @@ export function Button({
 }: ButtonProps) {
   const inert = disabled || loading;
   const press = usePressFeedback(inert);
-  const cls = cx(buttonClass({ variant, size, fullWidth, className }), loading && 'zc-is-loading');
+  const cls = cx(buttonClass({ variant, size, iconOnly, fullWidth, className }), loading && 'zc-is-loading');
   const merged = { ...rest, ...htmlProps };
 
   return (

@@ -131,7 +131,8 @@ export function PageView({ doc, seo }: { doc: Doc; seo?: PageSeo }) {
                 <Tooltip content="Replay the demo" placement="bottom">
                   <Button
                     variant="ghost"
-                    size="icon"
+                    size="sm"
+                    iconOnly
                     onClick={handleHeroReplay}
                     aria-label="Restart component animation"
                   >

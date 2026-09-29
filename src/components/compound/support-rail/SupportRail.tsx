@@ -144,7 +144,8 @@ function SupportRailBody({
         </div>
         <Button
           variant="ghost"
-          size="icon"
+          size="sm"
+          iconOnly
           className="zc-support-rail__close"
           aria-label="Close"
           onClick={requestClose}

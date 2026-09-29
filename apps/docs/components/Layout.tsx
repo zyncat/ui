@@ -64,7 +64,8 @@ export function DocsShell({ children }: { children: ReactNode }) {
           <div className="navbar__left">
             <Button
               variant="ghost"
-              size="icon"
+              size="sm"
+              iconOnly
               className="navbar__mobile-toggle"
               onClick={() => setIsMobileNavOpen((o) => !o)}
               aria-label="Toggle navigation menu"

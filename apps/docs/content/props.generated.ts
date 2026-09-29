@@ -22,12 +22,6 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       description: 'Forwarded to the underlying <button> (React 19 ref-as-prop).',
     },
     {
-      name: 'size',
-      type: 'ButtonSize',
-      default: "'md'",
-      description: 'Control height. sm 28px - md 32px (default) - lg 37px.',
-    },
-    {
       name: 'type',
       type: "'button' | 'submit' | 'reset'",
       default: "'button'",
@@ -40,10 +34,27 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       description:
         'Loading - swaps the label for a spinner and makes the button inert. The label stays mounted but invisible, so the button holds its width.',
     },
-    { name: 'fullWidth', type: 'boolean', description: 'Stretch to fill the container width.' },
     { name: 'className', type: 'string', description: 'Extra class(es) merged onto the button.' },
     { name: 'style', type: 'CSSProperties', description: 'Inline styles merged onto the button.' },
-    { name: 'children', type: 'ReactNode', description: 'Button label.' },
+    {
+      name: 'children',
+      type: 'ReactNode',
+      description: "Button label. An svg child takes the size's glyph; a class or style of your own on it wins.",
+    },
+    {
+      name: 'size',
+      type: "ButtonSize | 'icon'",
+      default: "'md'",
+      description:
+        'Control height: the `--control-height-*` step, so it lines up with a field of the same size. Type, padding and glyph step with it. `\'icon\'` is deprecated: it is `size="sm" iconOnly`.',
+    },
+    {
+      name: 'iconOnly',
+      type: 'boolean',
+      default: 'false',
+      description: 'A square of the control height for one glyph. Name it with `aria-label`.',
+    },
+    { name: 'fullWidth', type: 'boolean', description: 'Stretch to fill the container width.' },
   ],
   spinner: [
     {

@@ -12,7 +12,7 @@ export const primitives: Record<string, ComponentDoc> = {
 // bring your own icon library - compose it straight into children
 
 <Button><PaperPlaneTilt />Publish</Button>
-<Button size="icon" aria-label="Publish"><PaperPlaneTilt /></Button>`,
+<Button iconOnly aria-label="Publish"><PaperPlaneTilt /></Button>`,
   },
 
   collapse: {

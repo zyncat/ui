@@ -82,7 +82,13 @@ export function Playground({
           className="plate-tabs"
         />
         <Tooltip content="Replay the demo" placement="bottom">
-          <Button variant="ghost" size="icon" onClick={() => setReplayKey((k) => k + 1)} aria-label="Restart the demo">
+          <Button
+            variant="ghost"
+            size="sm"
+            iconOnly
+            onClick={() => setReplayKey((k) => k + 1)}
+            aria-label="Restart the demo"
+          >
             <Icon name="arrow-counter-clockwise" size="sm" />
           </Button>
         </Tooltip>
