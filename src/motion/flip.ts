@@ -14,9 +14,9 @@ import {
   type Playback,
 } from '../engine';
 import { flipLayers } from '../engine/flip';
-import { sharedSlot } from '../shared-slot';
 import { UIMotion } from '../tokens/motion-tokens';
 import { beforePaint } from './before-paint';
+import { leaving, measureHolders, sharedOwner } from './holders';
 
 export interface FlipTuning extends FlipOptions {
   /** Keep the element that last held the `layoutId` on screen through the handoff: a copy of it takes the same path and fades out while this one fades in. */
@@ -24,9 +24,6 @@ export interface FlipTuning extends FlipOptions {
 }
 
 const SAME_BOX_PX = 0.5;
-
-const sharedOwner = sharedSlot('motion.flip-owner@1', () => new Map<string, HTMLElement>());
-const leaving = sharedSlot('motion.flip-leaving@1', () => new Map<HTMLElement, Box>());
 
 let loadedCrossfade: typeof import('./crossfade') | null = null;
 
@@ -56,6 +53,7 @@ export function useFlip<T extends HTMLElement>(
   const { size, timing, crossfade, offscreenMargin } = tuning;
   const enabled = inPlace || sharedId !== null;
   const lastCommitted = ref.current && (inPlace || playing.current) ? measure(ref.current) : null;
+  if (enabled) measureHolders();
   const holder = sharedId === null ? undefined : sharedOwner.get(sharedId);
   if (holder && holder !== ref.current && holder.isConnected) leaving.set(holder, measure(holder));
 
@@ -89,6 +87,7 @@ export function useFlip<T extends HTMLElement>(
     return () => {
       held.current = null;
       const live = playing.current;
+      measureHolders();
       let box: Box | null = (ref.current && leaving.get(ref.current)) ?? (live ? measure(live.el) : null);
       if (!usable(box)) box = ref.current ? measure(ref.current) : null;
       const painted = !origin.current;
