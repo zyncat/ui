@@ -76,7 +76,7 @@ export function TagPlayground() {
   return (
     <Playground
       code={code}
-      note="sm is the dense row height - 24px against the default 28px."
+      note="sm is the dense row height - 24px against the default 32px."
       rail={<KnobSegment label="size" value={size} onChange={setSize} options={TAG_SIZES} />}
     >
       <TagGroup ariaLabel="Labels">

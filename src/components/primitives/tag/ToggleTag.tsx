@@ -23,7 +23,7 @@ interface ToggleTagOwnProps {
   icon?: ReactNode | null;
   /** Optional result count - rendered mono/tabular. */
   count?: ReactNode;
-  /** 'md' = 28px (default) - 'sm' = 24px for dense rows. */
+  /** 'md' sits on `--control-height-sm`; 'sm' is 24px, for dense rows. @default 'md' */
   size?: 'md' | 'sm';
   /** Disable the button, blocking toggles. @default false */
   disabled?: boolean;

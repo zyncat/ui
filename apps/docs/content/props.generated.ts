@@ -916,7 +916,11 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       description: 'Leading icon - your own icon node (sized to the control). Decorative.',
     },
     { name: 'clearable', type: 'boolean', description: "Show a clear button when there's a value." },
-    { name: 'size', type: "'sm' | 'md' | 'lg'", description: 'Control height: sm 28px - md 32px (default) - lg 37px.' },
+    {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      description: 'Control height: the `--control-height-*` step of the same name, md by default.',
+    },
     { name: 'className', type: 'string', description: 'Extra class(es) merged onto the field root.' },
     { name: 'style', type: 'CSSProperties', description: 'Inline styles merged onto the field root.' },
     {
@@ -976,7 +980,8 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       name: 'step',
       type: 'number',
       default: '1',
-      description: 'Amount added/removed per ArrowUp/ArrowDown press and per caret stepper click. Decimals work.',
+      description:
+        'Amount added/removed per ArrowUp/ArrowDown press and per minus/plus click; holding a button repeats it. Decimals work.',
     },
     {
       name: 'value',
@@ -1567,7 +1572,12 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       type: 'string',
       description: 'Accessible label for the remove button. Defaults to "Remove {label}" for string labels.',
     },
-    { name: 'size', type: "'md' | 'sm'", description: "'md' = 28px (default) - 'sm' = 24px for dense rows." },
+    {
+      name: 'size',
+      type: "'md' | 'sm'",
+      default: "'md'",
+      description: "'md' sits on `--control-height-sm`; 'sm' is 24px, for dense rows.",
+    },
     {
       name: 'disabled',
       type: 'boolean',

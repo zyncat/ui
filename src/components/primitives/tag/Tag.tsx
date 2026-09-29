@@ -39,7 +39,7 @@ interface TagOwnProps {
   onRemove?: (() => void) | null;
   /** Accessible label for the remove button. Defaults to "Remove {label}" for string labels. */
   removeLabel?: string;
-  /** 'md' = 28px (default) - 'sm' = 24px for dense rows. */
+  /** 'md' sits on `--control-height-sm`; 'sm' is 24px, for dense rows. @default 'md' */
   size?: 'md' | 'sm';
   /** Set `data-disabled` on the tag and disable its remove button. @default false */
   disabled?: boolean;

@@ -37,7 +37,7 @@ interface TextFieldOwnProps extends FieldMessagingProps, TextFieldNative {
   leadingIcon?: ReactNode;
   /** Show a clear button when there's a value. */
   clearable?: boolean;
-  /** Control height: sm 28px - md 32px (default) - lg 37px. */
+  /** Control height: the `--control-height-*` step of the same name, md by default. */
   size?: 'sm' | 'md' | 'lg';
   /** Extra class(es) merged onto the field root. */
   className?: string;
