@@ -2,11 +2,11 @@
 
 import './input.css';
 
-import { useId, useState } from 'react';
+import { useId } from 'react';
 import type { CSSProperties, InputHTMLAttributes } from 'react';
 
 import type { DataAttributes } from '../../../dom-props';
-import { useControllable } from '../../internal/hooks/use-controllable';
+import { useHoldRepeat } from '../../internal/hooks/use-hold-repeat';
 import { Icon } from '../../internal/icon/Icon';
 import { cx } from '../../internal/utils/cx';
 import {
@@ -17,6 +17,7 @@ import {
   type FieldCoreMessagingProps,
   type FieldIdProps,
 } from './field-chrome';
+import { useNumberValue } from './use-number-value';
 
 interface NumberFieldOwnProps extends FieldIdProps, FieldCoreMessagingProps {
   /** Unit suffix shown inside the field (e.g. "days", "%"). */
@@ -25,7 +26,7 @@ interface NumberFieldOwnProps extends FieldIdProps, FieldCoreMessagingProps {
   min?: number;
   /** Maximum value - steps and committed typing clamp down to this; the increase stepper disables here. @default Infinity */
   max?: number;
-  /** Amount added/removed per ArrowUp/ArrowDown press and per caret stepper click. Decimals work. @default 1 */
+  /** Amount added/removed per ArrowUp/ArrowDown press and per minus/plus click; holding a button repeats it. Decimals work. @default 1 */
   step?: number;
   /** Controlled numeric value. Omit for uncontrolled (use `defaultValue`). */
   value?: number | string;
@@ -52,6 +53,12 @@ export interface NumberFieldProps extends NumberFieldOwnProps {
     DataAttributes;
 }
 
+const STEPPERS = [
+  { direction: -1, label: 'Decrease', icon: 'minus' },
+  { direction: 1, label: 'Increase', icon: 'plus' },
+] as const;
+const ARROW_STEP: Partial<Record<string, 1 | -1>> = { ArrowUp: 1, ArrowDown: -1 };
+
 export function NumberField({
   id,
   label,
@@ -73,20 +80,11 @@ export function NumberField({
   const autoId = useId();
   const message = error || helper;
   const msgId = fieldMessageId(id ?? autoId, message);
-  const resolvedValue = value === undefined ? undefined : typeof value === 'number' ? value : parseFloat(value) || 0;
-  const [num, setNum] = useControllable<number>(resolvedValue, defaultValue, onChange);
-  const [draft, setDraft] = useState<string | null>(null);
-  const v = draft !== null ? parseFloat(draft) || 0 : num;
-  const snap = (n: number) => parseFloat(n.toFixed(10));
-  const clamp = (n: number) => Math.min(max, Math.max(min, snap(n)));
-  const commit = (n: number) => {
-    setDraft(null);
-    setNum(clamp(n));
-  };
+  const { v, text, commit, stepBy, type } = useNumberValue({ value, defaultValue, onChange, min, max, step });
+  const holdStep = useHoldRepeat(stepBy);
   const cls = cx(
     'zc-fld',
     'zc-numf',
-    unit && 'zc-numf--unit',
     size === 'sm' ? 'zc-fld--sm' : size === 'lg' ? 'zc-fld--lg' : '',
     error && 'zc-is-error',
     className,
@@ -95,29 +93,26 @@ export function NumberField({
   return (
     <div className={cls} style={style}>
       <FieldLabel id={id} label={label} />
-      <div className="zc-fld__control">
+      <div className="zc-fld__control" style={{ '--numf-len': text.length } as CSSProperties}>
         <input
           id={id}
           className="zc-fld__input"
           type="text"
           inputMode="decimal"
+          role="spinbutton"
+          aria-valuenow={v}
+          aria-valuemin={min}
+          aria-valuemax={max === Infinity ? undefined : max}
           disabled={disabled}
           aria-invalid={error ? true : undefined}
-          value={draft !== null ? draft : String(num)}
-          onChange={(e) => {
-            const text = e.target.value.replace(/[^\d.-]/g, '');
-            setDraft(text);
-            setNum(clamp(parseFloat(text) || 0));
-          }}
+          value={text}
+          onChange={(e) => type(e.target.value)}
           onBlur={() => commit(v)}
           onKeyDown={(e) => {
-            if (e.key === 'ArrowUp') {
+            const direction = ARROW_STEP[e.key];
+            if (direction) {
               e.preventDefault();
-              commit(v + step);
-            }
-            if (e.key === 'ArrowDown') {
-              e.preventDefault();
-              commit(v - step);
+              stepBy(direction);
             }
             if (e.key === 'Enter') commit(v);
           }}
@@ -125,26 +120,19 @@ export function NumberField({
           aria-describedby={joinIds(msgId, htmlProps?.['aria-describedby'])}
         />
         {unit && <span className="zc-numf__unit">{unit}</span>}
-        <div className="zc-numf__steppers">
+        {STEPPERS.map(({ direction, label, icon }) => (
           <button
+            key={icon}
             type="button"
-            className="zc-numf__step"
-            aria-label="Increase"
-            disabled={disabled || v >= max}
-            onClick={() => commit(v + step)}
+            tabIndex={-1}
+            className={`zc-numf__step zc-numf__step--${icon}`}
+            aria-label={label}
+            disabled={disabled || (direction > 0 ? v >= max : v <= min)}
+            {...holdStep(direction)}
           >
-            <Icon name="caret-up" size="sm" />
+            <Icon name={icon} size="sm" />
           </button>
-          <button
-            type="button"
-            className="zc-numf__step"
-            aria-label="Decrease"
-            disabled={disabled || v <= min}
-            onClick={() => commit(v - step)}
-          >
-            <Icon name="caret-down" size="sm" />
-          </button>
-        </div>
+        ))}
       </div>
       <FieldMessage id={msgId} message={message} icon={error ? 'warning-circle' : null} />
     </div>

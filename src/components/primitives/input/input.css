@@ -177,48 +177,53 @@
   }
 
   .zc-numf {
-    --numf-stepper-w: var(--space-6);
+    --numf-h: var(--control-height);
+    --numf-inset: var(--space-1);
+  }
+  .zc-numf.zc-fld--sm {
+    --numf-h: var(--control-height-sm);
+  }
+  .zc-numf.zc-fld--lg {
+    --numf-h: var(--control-height-lg);
   }
   .zc-numf .zc-fld__input {
+    padding-inline: var(--numf-h);
+    text-align: center;
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum';
-    padding-right: calc(var(--numf-stepper-w) + var(--space-2));
-  }
-  .zc-numf--unit .zc-fld__input {
-    padding-right: calc(var(--numf-stepper-w) + var(--numf-unit-w, var(--control-height-lg)) + var(--space-2));
   }
   .zc-numf__unit {
     position: absolute;
-    right: calc(var(--numf-stepper-w) + var(--space-2));
+    left: calc(50% + var(--numf-len) * 0.5ch + var(--space-1));
+    font: var(--type-body);
+    font-variant-numeric: tabular-nums;
     color: var(--text-subtle);
-    font: var(--type-caption);
     pointer-events: none;
   }
-  .zc-numf__steppers {
-    position: absolute;
-    top: var(--border-hairline);
-    right: var(--border-hairline);
-    bottom: var(--border-hairline);
-    width: var(--numf-stepper-w);
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    border-left: var(--border-hairline) solid var(--border-default);
+  .zc-fld--sm .zc-numf__unit {
+    font-size: var(--size-caption);
   }
   .zc-numf__step {
-    border: 0;
-    background: var(--bg-surface);
-    color: var(--text-muted);
+    position: absolute;
+    inset-block: var(--numf-inset);
+    width: calc(var(--numf-h) - var(--numf-inset) * 2);
     display: grid;
     place-items: center;
-    cursor: pointer;
-    transition: var(--transition-control);
     padding: 0;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    touch-action: manipulation;
+    user-select: none;
+    transition: var(--transition-control);
   }
-  .zc-numf__step:first-child {
-    border-start-end-radius: var(--radius-md);
+  .zc-numf__step--minus {
+    left: var(--numf-inset);
   }
-  .zc-numf__step:last-child {
-    border-end-end-radius: var(--radius-md);
+  .zc-numf__step--plus {
+    right: var(--numf-inset);
   }
   .zc-numf__step:hover {
     background: var(--neutral-wash);
@@ -230,16 +235,7 @@
   .zc-numf__step:disabled {
     color: var(--text-disabled);
     cursor: not-allowed;
-    background: var(--bg-surface);
-  }
-  .zc-numf__step:focus-visible {
-    outline: var(--ring-accent);
-  }
-  .zc-numf__step + .zc-numf__step {
-    border-top: var(--border-hairline) solid var(--border-default);
-  }
-  .zc-numf .zc-fld__input:focus ~ .zc-numf__steppers {
-    border-color: var(--accent);
+    background: transparent;
   }
 
   /* Bespoke px: the token ramp has no correctly proportioned code cell. */
