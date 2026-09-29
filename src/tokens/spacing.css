@@ -16,9 +16,11 @@
 
     --measure-prose: 38rem;
 
-    --control-height-sm: 1.85rem;
-    --control-height: 2.25rem;
-    --control-height-lg: 2.5rem;
+    --control-height-xs: 1.75rem; /* 28px - the dense step for toolbars; a control opts in to it */
+    --control-height-sm: 2rem; /* 32px */
+    --control-height: 2.25rem; /* 36px */
+    --control-height-lg: 2.5rem; /* 40px */
+    --control-height-xl: 2.75rem; /* 44px - the touch-target step; a control opts in to it */
     --control-box: 1.125rem;
     --control-switch: 1.25rem; /* the switch track - the one control size off the scale */
 

@@ -553,12 +553,16 @@ export interface TokenProperties {
   '--space-10'?: string | number;
   /** `--measure-prose`. Default: `38rem`. */
   '--measure-prose'?: string | number;
-  /** `--control-height-sm`. Default: `1.85rem`. */
+  /** `--control-height-xs` - 28px - the dense step for toolbars; a control opts in to it. Default: `1.75rem`. */
+  '--control-height-xs'?: string | number;
+  /** `--control-height-sm` - 32px. Default: `2rem`. */
   '--control-height-sm'?: string | number;
-  /** `--control-height`. Default: `2.25rem`. */
+  /** `--control-height` - 36px. Default: `2.25rem`. */
   '--control-height'?: string | number;
-  /** `--control-height-lg`. Default: `2.5rem`. */
+  /** `--control-height-lg` - 40px. Default: `2.5rem`. */
   '--control-height-lg'?: string | number;
+  /** `--control-height-xl` - 44px - the touch-target step; a control opts in to it. Default: `2.75rem`. */
+  '--control-height-xl'?: string | number;
   /** `--control-box`. Default: `1.125rem`. */
   '--control-box'?: string | number;
   /** `--control-switch` - the switch track - the one control size off the scale. Default: `1.25rem`. */
