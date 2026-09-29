@@ -56,9 +56,32 @@ function copyOf(el: HTMLElement, box: Box, look: HTMLElement = el): HTMLElement 
   return copy;
 }
 
+function clipping(from: Element | null): Element | null {
+  for (let node = from; node; node = node.parentElement) {
+    const { overflowX, overflowY } = getComputedStyle(node);
+    if (overflowX !== 'visible' || overflowY !== 'visible') return node;
+  }
+  return null;
+}
+
+function clipTo(copy: HTMLElement, box: Box, stage: Element | null): void {
+  const x = box.left - window.scrollX;
+  const y = box.top - window.scrollY;
+  let [top, right, bottom, left] = [0, 0, 0, 0];
+  for (let node = stage; node; node = clipping(node.parentElement)) {
+    const rect = node.getBoundingClientRect();
+    top = Math.max(top, rect.top - y);
+    right = Math.max(right, x + box.width - rect.right);
+    bottom = Math.max(bottom, y + box.height - rect.bottom);
+    left = Math.max(left, rect.left - x);
+  }
+  if (top || right || bottom || left) copy.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+}
+
 export function keep(id: string, el: HTMLElement, box: Box, timing?: Timing, margin?: number): void {
   const twin = twins.get(el);
   const copy = copyOf(el, box, twin?.isConnected ? twin : el);
+  const stage = clipping(el.parentElement);
   const entry: Copy = { el: copy, box, of: el };
   kept.set(id, entry);
   queueMicrotask(() => {
@@ -68,8 +91,11 @@ export function keep(id: string, el: HTMLElement, box: Box, timing?: Timing, mar
       return;
     }
     kept.delete(id);
-    if (el.isConnected || offscreen(margin, box)) copy.remove();
-    else animate(copy, { opacity: [0], timing }).finished.then(() => copy.remove());
+    if (el.isConnected || stage?.isConnected === false || offscreen(margin, box)) copy.remove();
+    else {
+      clipTo(copy, box, stage);
+      animate(copy, { opacity: [0], timing }).finished.then(() => copy.remove());
+    }
   });
 }
 
