@@ -35,11 +35,16 @@ export function useScrollEdges(
     sync();
     el.addEventListener('scroll', sync, { passive: true });
     const ro = new ResizeObserver(sync);
+    const mo = new MutationObserver(sync);
     ro.observe(el);
-    if (content && el.firstElementChild) ro.observe(el.firstElementChild);
+    if (content && el.firstElementChild) {
+      ro.observe(el.firstElementChild);
+      mo.observe(el.firstElementChild, { childList: true, subtree: true });
+    }
     return () => {
       el.removeEventListener('scroll', sync);
       ro.disconnect();
+      mo.disconnect();
     };
   }, [sync, content]);
   return sync;
