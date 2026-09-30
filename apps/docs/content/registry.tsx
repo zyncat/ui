@@ -13,6 +13,7 @@ import { McpDoc } from '../components/pages/mcp';
 import { MotionDoc } from '../components/pages/motion';
 import * as O from '../components/pages/overlays';
 import * as P from '../components/pages/primitives';
+import * as SA from '../components/pages/scroll-area';
 import { ThemingDoc } from '../components/pages/theming';
 import * as TT from '../components/pages/tiktok';
 import * as YT from '../components/pages/youtube';
@@ -378,6 +379,14 @@ export const GROUPS: DocGroup[] = [
         blurb: 'Honest cursor strip - a mono range readout and a prev/next pair.',
         HeroComponent: D.PaginationHero,
         heroCode: `import { Pagination } from '@zyncat/ui/pagination';\n\n<Pagination\n  range={[offset + 1, Math.min(offset + pageSize, total)]}\n  total={total}\n  hasPrev={offset > 0}\n  hasNext={offset + pageSize < total}\n  onPrev={() => setOffset(offset - pageSize)}\n  onNext={() => setOffset(offset + pageSize)}\n/>`,
+      },
+      {
+        slug: 'scroll-area',
+        label: 'ScrollArea',
+        blurb:
+          'A scroller with no scrollbar - its edges fade while content hides past them, and a rail pages from them.',
+        Playground: SA.ScrollAreaPlayground,
+        heroCode: `import { ScrollArea } from '@zyncat/ui/scroll-area';\n\n<ScrollArea axis="x" ariaLabel="Trending now">\n  {films.map((film) => <Poster key={film.id} film={film} />)}\n</ScrollArea>`,
       },
     ],
   },
