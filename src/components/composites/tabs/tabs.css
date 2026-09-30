@@ -75,7 +75,6 @@
     display: block;
     font-family: var(--font-body);
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
     border-radius: var(--_tabs-radius);
     transition: var(--transition-control);
   }

@@ -78,7 +78,6 @@
     color: var(--text-subtle);
     cursor: pointer;
     appearance: none;
-    -webkit-tap-highlight-color: transparent;
     transition:
       color var(--duration-fast) var(--ease-standard),
       background-color var(--duration-fast) var(--ease-standard),
@@ -113,7 +112,6 @@
   .zc-tag--toggle {
     cursor: pointer;
     appearance: none;
-    -webkit-tap-highlight-color: transparent;
     transition:
       var(--transition-control),
       transform var(--duration-fast) var(--ease-standard);

@@ -20,7 +20,6 @@
     padding: var(--space-2);
     border-radius: var(--radius-md);
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
     transition: background-color var(--duration-base) var(--ease-standard);
 
     &:has(:checked) {

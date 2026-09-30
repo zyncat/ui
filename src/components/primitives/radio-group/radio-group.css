@@ -81,7 +81,6 @@
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: var(--transition-colors);
-    -webkit-tap-highlight-color: transparent;
   }
   .zc-rg__hover {
     opacity: 0;
