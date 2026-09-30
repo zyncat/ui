@@ -48,6 +48,7 @@
       "@zyncat/ui/modal": ["../../src/components/composites/modal/Modal.tsx"],
       "@zyncat/ui/pagination": ["../../src/components/composites/pagination/Pagination.tsx"],
       "@zyncat/ui/popover": ["../../src/components/composites/popover/Popover.tsx"],
+      "@zyncat/ui/scroll-area": ["../../src/components/composites/scroll-area/ScrollArea.tsx"],
       "@zyncat/ui/multi-select": ["../../src/components/composites/select/MultiSelect.tsx"],
       "@zyncat/ui/select": ["../../src/components/composites/select/Select.tsx"],
       "@zyncat/ui/sheet": ["../../src/components/composites/sheet/Sheet.tsx"],

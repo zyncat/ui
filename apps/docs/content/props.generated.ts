@@ -1702,6 +1702,53 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       description: 'Standard <nav> attributes (style, data-*, aria-*, ...) forwarded to the root.',
     },
   ],
+  'scroll-area': [
+    {
+      name: 'axis',
+      type: "'x' | 'y'",
+      default: "'y'",
+      description:
+        "Scroll direction. `'x'` lays the children out as a rail, one item each, with a paging door on each faded edge for a mouse.",
+    },
+    {
+      name: 'variant',
+      type: "'fade' | 'depth'",
+      default: "'fade'",
+      description:
+        "`'fade'` fades an edge while content hides past it. `'depth'` also shrinks each child as it crosses a faded edge; pass the items as direct children.",
+    },
+    {
+      name: 'fill',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'With `axis="x"`, sizes the row to the scroller instead of to its items: `flex: 1` children share its width down to their `min-width` and then scroll, and every child fills its height. For a board or a toolbar.',
+    },
+    {
+      name: 'ariaLabel',
+      type: 'string',
+      description: 'Names the scroller as a region landmark. Omit for an unnamed scroller.',
+    },
+    {
+      name: 'ref',
+      type: 'Ref<HTMLDivElement>',
+      description:
+        "The element that scrolls: a virtualizer's `getScrollElement`, an IntersectionObserver's `root`, or `scrollTo` for a jump.",
+    },
+    {
+      name: 'activateOn',
+      type: 'ActivateOn',
+      default: "'pointerdown'",
+      description: "When a rail's edge door pages: on `pointerdown` (snappier) or on `click`.",
+    },
+    { name: 'className', type: 'string', description: 'Extra class(es) merged onto the root.' },
+    {
+      name: 'style',
+      type: 'CSSProperties',
+      description: "Inline styles merged onto the root. A `'y'` scroller takes its height or max-height here.",
+    },
+    { name: 'children', type: 'ReactNode', description: 'The scrolled content.' },
+  ],
   'date-field': [
     { name: 'value', type: 'string | null', description: "Controlled value, 'YYYY-MM-DD'." },
     {

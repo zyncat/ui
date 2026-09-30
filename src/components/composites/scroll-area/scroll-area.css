@@ -1,0 +1,150 @@
+@layer zyncat.reset, zyncat.tokens, zyncat.base, zyncat.components;
+
+@property --_scroll-area-from {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0;
+}
+@property --_scroll-area-to {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@layer zyncat.components {
+  .zc-scroll-area {
+    --scroll-area-fade: var(--space-7);
+    --scroll-area-gap: var(--space-3);
+    --scroll-area-depth: 0.86;
+    --_scroll-area-dir: to bottom;
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    border-radius: var(--radius-md);
+  }
+  .zc-scroll-area--x {
+    --_scroll-area-dir: to right;
+  }
+  .zc-scroll-area:has(> .zc-scroll-area__viewport:focus-visible) {
+    outline: var(--ring-accent);
+  }
+
+  .zc-scroll-area__viewport {
+    flex: 1;
+    overflow: hidden auto;
+    padding: var(--ring-gutter);
+    scroll-padding-block: var(--_scroll-area-from) var(--_scroll-area-to);
+    scroll-padding-inline: var(--_scroll-area-from) var(--_scroll-area-to);
+    scrollbar-width: none;
+    outline: none;
+    mask-image: linear-gradient(
+      var(--_scroll-area-dir),
+      transparent,
+      black var(--_scroll-area-from),
+      black calc(100% - var(--_scroll-area-to)),
+      transparent
+    );
+    transition:
+      --_scroll-area-from var(--duration-base) var(--ease-standard),
+      --_scroll-area-to var(--duration-base) var(--ease-standard);
+  }
+  .zc-scroll-area__viewport::-webkit-scrollbar {
+    display: none;
+  }
+  .zc-scroll-area__viewport[data-edges~='start'] {
+    --_scroll-area-from: var(--scroll-area-fade);
+  }
+  .zc-scroll-area__viewport[data-edges~='end'] {
+    --_scroll-area-to: var(--scroll-area-fade);
+  }
+  .zc-scroll-area--x > .zc-scroll-area__viewport {
+    overflow: auto hidden;
+    overscroll-behavior-x: contain;
+  }
+  .zc-scroll-area--x > .zc-scroll-area__viewport > .zc-scroll-area__content {
+    display: flex;
+    gap: var(--scroll-area-gap);
+    width: max-content;
+  }
+  .zc-scroll-area--fill > .zc-scroll-area__viewport {
+    display: flex;
+    gap: var(--scroll-area-gap);
+  }
+  .zc-scroll-area--fill > .zc-scroll-area__viewport > .zc-scroll-area__content {
+    display: contents;
+  }
+
+  .zc-scroll-area__door {
+    --_scroll-area-nudge: calc(var(--space-2) * -1);
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--scroll-area-fade);
+    opacity: 0;
+    pointer-events: none;
+    cursor: pointer;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+  }
+  .zc-scroll-area__door[data-side='end'] {
+    --_scroll-area-nudge: var(--space-2);
+    left: auto;
+    right: 0;
+  }
+  .zc-scroll-area__chip {
+    display: grid;
+    place-items: center;
+    width: var(--control-height-xs);
+    height: var(--control-height-xs);
+    border: var(--border-hairline) solid var(--border-default);
+    border-radius: var(--radius-full);
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-sm);
+    color: var(--text-body);
+    transform: translateX(var(--_scroll-area-nudge));
+    transition:
+      transform var(--duration-base) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .zc-scroll-area:hover > .zc-scroll-area__viewport[data-edges~='start'] ~ .zc-scroll-area__door[data-side='start'],
+    .zc-scroll-area:hover > .zc-scroll-area__viewport[data-edges~='end'] ~ .zc-scroll-area__door[data-side='end'] {
+      --_scroll-area-nudge: 0;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .zc-scroll-area__door:hover > .zc-scroll-area__chip {
+      color: var(--text-strong);
+      box-shadow: var(--shadow-md);
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    .zc-scroll-area--depth > .zc-scroll-area__viewport > .zc-scroll-area__content > * {
+      animation-name: zc-scroll-area-depth, zc-scroll-area-depth;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-direction: normal, reverse;
+      animation-fill-mode: backwards, forwards;
+      animation-timeline: view(y);
+      animation-range: entry, exit;
+    }
+    .zc-scroll-area--depth.zc-scroll-area--x > .zc-scroll-area__viewport > .zc-scroll-area__content > * {
+      animation-timeline: view(x);
+    }
+  }
+  @keyframes zc-scroll-area-depth {
+    from {
+      transform: scale(var(--scroll-area-depth));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .zc-scroll-area--depth > .zc-scroll-area__viewport > .zc-scroll-area__content > * {
+      animation: none;
+    }
+  }
+}

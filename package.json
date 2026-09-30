@@ -308,6 +308,11 @@
       "types": "./dist/types/motion/motion.d.ts",
       "import": "./dist/motion.js"
     },
+    "./scroll-area": {
+      "source": "./src/components/composites/scroll-area/ScrollArea.tsx",
+      "types": "./dist/types/components/composites/scroll-area/ScrollArea.d.ts",
+      "import": "./dist/scroll-area.js"
+    },
     "./styles.css": "./src/styles.css",
     "./tailwind.css": "./tailwind.css",
     "./next": {
