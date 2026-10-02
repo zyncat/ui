@@ -62,6 +62,7 @@
 
     display: block;
     font-size: calc(1em * var(--_odometer-reveal));
+    white-space: pre;
     opacity: var(--_odometer-reveal);
     color: var(--odometer-separator-ink);
   }
