@@ -1,7 +1,7 @@
 import { UIMotion } from '../tokens/motion-tokens';
 import { claim, clock, release, type Playback, type PropertyHolder } from './animate';
 
-export type SimulationFrame = (k: number, dt: number, now: number) => void;
+export type SimulationFrame = (k: number, dt: number, now: number) => boolean | void;
 
 export interface LoopOptions {
   el?: HTMLElement;
@@ -13,9 +13,13 @@ export interface LoopOptions {
 const MAX_FRAME_MS = 34;
 const BASE_FRAME_MS = 1000 / 60;
 
-const settled: Playback = { stop() {}, finished: Promise.resolve() };
+export interface LoopPlayback extends Playback {
+  wake(): void;
+}
 
-export function loop(frame: SimulationFrame, options: LoopOptions = {}): Playback {
+const settled: LoopPlayback = { stop() {}, wake() {}, finished: Promise.resolve() };
+
+export function loop(frame: SimulationFrame, options: LoopOptions = {}): LoopPlayback {
   if (UIMotion.reduced) {
     options.snap?.();
     return settled;
@@ -26,6 +30,7 @@ export function loop(frame: SimulationFrame, options: LoopOptions = {}): Playbac
 
   let raf = 0;
   let stopped = false;
+  let parked = false;
   let hidden = document.visibilityState === 'hidden';
   let inView = true;
   let running = false;
@@ -40,12 +45,13 @@ export function loop(frame: SimulationFrame, options: LoopOptions = {}): Playbac
     last = now;
     const rate = Number(speed ? speed() : 1);
     const effective = (isFinite(rate) && rate >= 0 ? rate : 1) / clock.scale;
-    frame((dt / BASE_FRAME_MS) * effective, dt * effective, now);
+    parked = frame((dt / BASE_FRAME_MS) * effective, dt * effective, now) === false;
+    sync();
     if (running) raf = requestAnimationFrame(step);
   };
 
   const sync = () => {
-    const next = !stopped && !hidden && inView;
+    const next = !stopped && !parked && !hidden && inView;
     if (next === running) return;
     running = next;
     if (running) {
@@ -91,7 +97,12 @@ export function loop(frame: SimulationFrame, options: LoopOptions = {}): Playbac
 
   if (keys && el) claim(el, keys, holder);
 
+  const wake = () => {
+    parked = false;
+    sync();
+  };
+
   sync();
 
-  return { stop, finished };
+  return { stop, wake, finished };
 }

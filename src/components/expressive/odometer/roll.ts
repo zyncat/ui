@@ -66,8 +66,9 @@ export function aim(places: Place[], grid: string, core: string, zero: number, s
   }
 }
 
-export function step(places: Place[], cols: Slot, strips: Slot, dt: number): void {
+export function step(places: Place[], cols: Slot, strips: Slot, dt: number): boolean {
   const zeta = 1 - BOUNCE;
+  let moving = false;
   for (let i = 0; i < places.length; i++) {
     const p = places[i];
     if (!p || p.settled) continue;
@@ -82,7 +83,9 @@ export function step(places: Place[], cols: Slot, strips: Slot, dt: number): voi
     const slow = Math.abs(p.rate) < REST_RATE && Math.abs(p.openRate) < REST_RATE;
     if (slow && Math.abs(p.to - p.at) < REST_CELL && Math.abs(p.shown - p.open) < REST_CELL) rest(p);
     write(cols[i], strips[i], p);
+    moving ||= !p.settled;
   }
+  return moving;
 }
 
 export function snap(places: Place[], cols: Slot, strips: Slot): void {

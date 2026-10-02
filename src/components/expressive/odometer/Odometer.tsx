@@ -5,7 +5,7 @@ import './odometer.css';
 import { useEffect, useMemo, useRef, useState, type HTMLAttributes } from 'react';
 
 import type { DataAttributes } from '../../../dom-props';
-import { loop } from '../../../engine';
+import { loop, type LoopPlayback } from '../../../engine';
 import type { OdometerStyle } from '../../../tokens/component-styles.generated';
 import { motionFor } from '../../../tokens/motion-tokens';
 import { cx } from '../../internal/utils/cx';
@@ -49,6 +49,7 @@ export function Odometer({ value, format, speed = 1, className = '', style, html
   const strips = useRef<Slot>([]);
   const sim = useRef<Place[]>([]);
   const shown = useRef(0);
+  const playback = useRef<LoopPlayback>(null);
   const rate = useRef(speed);
   rate.current = speed;
 
@@ -58,17 +59,19 @@ export function Odometer({ value, format, speed = 1, className = '', style, html
     shown.current = value;
     aim(sim.current, grid, core, zero, Math.max(motion.dur.slower, MIN_ROLL), dir);
     if (motion.reduced) snap(sim.current, cols.current, strips.current);
+    playback.current?.wake();
   }, [value, core, grid, zero]);
 
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
-    const playback = loop((_k, dt) => step(sim.current, cols.current, strips.current, dt / 1000), {
+    const roll = loop((_k, dt) => step(sim.current, cols.current, strips.current, dt / 1000), {
       el,
       speed: () => rate.current,
       snap: () => snap(sim.current, cols.current, strips.current),
     });
-    return () => playback.stop();
+    playback.current = roll;
+    return () => roll.stop();
   }, []);
 
   return (
