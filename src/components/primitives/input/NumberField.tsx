@@ -93,7 +93,10 @@ export function NumberField({
   return (
     <div className={cls} style={style}>
       <FieldLabel id={id} label={label} />
-      <div className="zc-fld__control" style={{ '--numf-len': text.length } as CSSProperties}>
+      <div
+        className="zc-fld__control"
+        style={{ '--numf-len': text.length, '--numf-unit-len': unit?.length } as CSSProperties}
+      >
         <input
           id={id}
           className="zc-fld__input"

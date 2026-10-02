@@ -192,9 +192,19 @@
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum';
   }
+  .zc-fld__control:has(.zc-numf__unit) .zc-fld__input {
+    padding-right: clamp(
+      var(--numf-h),
+      var(--numf-h) + var(--numf-unit-len) * 1ch + var(--space-1),
+      100% - var(--numf-h) - 2 * var(--border-hairline)
+    );
+  }
   .zc-numf__unit {
     position: absolute;
-    left: calc(50% + var(--numf-len) * 0.5ch + var(--space-1));
+    left: min(
+      50% + (var(--numf-len) - var(--numf-unit-len)) * 0.5ch + var(--space-1) / 2,
+      100% - var(--numf-h) - var(--numf-unit-len) * 1ch
+    );
     font: var(--type-body);
     font-variant-numeric: tabular-nums;
     color: var(--text-subtle);
