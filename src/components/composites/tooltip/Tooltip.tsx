@@ -98,9 +98,9 @@ export function Tooltip({
     [myId],
   );
 
-  function show(immediate: boolean) {
+  function show(immediate: boolean, from: EventTarget) {
     clearTimeout(openTimer.current);
-    if (disabled || !wrapRef.current?.firstElementChild) return;
+    if (disabled || !wrapRef.current?.firstElementChild || !wrapRef.current.contains(from as Node)) return;
     if (immediate || store.isWarm()) setOpen(true);
     else openTimer.current = setTimeout(() => setOpen(true), openDelay);
   }
@@ -110,10 +110,10 @@ export function Tooltip({
   }
 
   const onEnter = (e: PointerEvent) => {
-    if (e.pointerType !== 'touch') show(false);
+    if (e.pointerType !== 'touch') show(false, e.target);
   };
   const onFocusIn = (e: FocusEvent) => {
-    if ((e.target as HTMLElement).matches(':focus-visible')) show(true);
+    if ((e.target as HTMLElement).matches(':focus-visible')) show(true, e.target);
   };
 
   return (
@@ -125,6 +125,7 @@ export function Tooltip({
         onPointerEnter={onEnter}
         onPointerLeave={hide}
         onPointerDown={hide}
+        onClick={hide}
         onFocus={onFocusIn}
         onBlur={hide}
       >
