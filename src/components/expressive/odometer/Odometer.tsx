@@ -5,11 +5,11 @@ import './odometer.css';
 import { useEffect, useMemo, useRef, useState, type HTMLAttributes } from 'react';
 
 import type { DataAttributes } from '../../../dom-props';
-import { loop, type LoopPlayback } from '../../../engine';
+import { clock } from '../../../engine';
 import type { OdometerStyle } from '../../../tokens/component-styles.generated';
 import { motionFor } from '../../../tokens/motion-tokens';
 import { cx } from '../../internal/utils/cx';
-import { aim, CELLS, charAt, DIGIT, MIN_ROLL, parts, snap, step, type Place, type Slot } from './roll';
+import { aim, CELLS, charAt, DIGIT, hold, launch, MIN_ROLL, motions, parts, snap, type Place, type Slot } from './roll';
 
 const affix = (chars: string) =>
   chars && (
@@ -49,7 +49,7 @@ export function Odometer({ value, format, speed = 1, className = '', style, html
   const strips = useRef<Slot>([]);
   const sim = useRef<Place[]>([]);
   const shown = useRef(0);
-  const playback = useRef<LoopPlayback>(null);
+  const visible = useRef(true);
   const rate = useRef(speed);
   rate.current = speed;
 
@@ -59,19 +59,33 @@ export function Odometer({ value, format, speed = 1, className = '', style, html
     shown.current = value;
     aim(sim.current, grid, core, zero, Math.max(motion.dur.slower, MIN_ROLL), dir);
     if (motion.reduced) snap(sim.current, cols.current, strips.current);
-    playback.current?.wake();
+    else launch(sim.current, strips.current, cols.current, rate.current / clock.scale, !visible.current);
   }, [value, core, grid, zero]);
+
+  useEffect(() => {
+    for (const motion of motions(sim.current))
+      if (motion.playState !== 'finished') motion.updatePlaybackRate(speed / clock.scale);
+  }, [speed]);
 
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
-    const roll = loop((_k, dt) => step(sim.current, cols.current, strips.current, dt / 1000), {
-      el,
-      speed: () => rate.current,
-      snap: () => snap(sim.current, cols.current, strips.current),
+    let inView = true;
+    const sync = () => {
+      visible.current = inView && document.visibilityState !== 'hidden';
+      hold(sim.current, !visible.current);
+    };
+    const observer = new IntersectionObserver((entries) => {
+      inView = entries[entries.length - 1].isIntersecting;
+      sync();
     });
-    playback.current = roll;
-    return () => roll.stop();
+    observer.observe(el);
+    document.addEventListener('visibilitychange', sync);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', sync);
+      for (const motion of motions(sim.current)) motion.cancel();
+    };
   }, []);
 
   return (

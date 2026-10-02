@@ -1,5 +1,11 @@
 @layer zyncat.reset, zyncat.tokens, zyncat.base, zyncat.components;
 
+@property --_odometer-reveal {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
+}
+
 @layer zyncat.components {
   .zc-odometer {
     --_odometer-cell: 1em;
