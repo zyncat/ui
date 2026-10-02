@@ -67,19 +67,24 @@ function resolveModules(d: Db, inputs: string[]): UsageModule[] {
     for (const [name, m] of candidates) if (name.includes(q) || q.includes(name)) loose.add(m);
     if (loose.size === 1) found.push([...loose][0]);
     else if (loose.size > 1) misses.push(`"${input}" (ambiguous: ${[...loose].map((m) => m.subpath).join(', ')})`);
-    else misses.push(`"${input}"`);
+    else misses.push(`"${input}"${nearest(d, input)}`);
   }
   if (misses.length) {
-    throw new Error(`No component matches ${misses.join(', ')}. The catalog:\n\n${d.index}`);
+    throw new Error(`No component matches ${misses.join(', ')}. search_api("*") lists every component.`);
   }
   return [...new Set(found)];
 }
 
+function nearest(d: Db, input: string): string {
+  const name = input.toLowerCase().replace(/^@zyncat\/ui\//, '');
+  const names = rank(d, name.match(/[a-z0-9]+/g) ?? []).ranked.map((h) => h.module.subpath);
+  return names.length ? ` (nearest by keyword: ${names.slice(0, 3).join(', ')})` : '';
+}
+
 const RELATIVE_SPEC_RE = /(?:from\s+['"]|import\(['"])(\.[^'"]+)['"]/g;
 
-function readTypes(root: string, typesPath: string): string {
+function readTypes(root: string, typesPath: string, seen = new Set<string>()): string {
   const out: string[] = [];
-  const seen = new Set<string>();
   const walk = (path: string) => {
     const full = resolve(root, path);
     if (seen.has(full) || !existsSync(full)) return;
@@ -105,7 +110,7 @@ function readTypes(root: string, typesPath: string): string {
   return out.join('\n\n');
 }
 
-function renderModule(d: Db, m: UsageModule): string {
+function renderModule(d: Db, m: UsageModule, printed: Set<string>): string {
   const out: string[] = [];
   if (m.usage) {
     out.push(`# ${m.usage.title} - @zyncat/ui/${m.subpath}`, '');
@@ -119,16 +124,18 @@ function renderModule(d: Db, m: UsageModule): string {
   } else {
     out.push(`# @zyncat/ui/${m.subpath}`, '', 'No usage doc - this module is documented by its types below.', '');
   }
-  out.push('## Complete prop types (entry .d.ts + the shared chunks it imports)', '', readTypes(d.root, m.typesPath));
+  const types = readTypes(d.root, m.typesPath, printed);
+  out.push('## Complete prop types (entry .d.ts + shared chunks, each printed once per call)', '', types);
   return out.join('\n');
 }
 
 function getComponent(raw: unknown): string {
   const inputs = (Array.isArray(raw) ? raw : [raw]).filter((v): v is string => typeof v === 'string');
-  if (!inputs.length) throw new Error('Pass one or more component names, e.g. ["select", "text-field"].');
+  if (!inputs.length) throw new Error('Pass "components": a component name or a list of names.');
   const d = db();
   const modules = resolveModules(d, inputs);
-  return modules.map((m) => renderModule(d, m)).join('\n\n');
+  const printed = new Set<string>();
+  return modules.map((m) => renderModule(d, m, printed)).join('\n\n');
 }
 
 const DECISIONS_FILE = 'decisions.css';
@@ -158,11 +165,7 @@ function corpusFor(d: Db, m: UsageModule): { label: string; text: string }[] {
   return parts;
 }
 
-function searchApi(query: string): string {
-  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
-  if (!words.length) throw new Error('Pass one or more keywords, e.g. "searchable" or "drag dismiss".');
-  const d = db();
-
+function rank(d: Db, words: string[]): { ranked: Hit[]; everyWord: boolean } {
   const hits: Hit[] = [];
   for (const m of d.modules) {
     const hit: Hit = { module: m, score: 0, matched: new Set(), lines: [] };
@@ -193,9 +196,17 @@ function searchApi(query: string): string {
     }
     if (hit.matched.size) hits.push(hit);
   }
-
   const full = hits.filter((h) => h.matched.size === words.length);
   const ranked = (full.length ? full : hits).sort((a, b) => b.score - a.score).slice(0, 8);
+  return { ranked, everyWord: full.length > 0 };
+}
+
+function searchApi(query: string): string {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  if (!words.length) throw new Error('Pass one or more keywords, e.g. "searchable" or "drag dismiss".');
+  const d = db();
+  if (query.trim() === '*') return d.index;
+  const { ranked, everyWord } = rank(d, words);
 
   const tokenHits: string[] = [];
   for (const f of tokenFiles(d.root)) {
@@ -206,11 +217,11 @@ function searchApi(query: string): string {
   }
 
   if (!ranked.length && !tokenHits.length) {
-    return `No matches for "${query}". The catalog:\n\n${d.index}`;
+    return `No component or token mentions "${query}". search_api("*") lists every component.`;
   }
 
   const out: string[] = [];
-  if (!full.length && ranked.length) out.push(`No component matches every word of "${query}"; closest by keyword:`, '');
+  if (!everyWord && ranked.length) out.push(`No component matches every word of "${query}"; closest by keyword:`, '');
   for (const h of ranked) {
     out.push(`## ${h.module.usage?.title ?? h.module.subpath} - @zyncat/ui/${h.module.subpath}`);
     if (h.module.usage) out.push(h.module.usage.summary);
@@ -218,7 +229,7 @@ function searchApi(query: string): string {
     out.push('');
   }
   if (tokenHits.length) out.push('## Design tokens', ...tokenHits.map((l) => `  ${l}`), '');
-  out.push(`Follow up with get_component([...names]) for complete APIs.`);
+  out.push(`Follow up with get_component({ components: [...names] }) for complete APIs.`);
   return out.join('\n');
 }
 
@@ -313,7 +324,7 @@ const CONSUMER_TOOLS = [
       'its neighbours, example, live docs page URL) plus the complete TypeScript prop types with doc comments, ' +
       'shared type chunks inlined. Accepts a list - pass every component the change touches in ONE call. This is ' +
       'the only reliable source for props: call it before writing any Zyncat UI JSX. An unknown name returns the ' +
-      'full component catalog, so a wrong guess still orients you.',
+      'nearest components by keyword, so a wrong guess still orients you.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -332,8 +343,7 @@ const CONSUMER_TOOLS = [
     description:
       'Ranked keyword search across every component’s usage doc, prop types and the design-token CSS. Finds ' +
       'which component owns a prop, behavior or token (e.g. "drag dismiss", "searchable", "DurationToken", ' +
-      '"--accent"). Zero matches returns the whole catalog instead, so a miss still orients you. Follow up with ' +
-      'get_component.',
+      '"--accent"). A miss says so in one line; "*" returns the whole catalog. Follow up with get_component.',
     inputSchema: {
       type: 'object',
       properties: { query: { type: 'string', description: 'One or more keywords.' } },

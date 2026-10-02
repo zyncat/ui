@@ -135,7 +135,7 @@ export function buildIndex(modules) {
   const typesOnly = modules.filter((m) => !m.usage);
   if (typesOnly.length) {
     out.push('== Types-only modules (documented by their .d.ts alone) ==');
-    for (const m of typesOnly) out.push(`@zyncat/ui/${m.subpath} - get_component("${m.subpath}")`);
+    for (const m of typesOnly) out.push(`@zyncat/ui/${m.subpath} - get_component({ components: "${m.subpath}" })`);
   }
   return out.join('\n').trim();
 }

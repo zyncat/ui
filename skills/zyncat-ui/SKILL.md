@@ -12,11 +12,11 @@ No Tailwind, no CSS-in-JS, no animation library - a built-in WAAPI motion engine
 
 1. **Never write a component's props from memory or from this skill.** Before writing any JSX that
    renders a Zyncat UI component, call the `get_component` MCP tool with EVERY component the change
-   touches, in one call: `get_component(["select", "text-field", "dialog"])`. It returns the
-   maintainers' usage notes, the live docs URL and the complete prop types for the version actually
-   installed. An unknown name returns the full catalog, so a wrong guess self-corrects.
-2. Unsure which component owns a behavior? `search_api("drag dismiss")` - ranked, and a miss
-   returns the catalog.
+   touches, in one call: `get_component({ components: ["select", "text-field", "dialog"] })`. It
+   returns the maintainers' usage notes, the live docs URL and the complete prop types for the version
+   actually installed. An unknown name returns the nearest components, so a wrong guess self-corrects.
+2. Unsure which component owns a behavior? `search_api("drag dismiss")` - ranked; `search_api("*")`
+   lists the whole catalog.
 3. Styling or theming? Read [references/theming.md](references/theming.md) first, then `get_tokens`
    for the real values.
 4. Full component inventory: [references/components.md](references/components.md) - generated, and
