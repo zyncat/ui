@@ -12,7 +12,7 @@ import {
   type ReactNode,
 } from 'react';
 
-import { PresenceContext } from './presence-context';
+import { PresenceContext, type PresenceState } from './presence-context';
 
 interface Entry {
   key: string;
@@ -64,6 +64,7 @@ export function Presence({ children, initial = true, mode = 'sync', onExitComple
   const signature = incoming.map((entry) => entry.key).join('|');
   const claims = useRef<Claims>(new Map());
   const latest = useRef<Latest>(new Map());
+  const values = useRef({ membership: '', byKey: new Map<string, PresenceState>() });
   for (const entry of incoming) latest.current.set(entry.key, entry.node);
   const [tracked, setTracked] = useState<Tracked>({ shown: incoming, signature });
   const bornAtMount = useRef(new Set(incoming.map((entry) => entry.key)));
@@ -115,20 +116,28 @@ export function Presence({ children, initial = true, mode = 'sync', onExitComple
   const fresh = new Map(incoming.map((entry) => [entry.key, entry.node]));
   const visible = mode === 'wait' && leaving ? shown.filter((entry) => entry.exiting) : shown;
 
+  const membership = visible.map((entry) => entry.key).join('|');
+  const reflowed = values.current.membership !== membership;
+  const priorValues = values.current.byKey;
+  values.current = { membership, byKey: new Map() };
+  const valueFor = ({ key, exiting }: Entry): PresenceState => {
+    const born = initial || !bornAtMount.current.has(key);
+    const kept = reflowed ? undefined : priorValues.get(key);
+    const value =
+      kept?.isPresent === !exiting && kept.initial === born
+        ? kept
+        : { isPresent: !exiting, initial: born, claimExit: claimExit(key) };
+    values.current.byKey.set(key, value);
+    return value;
+  };
+
   return createElement(
     Fragment,
     null,
     visible.map((entry) =>
       createElement(
         PresenceContext.Provider,
-        {
-          key: entry.key,
-          value: {
-            isPresent: !entry.exiting,
-            initial: initial || !bornAtMount.current.has(entry.key),
-            claimExit: claimExit(entry.key),
-          },
-        },
+        { key: entry.key, value: valueFor(entry) },
         fresh.get(entry.key) ?? entry.node,
       ),
     ),
