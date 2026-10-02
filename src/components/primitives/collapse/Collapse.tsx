@@ -33,8 +33,9 @@ interface CollapseOwnProps extends TimingProps {
   axis?: 'height' | 'width';
   /** Also cross-fade contents while resizing; follows `duration` / `ease`. */
   fade?: boolean;
-  /** Class applied to the inner measured wrapper - the clipping element (overflow: hidden).
-   *  Content whose focus ring sits flush to its edge needs padding there, or the ring clips. */
+  /** Class applied to the inner wrapper - the clipping element (`overflow: clip` on the animated
+   *  axis). Its padding stays while closed, so content whose focus ring sits flush to the clipped
+   *  edge gets its room as `var(--ring-gutter)` of padding on a child. */
   innerClassName?: string;
   /** Size (and fade) transition timing - motion tokens only, each field one token or
    *  `{ open, close }`, e.g. `{ duration: { close: 'fast' }, ease: { close: 'exit' } }`.
