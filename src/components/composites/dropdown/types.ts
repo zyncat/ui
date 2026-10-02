@@ -3,6 +3,7 @@ import type { HTMLAttributes, ReactNode, RefObject } from 'react';
 import type { DataAttributes } from '../../../dom-props';
 import { normalizeCollection, type NormalizedGroup } from '../../internal/collection/collection';
 import type { MenuHighlight, MenuSize, MenuWeight, MenuWidth } from '../../internal/menu/highlight';
+import type { VirtualAnchor } from '../../internal/overlay/position';
 import type { ActivateOn } from '../../internal/utils/activation';
 
 export interface DropdownItem {
@@ -99,6 +100,8 @@ export type SeedFocus = 'first' | 'last' | 'selected' | 'none';
 export interface MenuChain {
   levels: Level[];
   menuId: string;
+  triggerId: string;
+  anchor?: VirtualAnchor | null;
   activateOn?: ActivateOn;
   side: 'top' | 'bottom' | 'left' | 'right';
   align: 'start' | 'center' | 'end';

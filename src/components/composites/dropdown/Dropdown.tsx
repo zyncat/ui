@@ -4,6 +4,7 @@ import './dropdown.css';
 
 import {
   Fragment,
+  useEffect,
   useId,
   useMemo,
   useRef,
@@ -22,6 +23,7 @@ import { motionFor } from '../../../tokens/motion-tokens';
 import { useControllable } from '../../internal/hooks/use-controllable';
 import type { MenuSize, MenuWeight, MenuWidth } from '../../internal/menu/highlight';
 import { ovCloneTrigger, OverlayPortal } from '../../internal/overlay/layer';
+import type { VirtualAnchor } from '../../internal/overlay/position';
 import { pressedByKeyboard, type ActivateOn } from '../../internal/utils/activation';
 import { MenuPanel } from './menu-panel';
 import {
@@ -40,13 +42,19 @@ const DROPDOWN_TIMING = {
   open: { duration: 'base', ease: 'entrance' },
   close: { duration: 'fast', ease: 'exit' },
 } as const;
+const ROOT_SEED = { key: ROOT_LEVEL, focus: 'selected' as SeedFocus };
 
 export interface DropdownProps {
   /** The rows - a flat `DropdownItem[]`, or `DropdownGroup[]` to render divided sections.
    *  A row with its own `items` opens a submenu instead of committing. @default [] */
   items: DropdownItems;
-  /** Cloned to toggle the menu, and used as the anchor. Gets the `aria-haspopup="menu"` wiring. */
-  trigger: ReactElement;
+  /** Cloned to toggle the menu, and used as the anchor unless `anchor` is set. Gets the
+   *  `aria-haspopup="menu"` wiring. */
+  trigger?: ReactElement | null;
+  /** Anchor to an arbitrary rect instead of the trigger - any `{ getBoundingClientRect() }`, which an element
+   *  also satisfies. Drive `open` yourself, name the menu with `ariaLabel` when there is no trigger, and pass
+   *  a new object to re-place a moving anchor. Submenus always anchor to their row. */
+  anchor?: VirtualAnchor | null;
   /** Whether the trigger and the rows fire on `pointerdown` (snappier) or wait for `click`. @default 'pointerdown' */
   activateOn?: ActivateOn;
 
@@ -94,7 +102,8 @@ export interface DropdownProps {
 
 export function Dropdown({
   items = [],
-  trigger,
+  trigger = null,
+  anchor,
   activateOn = 'pointerdown',
   open: controlledOpen,
   defaultOpen = false,
@@ -115,12 +124,13 @@ export function Dropdown({
 }: DropdownProps) {
   const [open, setOpen] = useControllable(controlledOpen, defaultOpen, onOpenChange);
   const [path, setPath] = useState<string[]>([]);
-  const [seed, setSeed] = useState({ key: ROOT_LEVEL, focus: 'selected' as SeedFocus });
+  const [seed, setSeed] = useState(ROOT_SEED);
 
   const refs = useRef(new Map<string, RefObject<HTMLElement>>());
   const hoverDepth = useRef(-1);
   const autoId = useId();
   const menuId = id || 'dropdown-' + autoId;
+  const triggerId = (trigger?.props as { id?: string } | undefined)?.id ?? menuId + '-trigger';
   const levels = useMemo(() => resolveLevels(items, path), [items, path]);
 
   const refFor = (key: string): RefObject<HTMLElement> => {
@@ -129,6 +139,10 @@ export function Dropdown({
   };
   const triggerRef = refFor('trigger');
   const timings = resolveMotionTiming(animation, DROPDOWN_TIMING, triggerRef.current);
+
+  useEffect(() => {
+    if (!open) setSeed(ROOT_SEED);
+  }, [open]);
 
   const dismiss = (refocus: boolean) => {
     setPath([]);
@@ -146,6 +160,8 @@ export function Dropdown({
   const chain: MenuChain = {
     levels,
     menuId,
+    triggerId,
+    anchor,
     activateOn,
     side,
     align,
@@ -184,7 +200,11 @@ export function Dropdown({
     <Fragment>
       {ovCloneTrigger(trigger, {
         open,
-        onPress: (e) => (open ? dismiss(false) : show(pressedByKeyboard(e) ? 'first' : 'selected')),
+        onPress: (e) => {
+          triggerRef.current?.focus({ preventScroll: true });
+          if (open) dismiss(false);
+          else show(pressedByKeyboard(e) ? 'first' : 'selected');
+        },
         onKeyDown: (e) => {
           if (open || (e.key !== 'ArrowDown' && e.key !== 'ArrowUp')) return;
           e.preventDefault();
@@ -194,6 +214,8 @@ export function Dropdown({
         haspopup: 'menu',
         triggerRef,
         activateOn,
+        holdFocus: true,
+        attrs: { id: triggerId },
       })}
       <OverlayPortal scope={triggerRef.current}>
         <Presence>

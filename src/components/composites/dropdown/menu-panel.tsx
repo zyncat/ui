@@ -80,7 +80,7 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
   useMotion(panelRef, motion);
   useReturnFocus(panelRef);
   useAnchorWidth(anchorRef, panelRef, !nested && chain.width === 'trigger');
-  useAnchorPosition({ ...place, arrow: false, triggerRef: anchorRef, panelRef });
+  useAnchorPosition({ ...place, arrow: false, anchor: nested ? null : chain.anchor, triggerRef: anchorRef, panelRef });
   useOutsidePress({ entry, refs: [panelRef, anchorRef], enabled: !nested, onPress: () => chain.dismiss(false) });
 
   function setActiveIdx(i: number) {
@@ -288,7 +288,9 @@ export function MenuPanel({ chain, depth, ...motion }: { chain: MenuChain; depth
       role={contentLevel ? 'dialog' : 'menu'}
       tabIndex={-1}
       aria-label={nested ? undefined : chain.ariaLabel}
-      aria-labelledby={nested ? panelId(depth - 1) + '-item-' + level.ownerIdx : undefined}
+      aria-labelledby={
+        nested ? panelId(depth - 1) + '-item-' + level.ownerIdx : chain.ariaLabel ? undefined : chain.triggerId
+      }
       data-nested={nested ? 'true' : undefined}
       data-content={contentLevel ? 'true' : undefined}
       onKeyDown={contentLevel ? onContentKeyDown : onKeyDown}
