@@ -40,8 +40,9 @@ export function useFlip<T extends HTMLElement>(
   sharedId: string | null,
   tuning: FlipTuning & { offscreenMargin?: number } = {},
   inPlace: boolean,
-): { ref: RefObject<T | null>; play: EffectCallback } {
+): { ref: RefObject<T | null>; play: EffectCallback; snapshot: () => void } {
   const ref = useRef<T | null>(null);
+  const lastCommitted = useRef<Box | null>(null);
   const playing = useRef<{ play: Playback; el: T } | null>(null);
   const superseded = useRef<Playback | null>(null);
   const queued = useRef<object | null>(null);
@@ -52,7 +53,6 @@ export function useFlip<T extends HTMLElement>(
   latest.current = tuning;
   const { size, timing, crossfade, offscreenMargin } = tuning;
   const enabled = inPlace || sharedId !== null;
-  const lastCommitted = ref.current && (inPlace || playing.current) ? measure(ref.current) : null;
   if (enabled) measureHolders();
   const holder = sharedId === null ? undefined : sharedOwner.get(sharedId);
   if (holder && holder !== ref.current && holder.isConnected) leaving.set(holder, measure(holder));
@@ -64,9 +64,9 @@ export function useFlip<T extends HTMLElement>(
     if (crossfade) loadCrossfade();
     const live = playing.current;
     const midFlight = live?.el === el;
-    const moved = !!lastCommitted && !sameBox(lastCommitted, measure(el));
+    const moved = !!lastCommitted.current && !sameBox(lastCommitted.current, measure(el));
     if (midFlight && !moved) return;
-    let from = moved ? lastCommitted : null;
+    let from = moved ? lastCommitted.current : null;
     if (sharedId !== null && !midFlight) {
       if (interrupted.current) from = interrupted.current;
       else if (sharedOwner.get(sharedId) !== el) from = readShared(sharedId);
@@ -142,5 +142,9 @@ export function useFlip<T extends HTMLElement>(
     };
   };
 
-  return { ref, play };
+  const snapshot = () => {
+    lastCommitted.current = ref.current && (inPlace || playing.current) ? measure(ref.current) : null;
+  };
+
+  return { ref, play, snapshot };
 }

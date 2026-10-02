@@ -1,6 +1,6 @@
 'use client';
 
-import { createElement, useCallback, useLayoutEffect, useRef, type ReactNode, type Ref } from 'react';
+import { Component, createElement, useCallback, useLayoutEffect, useRef, type ReactNode, type Ref } from 'react';
 
 import { useFlip, type FlipTuning } from './flip';
 import { usePresence } from './presence-context';
@@ -18,6 +18,19 @@ export interface MotionProps extends MotionSpecs {
   ref?: Ref<HTMLElement | null>;
   children?: ReactNode;
   [prop: string]: unknown;
+}
+
+class BeforeCommit extends Component<{ read: () => void; children?: ReactNode }> {
+  getSnapshotBeforeUpdate(): null {
+    this.props.read();
+    return null;
+  }
+
+  componentDidUpdate() {}
+
+  render() {
+    return this.props.children;
+  }
 }
 
 export function Motion({
@@ -54,5 +67,9 @@ export function Motion({
     [flip.ref],
   );
 
-  return createElement(as, { ...rest, 'data-exiting': isPresent ? undefined : 'true', ref: attach }, children);
+  return createElement(
+    BeforeCommit,
+    { read: flip.snapshot },
+    createElement(as, { ...rest, 'data-exiting': isPresent ? undefined : 'true', ref: attach }, children),
+  );
 }
