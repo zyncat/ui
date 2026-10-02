@@ -1,11 +1,6 @@
 @layer zyncat.reset, zyncat.tokens, zyncat.base, zyncat.components;
 
 @layer zyncat.base {
-  /* Drives native scrollbars, caret, select popups, and autofill background. */
-  :root {
-    color-scheme: light dark;
-  }
-
   /* Only reaches these four; scoped so it stops inheriting everywhere. */
   :where(input[type='checkbox'], input[type='radio'], input[type='range'], progress) {
     accent-color: var(--accent);
