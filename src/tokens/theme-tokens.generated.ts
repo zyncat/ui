@@ -747,11 +747,11 @@ export interface TokenProperties {
   '--accent-hover'?: string | number;
   /** `--accent-active`. Default: `oklch(from var(--accent) calc(l - 0.152) calc(c - 0.018) h)`. Re-derived on every theme root. */
   '--accent-active'?: string | number;
-  /** `--accent-subtle`. Default: `oklch(from var(--accent) 0.972 0.02 h)`. Dark: `oklch(from var(--accent) 0.27 0.045 h)`. Re-derived on every theme root. */
+  /** `--accent-subtle`. Default: `oklch(from var(--accent) 0.972 min(c, 0.02) h)`. Dark: `oklch(from var(--accent) 0.27 min(c, 0.045) h)`. Re-derived on every theme root. */
   '--accent-subtle'?: string | number;
-  /** `--accent-border`. Default: `oklch(from var(--accent) 0.88 0.066 h)`. Dark: `oklch(from var(--accent) 0.45 0.09 h)`. Re-derived on every theme root. */
+  /** `--accent-border`. Default: `oklch(from var(--accent) 0.88 min(c, 0.066) h)`. Dark: `oklch(from var(--accent) 0.45 min(c, 0.09) h)`. Re-derived on every theme root. */
   '--accent-border'?: string | number;
-  /** `--accent-disabled`. Default: `oklch(from var(--accent) 0.795 0.092 h)`. Dark: `oklch(from var(--accent) 0.42 0.06 h)`. Re-derived on every theme root. */
+  /** `--accent-disabled`. Default: `oklch(from var(--accent) 0.795 min(c, 0.092) h)`. Dark: `oklch(from var(--accent) 0.42 min(c, 0.06) h)`. Re-derived on every theme root. */
   '--accent-disabled'?: string | number;
   /** `--accent-wash`. Default: `oklch(from var(--accent) l c h / 0.08)`. Dark: `oklch(from var(--accent) l c h / 0.14)`. Re-derived on every theme root. */
   '--accent-wash'?: string | number;
@@ -765,11 +765,11 @@ export interface TokenProperties {
   '--neutral-wash-press'?: string | number;
   /** `--info` - The accent's hue one step down - repoint it for a hue of its own. Default: `var(--accent-hover)`. Re-derived on every theme root. */
   '--info'?: string | number;
-  /** `--info-subtle`. Default: `oklch(from var(--info) 0.972 0.02 h)`. Dark: `oklch(from var(--info) 0.265 0.045 h)`. Re-derived on every theme root. */
+  /** `--info-subtle`. Default: `oklch(from var(--info) 0.972 min(c, 0.02) h)`. Dark: `oklch(from var(--info) 0.265 min(c, 0.045) h)`. Re-derived on every theme root. */
   '--info-subtle'?: string | number;
-  /** `--info-text`. Default: `oklch(from var(--info) calc(l - 0.082) calc(c - 0.014) h)`. Dark: `oklch(from var(--info) calc(l + 0.22) calc(c - 0.014) h)`. Re-derived on every theme root. */
+  /** `--info-text`. Default: `oklch(from var(--info) calc(l - 0.1) calc(c - 0.014) h)`. Dark: `oklch(from var(--info) calc(l + 0.22) calc(c - 0.014) h)`. Re-derived on every theme root. */
   '--info-text'?: string | number;
-  /** `--info-wash`. Default: `oklch(from var(--info) 0.63 0.118 h / 0.08)`. Dark: `oklch(from var(--info) 0.63 0.118 h / 0.14)`. Re-derived on every theme root. */
+  /** `--info-wash`. Default: `oklch(from var(--info) 0.63 min(c, 0.118) h / 0.08)`. Dark: `oklch(from var(--info) 0.63 min(c, 0.118) h / 0.14)`. Re-derived on every theme root. */
   '--info-wash'?: string | number;
   /** `--success-subtle`. Default: `oklch(from var(--success) 0.965 0.028 h)`. Dark: `oklch(from var(--success) 0.265 0.05 h)`. Re-derived on every theme root. */
   '--success-subtle'?: string | number;
@@ -779,7 +779,7 @@ export interface TokenProperties {
   '--success-wash'?: string | number;
   /** `--warning-subtle`. Default: `oklch(from var(--warning) 0.972 0.034 h)`. Dark: `oklch(from var(--warning) 0.27 0.05 h)`. Re-derived on every theme root. */
   '--warning-subtle'?: string | number;
-  /** `--warning-text`. Default: `oklch(from var(--warning) calc(l - 0.14) calc(c - 0.024) h)`. Dark: `oklch(from var(--warning) calc(l + 0.13) calc(c - 0.02) h)`. Re-derived on every theme root. */
+  /** `--warning-text`. Default: `oklch(from var(--warning) calc(l - 0.16) calc(c - 0.024) h)`. Dark: `oklch(from var(--warning) calc(l + 0.13) calc(c - 0.02) h)`. Re-derived on every theme root. */
   '--warning-text'?: string | number;
   /** `--warning-wash`. Default: `oklch(from var(--warning) 0.76 0.14 h / 0.12)`. Dark: `oklch(from var(--warning) 0.76 0.14 h / 0.18)`. Re-derived on every theme root. */
   '--warning-wash'?: string | number;

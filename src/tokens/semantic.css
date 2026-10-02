@@ -43,9 +43,9 @@
     --accent-lift: oklch(from var(--accent) calc(l + 0.075) calc(c - 0.006) h);
     --accent-hover: oklch(from var(--accent) calc(l - 0.07) calc(c - 0.004) h);
     --accent-active: oklch(from var(--accent) calc(l - 0.152) calc(c - 0.018) h);
-    --accent-subtle: oklch(from var(--accent) 0.972 0.02 h);
-    --accent-border: oklch(from var(--accent) 0.88 0.066 h);
-    --accent-disabled: oklch(from var(--accent) 0.795 0.092 h);
+    --accent-subtle: oklch(from var(--accent) 0.972 min(c, 0.02) h);
+    --accent-border: oklch(from var(--accent) 0.88 min(c, 0.066) h);
+    --accent-disabled: oklch(from var(--accent) 0.795 min(c, 0.092) h);
     --accent-wash: oklch(from var(--accent) l c h / 0.08);
     --text-accent: var(--accent-active);
 
@@ -57,16 +57,16 @@
 
     /* The accent's hue one step down - repoint it for a hue of its own. */
     --info: var(--accent-hover);
-    --info-subtle: oklch(from var(--info) 0.972 0.02 h);
-    --info-text: oklch(from var(--info) calc(l - 0.082) calc(c - 0.014) h);
-    --info-wash: oklch(from var(--info) 0.63 0.118 h / 0.08);
+    --info-subtle: oklch(from var(--info) 0.972 min(c, 0.02) h);
+    --info-text: oklch(from var(--info) calc(l - 0.1) calc(c - 0.014) h);
+    --info-wash: oklch(from var(--info) 0.63 min(c, 0.118) h / 0.08);
 
     --success-subtle: oklch(from var(--success) 0.965 0.028 h);
     --success-text: oklch(from var(--success) calc(l - 0.086) calc(c - 0.022) h);
     --success-wash: oklch(from var(--success) 0.62 0.13 h / 0.1);
 
     --warning-subtle: oklch(from var(--warning) 0.972 0.034 h);
-    --warning-text: oklch(from var(--warning) calc(l - 0.14) calc(c - 0.024) h);
+    --warning-text: oklch(from var(--warning) calc(l - 0.16) calc(c - 0.024) h);
     --warning-wash: oklch(from var(--warning) 0.76 0.14 h / 0.12);
 
     /* The destructive button's hover face, above --danger-fill. */

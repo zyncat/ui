@@ -34,15 +34,15 @@
 
     /* A light face reads as a light source on dark, so the fills drop a step while the lift stays put. */
     --accent-fill: oklch(from var(--accent) calc(l - 0.06) calc(c - 0.01) h);
-    --accent-subtle: oklch(from var(--accent) 0.27 0.045 h);
-    --accent-border: oklch(from var(--accent) 0.45 0.09 h);
-    --accent-disabled: oklch(from var(--accent) 0.42 0.06 h);
+    --accent-subtle: oklch(from var(--accent) 0.27 min(c, 0.045) h);
+    --accent-border: oklch(from var(--accent) 0.45 min(c, 0.09) h);
+    --accent-disabled: oklch(from var(--accent) 0.42 min(c, 0.06) h);
     --accent-wash: oklch(from var(--accent) l c h / 0.14);
     --text-accent: oklch(from var(--accent) calc(l + 0.14) calc(c - 0.012) h);
 
-    --info-subtle: oklch(from var(--info) 0.265 0.045 h);
+    --info-subtle: oklch(from var(--info) 0.265 min(c, 0.045) h);
     --info-text: oklch(from var(--info) calc(l + 0.22) calc(c - 0.014) h);
-    --info-wash: oklch(from var(--info) 0.63 0.118 h / 0.14);
+    --info-wash: oklch(from var(--info) 0.63 min(c, 0.118) h / 0.14);
 
     --success-subtle: oklch(from var(--success) 0.265 0.05 h);
     --success-text: oklch(from var(--success) calc(l + 0.23) calc(c - 0.02) h);
