@@ -49,6 +49,17 @@ export function useSheetDrag({
   const axis = side === 'bottom' ? 'y' : 'x';
   const savedUserSelect = useRef<string | null>(null);
   const span = useRef(1);
+  const dragging = useRef(false);
+
+  useEffect(() => {
+    const panel = panelRef.current;
+    if (!enabled || !panel) return undefined;
+    const holdPan = (e: TouchEvent) => {
+      if (dragging.current) e.preventDefault();
+    };
+    panel.addEventListener('touchmove', holdPan, { passive: false });
+    return () => panel.removeEventListener('touchmove', holdPan);
+  }, [enabled, panelRef]);
 
   function suspendSelection() {
     const sel = window.getSelection();
@@ -92,6 +103,7 @@ export function useSheetDrag({
       if (!panelRef.current) return;
       span.current = sheetSpan(panelRef.current, side);
       suspendSelection();
+      dragging.current = true;
       startDrag(ev, { onMove: onDrag, onEnd: onDragEnd });
     };
 
@@ -113,6 +125,7 @@ export function useSheetDrag({
   }
 
   function onDragEnd(info: PanInfo) {
+    dragging.current = false;
     restoreSelection();
     const el = panelRef.current;
     if (!el) return;
