@@ -26,6 +26,7 @@ export interface ListboxPanelProps extends MenuSurfaceProps {
   animation?: DisableableAnimation;
   menuProps?: SelectMenuHtmlProps;
   check?: (selected: boolean) => ReactNode;
+  presets?: ReactNode;
 }
 
 const defaultCheck = (selected: boolean) => (selected ? <Icon key="on" name="check" size="sm" weight="bold" /> : null);
@@ -63,6 +64,7 @@ export function ListboxPanel({
   animation,
   menuProps,
   check = defaultCheck,
+  presets,
 }: ListboxPanelProps) {
   const grouped = lb.sections.some((s) => s.label);
   const option = (row: ListRow) => {
@@ -121,6 +123,7 @@ export function ListboxPanel({
           />
         </div>
       )}
+      {!loading && presets}
 
       <div
         className="zc-menu-scroller zc-select__list"
@@ -128,7 +131,7 @@ export function ListboxPanel({
         id={lb.listId}
         role="listbox"
         aria-multiselectable={multiple || undefined}
-        tabIndex={-1}
+        tabIndex={presets && !searchable ? 0 : -1}
         aria-label={ariaLabel}
         data-grouped={grouped ? 'true' : undefined}
         onKeyDown={searchable ? undefined : lb.onMenuKeyDown}

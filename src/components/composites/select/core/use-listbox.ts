@@ -21,6 +21,8 @@ export interface UseListboxArgs {
 
 export type ListboxState = ReturnType<typeof useListbox>;
 
+const TAB_STOPS = ':is(input, button, [tabindex]):not([tabindex="-1"], :disabled)';
+
 export function useListbox({
   options,
   disabled,
@@ -154,6 +156,12 @@ export function useListbox({
     navigate(matchPrefix(navItems, optionText, typeahead.push(ch)));
   }
 
+  function tabLeavesMenu(e: KeyboardEvent) {
+    const ahead = e.shiftKey ? Node.DOCUMENT_POSITION_PRECEDING : Node.DOCUMENT_POSITION_FOLLOWING;
+    const stops = document.getElementById(menuId)?.querySelectorAll(TAB_STOPS);
+    return !stops || !Array.from(stops).some((stop) => e.currentTarget.compareDocumentPosition(stop) & ahead);
+  }
+
   function onMenuKeyDown(e: KeyboardEvent) {
     switch (e.key) {
       case 'Escape':
@@ -182,7 +190,7 @@ export function useListbox({
         if (activeIdx.current >= 0) commit(navItems[activeIdx.current]);
         break;
       case 'Tab':
-        requestClose();
+        if (tabLeavesMenu(e)) requestClose();
         break;
       case ' ':
         if (searchable) break;

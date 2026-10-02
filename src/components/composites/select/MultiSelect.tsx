@@ -21,8 +21,10 @@ import {
   type SelectMenuHtmlProps,
   type SelectOption,
 } from './core';
+import { PresetRow, type MultiSelectPreset } from './presets';
 
 export type { SelectOption, SelectGroup } from './core';
+export type { MultiSelectPreset } from './presets';
 
 export interface MultiSelectProps {
   /** The choices - a flat `SelectOption[]`, or `SelectGroup[]` to render labeled sections. @default [] */
@@ -31,8 +33,12 @@ export interface MultiSelectProps {
   value?: string[];
   /** Initial selection when uncontrolled. @default [] */
   defaultValue?: string[];
-  /** Fires with the NEXT array and the option that was toggled. Committing keeps the menu open. */
-  onChange?: (value: string[], toggled: SelectOption) => void;
+  /** Fires with the NEXT array and the option that was toggled, or no option when a preset replaced
+   *  the selection. Committing keeps the menu open. */
+  onChange?: (value: string[], toggled?: SelectOption) => void;
+  /** One-press selections, shown as chips between the filter field and the list. A press replaces
+   *  the selection with the preset's `value` as given and keeps the menu open. @default [] */
+  presets?: MultiSelectPreset[];
   /** Trigger text when nothing is selected. @default 'Select options' */
   placeholder?: string;
   /** Trigger height, type and padding. The menu follows it unless `menuSize` overrides. @default 'md' */
@@ -108,6 +114,7 @@ export function MultiSelect({
   value: controlledValue,
   defaultValue = [],
   onChange,
+  presets = [],
   placeholder = 'Select options',
   size = 'md',
   menuSize = size,
@@ -130,11 +137,7 @@ export function MultiSelect({
   animation,
   trigger,
 }: MultiSelectProps) {
-  const [value, setValue] = useControllable<string[], SelectOption>(
-    controlledValue,
-    defaultValue,
-    onChange as ((next: string[], opt?: SelectOption) => void) | undefined,
-  );
+  const [value, setValue] = useControllable(controlledValue, defaultValue, onChange);
   const values = Array.isArray(value) ? value : [];
   const isSelected = (v: string) => values.indexOf(v) !== -1;
 
@@ -195,6 +198,11 @@ export function MultiSelect({
         animation={animation}
         menuProps={menuProps}
         check={(sel) => <OptionMarker marker={marker} checked={sel} size={menuSize} />}
+        presets={
+          presets.length > 0 && (
+            <PresetRow presets={presets} size={menuSize} apply={setValue} onMenuKeyDown={lb.onMenuKeyDown} />
+          )
+        }
       />
     </div>
   );
