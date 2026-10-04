@@ -38,6 +38,7 @@
     min-height: 0;
   }
   .zc-tbl__scroll {
+    position: relative;
     flex: 1 1 auto;
     min-height: 0;
     overflow: auto;
@@ -49,6 +50,8 @@
   }
 
   .zc-tbl__table {
+    position: relative;
+    z-index: 1;
     width: 100%;
     border-collapse: separate; /* collapse breaks sticky borders */
     border-spacing: 0;
@@ -77,7 +80,7 @@
   .zc-tbl__table td {
     padding: var(--tbl-pad-y) var(--space-3);
     border-bottom: var(--border-hairline) solid var(--border-subtle);
-    background: var(--row-bg, var(--bg-surface));
+    background: var(--row-bg, transparent);
     font: var(--type-body);
     color: var(--text-body);
     vertical-align: middle;
@@ -93,7 +96,7 @@
     padding-inline-start: var(--space-4);
   }
   .zc-tbl__table th:last-child:not(.zc-tbl__cell--sortable),
-  .zc-tbl__table td:last-child {
+  .zc-tbl__table td:last-child:not(.zc-tbl__cell--toggle) {
     padding-inline-end: var(--space-4);
   }
 
@@ -101,20 +104,30 @@
     --_tbl-row-hover: var(--bg-subtle);
   }
 
-  .zc-tbl__row {
-    --row-bg: var(--bg-surface);
-  }
-  .zc-tbl__row:hover {
-    --row-bg: var(--_tbl-row-hover);
-  }
   .zc-tbl__row[data-selected] {
-    --row-bg: color-mix(in oklab, var(--accent) 5%, var(--bg-surface));
+    --row-bg: color-mix(in oklab, var(--accent) 5%, transparent);
   }
-  .zc-tbl__row[data-selected]:hover {
-    --row-bg: color-mix(in oklab, var(--accent) 5%, var(--_tbl-row-hover));
-  }
-  .zc-tbl--clickable tbody .zc-tbl__row {
+  .zc-tbl--clickable tbody .zc-tbl__row,
+  .zc-tbl__row[data-expandable] {
     cursor: pointer;
+  }
+
+  .zc-tbl__glide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .zc-tbl__glide::before {
+    content: '';
+    position: absolute;
+    inset: var(--space-1) var(--space-2);
+    border-radius: var(--radius-md);
+    background: var(--_tbl-row-hover);
+  }
+  .zc-tbl--loading .zc-tbl__glide {
+    visibility: hidden;
   }
 
   .zc-tbl__table td.zc-tbl__cell--mono {
@@ -267,6 +280,9 @@
   }
   .zc-tbl--pin thead .zc-tbl__cell--pin {
     z-index: 3;
+  }
+  .zc-tbl[data-x-back] td.zc-tbl__cell--pin {
+    background: linear-gradient(var(--row-bg, transparent) 0 0), linear-gradient(var(--bg-surface) 0 0);
   }
   .zc-tbl--pin .zc-tbl__cell--pinOff {
     left: var(--tbl-check-w);

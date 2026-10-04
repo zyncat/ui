@@ -1,0 +1,27 @@
+@layer zyncat.reset, zyncat.tokens, zyncat.base, zyncat.components;
+
+@layer zyncat.components {
+  .zc-tbl__row[data-expandable] > td {
+    border-bottom-width: 0;
+  }
+
+  .zc-tbl__table .zc-tbl__detail > td {
+    padding-block: 0;
+    white-space: normal;
+  }
+  .zc-tbl__detailBody {
+    padding: var(--ring-gutter) 0 var(--tbl-pad-y);
+  }
+
+  .zc-tbl__table .zc-tbl__cell--toggle {
+    width: 0;
+    padding: 0 var(--space-2);
+    text-align: right;
+  }
+  .zc-tbl__toggle .zc-icon {
+    transition: transform var(--duration-slow) var(--ease-standard);
+  }
+  .zc-tbl__toggle[aria-expanded='true'] .zc-icon {
+    transform: rotate(180deg);
+  }
+}

@@ -135,11 +135,23 @@ const COLUMNS: TableColumn<PostRow>[] = [
 ];
 
 type TableDensity = NonNullable<TableProps<PostRow>['density']>;
+type TableExpandMode = NonNullable<TableProps<PostRow>['expandMode']>;
+
+const renderPostDetail = (r: PostRow) =>
+  r.status === 'Draft' ? null : (
+    <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
+      {r.status === 'Published'
+        ? `${r.engagement.toLocaleString()} impressions on ${r.channel} so far.`
+        : `Queued for ${r.channel}. Drafts have no details, so their rows do not expand.`}
+    </p>
+  );
 
 export function TablePlayground() {
   const [selectable, setSelectable] = useState(true);
   const [density, setDensity] = useState<TableDensity>('cozy');
   const [loading, setLoading] = useState(false);
+  const [details, setDetails] = useState(true);
+  const [expandMode, setExpandMode] = useState<TableExpandMode>('multiple');
 
   const code = `<Table
   rows={rows}
@@ -147,7 +159,7 @@ export function TablePlayground() {
   rowKey="id"
   selectable={${selectable}}
   density="${density}"
-  loading={${loading}}
+  loading={${loading}}${details ? `\n  renderDetail={(row) => row.status === 'Draft' ? null : <PostDetail row={row} />}\n  expandMode="${expandMode}"` : ''}
 />`;
 
   return (
@@ -160,11 +172,27 @@ export function TablePlayground() {
           <KnobSegment label="density" value={density} onChange={setDensity} options={['cozy', 'compact']} />
           <KnobSwitch label="selectable" checked={selectable} onChange={setSelectable} />
           <KnobSwitch label="loading" checked={loading} onChange={setLoading} />
+          <KnobSwitch label="details" checked={details} onChange={setDetails} />
+          <KnobSegment
+            label="expandMode"
+            value={expandMode}
+            onChange={setExpandMode}
+            options={['multiple', 'single']}
+          />
         </>
       }
     >
       <div style={{ width: '100%', overflowX: 'auto' }}>
-        <Table rows={ROWS} columns={COLUMNS} rowKey="id" selectable={selectable} density={density} loading={loading} />
+        <Table
+          rows={ROWS}
+          columns={COLUMNS}
+          rowKey="id"
+          selectable={selectable}
+          density={density}
+          loading={loading}
+          renderDetail={details ? renderPostDetail : undefined}
+          expandMode={expandMode}
+        />
       </div>
     </Playground>
   );
