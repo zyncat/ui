@@ -755,7 +755,7 @@ export interface TokenProperties {
   '--accent-disabled'?: string | number;
   /** `--accent-wash`. Default: `oklch(from var(--accent) l c h / 0.08)`. Dark: `oklch(from var(--accent) l c h / 0.14)`. Re-derived on every theme root. */
   '--accent-wash'?: string | number;
-  /** `--text-accent`. Default: `var(--accent-active)`. Dark: `oklch(from var(--accent) calc(l + 0.14) calc(c - 0.012) h)`. Re-derived on every theme root. */
+  /** `--text-accent`. Default: `oklch(from var(--accent) calc(l - 0.17) calc(c - 0.018) h)`. Dark: `oklch(from var(--accent) calc(l + 0.14) calc(c - 0.012) h)`. Re-derived on every theme root. */
   '--text-accent'?: string | number;
   /** `--text-on-accent` - The ink on a hue fill - the ramp's lightest rung in either polarity. Default: `var(--gray-0)`. Re-derived on every theme root. */
   '--text-on-accent'?: string | number;

@@ -9,7 +9,8 @@ import { useMediaQuery } from '../../internal/hooks/use-media-query';
 import { Popover } from '../popover/Popover';
 import { Sheet } from '../sheet/Sheet';
 import { FieldShell, FieldTrigger, type DateFieldBaseProps } from './field-shell';
-import { DrpPanel, drpRangeText, type DateRange } from './range-panel';
+import { DrpPanel } from './range-panel';
+import { drpRangeText, type DateRange } from './range-presets';
 
 export type { DateRange };
 
@@ -20,7 +21,8 @@ export interface DateRangeFieldProps extends DateFieldBaseProps {
   value?: DateRange | null;
   /** Uncontrolled initial range. Use instead of `value`. @default null */
   defaultValue?: DateRange | null;
-  /** Fires only on a COMPLETE range (a lone anchor never commits). */
+  /** Fires on Done with the range the panel shows, when it differs from the current one.
+   *  Closing the panel any other way discards the pick. */
   onChange?: (value: DateRange) => void;
   /** Trigger text shown when no range is picked. @default 'Pick a date range' */
   placeholder?: string;
@@ -30,6 +32,8 @@ export interface DateRangeFieldProps extends DateFieldBaseProps {
   min?: string;
   /** Latest pickable date, 'YYYY-MM-DD', inclusive. */
   max?: string;
+  /** Longest pickable range in days, inclusive. After the first day pick, days further away disable, and so do quick picks that run longer. */
+  maxDays?: number;
 }
 
 export function DateRangeField({
@@ -37,10 +41,12 @@ export function DateRangeField({
   defaultValue = null,
   onChange,
   label,
+  ariaLabel,
   placeholder = 'Pick a date range',
   timezone,
   min,
   max,
+  maxDays,
   required = false,
   invalid = false,
   message,
@@ -65,6 +71,7 @@ export function DateRangeField({
       close={() => setPickerOpen(false)}
       min={min}
       max={max}
+      maxDays={maxDays}
       timezone={timezone}
       label={label}
       months={narrow ? 1 : 2}
@@ -77,6 +84,7 @@ export function DateRangeField({
     <FieldShell
       variant="zc-dtf"
       label={label}
+      ariaLabel={ariaLabel}
       required={required}
       invalid={invalid}
       message={message}

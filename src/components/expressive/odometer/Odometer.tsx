@@ -9,7 +9,20 @@ import { clock } from '../../../engine';
 import type { OdometerStyle } from '../../../tokens/component-styles.generated';
 import { motionFor } from '../../../tokens/motion-tokens';
 import { cx } from '../../internal/utils/cx';
-import { aim, CELLS, charAt, DIGIT, hold, launch, MIN_ROLL, motions, parts, snap, type Place, type Slot } from './roll';
+import {
+  aim,
+  charAt,
+  DIGIT,
+  hold,
+  launch,
+  MIN_ROLL,
+  motions,
+  parts,
+  RUN_TEXT,
+  snap,
+  type Place,
+  type Slot,
+} from './roll';
 
 const affix = (chars: string) =>
   chars && (
@@ -113,11 +126,7 @@ export function Odometer({ value, format, speed = 1, className = '', style, html
                 strips.current[i] = el;
               }}
             >
-              {CELLS.map((cell, c) => (
-                <span key={c} className="zc-odometer__cell">
-                  {cell}
-                </span>
-              ))}
+              {RUN_TEXT}
             </span>
           </span>
         );

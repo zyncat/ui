@@ -306,4 +306,11 @@
   .zc-otp.zc-is-error .zc-otp__slot:focus {
     outline: var(--ring-danger);
   }
+
+  @media (pointer: coarse) {
+    .zc-fld input.zc-fld__input,
+    .zc-fld .zc-numf__unit {
+      font-size: var(--size-body-lg);
+    }
+  }
 }

@@ -35,7 +35,7 @@ export interface MotionSpecs {
   initial?: boolean;
   /** Replay `animate` when these change. Must keep a stable length. @default [] */
   deps?: unknown[];
-  /** How far outside the viewport, in px, this element still animates; further out, `animate` and layout moves land on their end state at once. `Infinity` always animates. @default 320 */
+  /** How far outside the viewport, in px, this element still animates; further out, `animate` and layout moves land on their end state at once. `Infinity` always animates. @default 100 */
   offscreenMargin?: number;
 }
 

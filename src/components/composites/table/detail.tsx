@@ -4,8 +4,7 @@ import './table-detail.css';
 
 import type { PointerEventHandler, ReactNode } from 'react';
 
-import { Motion } from '../../../motion/element';
-import type { FlipTuning } from '../../../motion/flip';
+import { Motion, type MotionProps } from '../../../motion/element';
 import { useControllable } from '../../internal/hooks/use-controllable';
 import { Icon } from '../../internal/icon/Icon';
 import { Button, type ButtonSize } from '../../primitives/button/Button';
@@ -59,14 +58,14 @@ interface DetailRowProps {
   id: string;
   open: boolean;
   span: number;
-  flip: FlipTuning;
+  motion: Pick<MotionProps, 'layout' | 'layoutTransition' | 'animate' | 'exit'>;
   onPointerEnter: PointerEventHandler<HTMLElement>;
   children: ReactNode;
 }
 
-export function DetailRow({ id, open, span, flip, onPointerEnter, children }: DetailRowProps) {
+export function DetailRow({ id, open, span, motion, onPointerEnter, children }: DetailRowProps) {
   return (
-    <Motion as="tr" layout layoutTransition={flip} className="zc-tbl__detail" onPointerEnter={onPointerEnter}>
+    <Motion as="tr" {...motion} className="zc-tbl__detail" onPointerEnter={onPointerEnter}>
       <td colSpan={span}>
         <Collapse open={open} animation={DETAIL_MOTION} htmlProps={{ id: `${id}-d` }}>
           <div className="zc-tbl__detailBody">{children}</div>

@@ -78,8 +78,9 @@ export function NumberField({
   htmlProps,
 }: NumberFieldProps) {
   const autoId = useId();
+  const fieldId = id ?? autoId;
   const message = error || helper;
-  const msgId = fieldMessageId(id ?? autoId, message);
+  const msgId = fieldMessageId(fieldId, message);
   const { v, text, commit, stepBy, type } = useNumberValue({ value, defaultValue, onChange, min, max, step });
   const holdStep = useHoldRepeat(stepBy);
   const cls = cx(
@@ -92,13 +93,13 @@ export function NumberField({
 
   return (
     <div className={cls} style={style}>
-      <FieldLabel id={id} label={label} />
+      <FieldLabel id={fieldId} label={label} />
       <div
         className="zc-fld__control"
         style={{ '--numf-len': text.length, '--numf-unit-len': unit?.length } as CSSProperties}
       >
         <input
-          id={id}
+          id={fieldId}
           className="zc-fld__input"
           type="text"
           inputMode="decimal"

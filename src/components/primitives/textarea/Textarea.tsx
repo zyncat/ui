@@ -100,7 +100,8 @@ export function Textarea({
 
   const { state, msg, msgIcon } = resolveFieldMessage(error, warning, success, helper);
   const autoId = useId();
-  const msgId = fieldMessageId(id ?? autoId, msg);
+  const fieldId = id ?? autoId;
+  const msgId = fieldMessageId(fieldId, msg);
 
   const resize = () => {
     const el = taRef.current,
@@ -152,7 +153,7 @@ export function Textarea({
 
   return (
     <div className={cls} style={style}>
-      <FieldLabel id={id} label={label} required={required} optional={optional} />
+      <FieldLabel id={fieldId} label={label} required={required} optional={optional} />
       <div className={boxCls} style={{ '--txa-min-rows': minRows, '--txa-max-rows': maxRows } as CSSProperties}>
         <div className="zc-txa__stack" ref={stackRef}>
           <div className="zc-txa__mirror" ref={mirrorRef} aria-hidden="true">
@@ -161,7 +162,7 @@ export function Textarea({
             {'\n'}
           </div>
           <textarea
-            id={id}
+            id={fieldId}
             className="zc-txa__input"
             ref={taRef}
             rows={minRows}

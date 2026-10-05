@@ -52,7 +52,7 @@
   }
   .zc-rg__label + .zc-rg__options,
   .zc-rg__helper + .zc-rg__options {
-    margin-top: var(--space-4);
+    margin-top: var(--space-2);
   }
   .zc-rg--horizontal .zc-rg__options {
     display: flex;

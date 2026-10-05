@@ -2,6 +2,7 @@
 
 import './date-picker.css';
 
+import { createContext, useContext, useId } from 'react';
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode, Ref } from 'react';
 
 import type { DataAttributes } from '../../../dom-props';
@@ -14,6 +15,8 @@ import { FieldLabel, FieldMessage } from '../../primitives/input/field-chrome';
 export interface DateFieldBaseProps {
   /** Field label rendered above the trigger. */
   label?: string;
+  /** Accessible name for a field with no visible `label`. */
+  ariaLabel?: string;
   /** Asterisk on the label. @default false */
   required?: boolean;
   /** Danger border + message color (.zc-fld.zc-is-error). @default false */
@@ -40,6 +43,7 @@ export interface FieldShellProps {
   variant: string;
   size?: 'sm' | 'md' | 'lg';
   label?: string;
+  ariaLabel?: string;
   required?: boolean;
   invalid?: boolean;
   message?: ReactNode;
@@ -49,10 +53,13 @@ export interface FieldShellProps {
   children?: ReactNode;
 }
 
+const FieldNameId = createContext<string | undefined>(undefined);
+
 export function FieldShell({
   variant,
   size,
   label,
+  ariaLabel,
   required,
   invalid,
   message,
@@ -61,6 +68,7 @@ export function FieldShell({
   htmlProps,
   children,
 }: FieldShellProps) {
+  const nameId = useId();
   const cls = cx(
     'zc-fld',
     variant,
@@ -72,13 +80,20 @@ export function FieldShell({
   );
   return (
     <div {...htmlProps} className={cls}>
-      <FieldLabel label={label} required={required} />
-      <div className="zc-fld__control">
-        {children}
-        <span className="zc-fld__icon zc-fld__icon--lead" aria-hidden="true">
-          <Icon name={icon} size="md" />
+      <FieldLabel labelId={nameId} label={label} required={required} />
+      {!label && ariaLabel && (
+        <span id={nameId} hidden>
+          {ariaLabel}
         </span>
-      </div>
+      )}
+      <FieldNameId.Provider value={label || ariaLabel ? nameId : undefined}>
+        <div className="zc-fld__control">
+          {children}
+          <span className="zc-fld__icon zc-fld__icon--lead" aria-hidden="true">
+            <Icon name={icon} size="md" />
+          </span>
+        </div>
+      </FieldNameId.Provider>
       <FieldMessage message={message ? <span>{message}</span> : null} />
     </div>
   );
@@ -92,8 +107,17 @@ export function FieldTrigger({
 }: { display: string | null; placeholder: string; disabled?: boolean } & ButtonHTMLAttributes<HTMLButtonElement> & {
     ref?: Ref<HTMLButtonElement>;
   }) {
+  const nameId = useContext(FieldNameId);
+  const id = useId();
   return (
-    <button type="button" className="zc-fld__input zc-dtf__trigger" disabled={disabled} {...rest}>
+    <button
+      type="button"
+      id={id}
+      className="zc-fld__input zc-dtf__trigger"
+      aria-labelledby={nameId && `${nameId} ${id}`}
+      disabled={disabled}
+      {...rest}
+    >
       {display ? (
         <span className="zc-dtf__value">{display}</span>
       ) : (

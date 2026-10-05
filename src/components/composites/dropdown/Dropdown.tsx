@@ -43,6 +43,7 @@ const DROPDOWN_TIMING = {
   close: { duration: 'fast', ease: 'exit' },
 } as const;
 const ROOT_SEED = { key: ROOT_LEVEL, focus: 'selected' as SeedFocus };
+const NO_PATH: string[] = [];
 
 export interface DropdownProps {
   /** The rows - a flat `DropdownItem[]`, or `DropdownGroup[]` to render divided sections.
@@ -123,7 +124,7 @@ export function Dropdown({
   animation,
 }: DropdownProps) {
   const [open, setOpen] = useControllable(controlledOpen, defaultOpen, onOpenChange);
-  const [path, setPath] = useState<string[]>([]);
+  const [path, setPath] = useState(NO_PATH);
   const [seed, setSeed] = useState(ROOT_SEED);
 
   const refs = useRef(new Map<string, RefObject<HTMLElement>>());
@@ -141,7 +142,9 @@ export function Dropdown({
   const timings = resolveMotionTiming(animation, DROPDOWN_TIMING, triggerRef.current);
 
   useEffect(() => {
-    if (!open) setSeed(ROOT_SEED);
+    if (open) return;
+    setSeed(ROOT_SEED);
+    setPath(NO_PATH);
   }, [open]);
 
   const dismiss = (refocus: boolean) => {

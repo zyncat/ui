@@ -53,14 +53,12 @@
   }
 
   .zc-odometer__strip {
-    display: block;
-    will-change: translate;
-  }
-
-  .zc-odometer__cell {
     display: grid;
-    place-items: center;
-    height: var(--_odometer-cell);
+    justify-items: center;
+    white-space: pre;
+    text-align: center;
+    line-height: var(--_odometer-cell);
+    will-change: translate;
   }
 
   .zc-odometer__separator {

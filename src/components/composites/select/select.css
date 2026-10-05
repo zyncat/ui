@@ -350,4 +350,10 @@
       opacity: 0.7;
     }
   }
+
+  @media (pointer: coarse) {
+    .zc-select__menu .zc-select__search .zc-select__search-input {
+      font-size: var(--size-body-lg);
+    }
+  }
 }

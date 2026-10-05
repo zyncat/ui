@@ -12,7 +12,7 @@ const GATE: Keyframe[] = [{ '--_odometer-reveal': 0 }, { '--_odometer-reveal': 1
 
 export const MIN_ROLL = 0.08;
 export const DIGIT = /\d/;
-export const CELLS = Array.from({ length: RUN * 2 }, (_, i) => i % RUN);
+export const RUN_TEXT = Array.from({ length: RUN * 2 }, (_, i) => i % RUN).join('\n');
 
 export type Slot = (HTMLElement | null)[];
 

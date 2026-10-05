@@ -12,12 +12,18 @@ export interface Box {
 const MOVE_EPSILON = 0.5;
 const SCALE_EPSILON = 0.01;
 const TOP_LEFT = { x: 0, y: 0 };
-const OFFSCREEN_MARGIN_PX = 320;
+const OFFSCREEN_MARGIN_PX = 100;
 
 function transformOrigin(el: HTMLElement): { x: number; y: number } {
   const [x, y] = getComputedStyle(el).transformOrigin.split(' ');
   return { x: parseFloat(x), y: parseFloat(y) };
 }
+
+const writesTranslate = (animation: Animation): boolean =>
+  animation.effect instanceof KeyframeEffect && animation.effect.getKeyframes().some((frame) => 'translate' in frame);
+
+const untranslated = (el: HTMLElement): boolean =>
+  getComputedStyle(el).translate === 'none' && !el.getAnimations().some(writesTranslate);
 
 export function measure(el: HTMLElement): Box {
   const rect = el.getBoundingClientRect();
@@ -79,7 +85,7 @@ export function flipLayers(el: HTMLElement, from: Box, to: Box, options: FlipOpt
     ...options.timing,
     fill: options.timing?.fill ?? (holdsStartThroughDelay ? 'backwards' : 'none'),
   };
-  const layers: Layer[] = [{ x: [dx, 0], y: [dy, 0], timing, composite: 'add' }];
+  const layers: Layer[] = [{ x: [dx, 0], y: [dy, 0], timing, composite: untranslated(el) ? 'replace' : 'add' }];
   if (scaling)
     layers.push({
       scale: [

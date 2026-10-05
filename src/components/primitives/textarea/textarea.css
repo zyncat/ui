@@ -219,4 +219,14 @@
   .zc-fld--txa.zc-fld--lg .zc-txa__mirror {
     font: var(--type-body-lg);
   }
+
+  @media (pointer: coarse) {
+    .zc-fld.zc-fld--txa .zc-txa {
+      --txa-lh: var(--leading-body-lg);
+    }
+    .zc-fld.zc-fld--txa .zc-txa__input,
+    .zc-fld.zc-fld--txa .zc-txa__mirror {
+      font: var(--type-body-lg);
+    }
+  }
 }

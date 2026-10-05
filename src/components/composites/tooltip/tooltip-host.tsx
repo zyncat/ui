@@ -12,6 +12,8 @@ import { tokenPx } from '../../internal/utils/token-px';
 import { store, TOOLTIP_DOM_ID, type ActivePayload, type Placement } from './tooltip-store';
 
 const tipLayout = (scope?: Element | null) => ({ size: 'morph' as const, timing: motionFor(scope).t.layout });
+const OPPOSITE: Record<Placement, Placement> = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' };
+const CROSS_FALLBACK: Placement[] = ['bottom', 'top'];
 
 interface Size {
   w: number;
@@ -31,11 +33,13 @@ function targetBox(size: Size, t: DOMRect, want: Placement, scope?: Element | nu
     vh = window.innerHeight,
     TIP_GAP = tokenPx('--space-2', 8, scope) || 8,
     M = TIP_GAP;
-  let p = want;
-  if (p === 'top' && t.top - size.h - TIP_GAP < M) p = 'bottom';
-  else if (p === 'bottom' && t.bottom + size.h + TIP_GAP > vh - M) p = 'top';
-  else if (p === 'left' && t.left - size.w - TIP_GAP < M) p = 'right';
-  else if (p === 'right' && t.right + size.w + TIP_GAP > vw - M) p = 'left';
+  const room: Record<Placement, boolean> = {
+    top: t.top - size.h - TIP_GAP >= M,
+    bottom: t.bottom + size.h + TIP_GAP <= vh - M,
+    left: t.left - size.w - TIP_GAP >= M,
+    right: t.right + size.w + TIP_GAP <= vw - M,
+  };
+  const p = [want, OPPOSITE[want], ...CROSS_FALLBACK].find((side) => room[side]) ?? want;
   let x, y;
   if (p === 'top') {
     x = t.left + t.width / 2 - size.w / 2;

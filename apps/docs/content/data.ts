@@ -45,11 +45,11 @@ const [channels, setChannels] = useState(['instagram', 'twitter', 'linkedin']);
   },
 
   table: {
-    example: `import { Table } from '@zyncat/ui/table';
+    example: `import { Table, type TableColumn } from '@zyncat/ui/table';
 
 type Post = { id: number; channel: string; status: string; scheduled: string; reach: number };
 
-const columns = [
+const columns: TableColumn<Post>[] = [
   { key: 'channel', label: 'Channel', grow: true, strong: true },
   { key: 'status', label: 'Status' },
   { key: 'scheduled', label: 'Scheduled at', mono: true, sortable: true },
@@ -63,7 +63,7 @@ const rows: Post[] = [
 ];
 
 <Table<Post>
-  label="Scheduled posts"
+  ariaLabel="Scheduled posts"
   columns={columns}
   rows={rows}
   selectable
@@ -86,5 +86,21 @@ const [cursor, setCursor] = useState({ from: 1, to: 25, hasPrev: false, hasNext:
   onPrev={() => loadPage('prev')}
   onNext={() => loadPage('next')}
 />`,
+  },
+
+  'scroll-area': {
+    example: `import { ScrollArea } from '@zyncat/ui/scroll-area';
+
+<ScrollArea ariaLabel="Recent activity" style={{ maxHeight: 360 }}>
+  {activity.map((event) => (
+    <ActivityRow key={event.id} event={event} />
+  ))}
+</ScrollArea>
+
+<ScrollArea axis="x" ariaLabel="Scheduled this week">
+  {posts.map((post) => (
+    <PostCard key={post.id} post={post} />
+  ))}
+</ScrollArea>`,
   },
 };

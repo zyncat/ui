@@ -32,6 +32,7 @@ export function DateField({
   defaultValue = null,
   onChange,
   label,
+  ariaLabel,
   placeholder = 'Pick a date',
   timezone,
   min,
@@ -54,6 +55,7 @@ export function DateField({
     <FieldShell
       variant="zc-dtf"
       label={label}
+      ariaLabel={ariaLabel}
       required={required}
       invalid={invalid}
       message={message}

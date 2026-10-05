@@ -21,7 +21,7 @@ export function useHoldRepeat(onStep: (direction: 1 | -1) => boolean) {
 
   return (direction: 1 | -1) => ({
     onPointerDown: (e: PointerEvent) => {
-      if (e.button !== 0) return;
+      if (e.button !== 0 || e.currentTarget.matches(':disabled')) return;
       repeatedRef.current = false;
       let delay = FIRST_REPEAT_MS;
       const tick = () => {

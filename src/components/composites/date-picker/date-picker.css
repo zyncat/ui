@@ -423,6 +423,10 @@
   .zc-drp__preset:hover {
     color: var(--text-strong);
   }
+  .zc-drp__preset:disabled {
+    color: var(--text-disabled);
+    cursor: default;
+  }
   .zc-drp__preset:focus-visible {
     outline: var(--ring-accent);
   }

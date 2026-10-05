@@ -32,6 +32,7 @@ export function TimeField({
   defaultValue = null,
   onChange,
   label,
+  ariaLabel,
   format = '24h',
   minuteStep = 5,
   min,
@@ -77,7 +78,7 @@ export function TimeField({
           min={min}
           max={max}
           disabled={disabled}
-          ariaLabel={label || 'Time'}
+          ariaLabel={label || ariaLabel || 'Time'}
         />
       </div>
     </FieldShell>

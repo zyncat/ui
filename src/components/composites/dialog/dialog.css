@@ -133,6 +133,9 @@
   .zc-dialog__body:first-child {
     padding-top: var(--space-5);
   }
+  .zc-dialog__body:empty {
+    display: none;
+  }
   .zc-dialog:has(.zc-dialog__icon) .zc-dialog__body {
     padding-left: calc(var(--space-5) + 2.25rem + var(--space-3));
   }

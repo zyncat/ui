@@ -147,6 +147,12 @@
   .zc-tbl__cell--grow {
     width: 100%;
   }
+  .zc-tbl--shares .zc-tbl__table .zc-tbl__cell--grow {
+    width: auto;
+  }
+  .zc-tbl--shares .zc-tbl__table th:not(.zc-tbl__cell--grow, .zc-tbl__cell--check) {
+    width: 0;
+  }
 
   .zc-tbl__table th.zc-tbl__cell--sortable {
     padding: 0;

@@ -9,7 +9,6 @@ import { useScrollEdges } from '../../internal/hooks/use-scroll-edges';
 import { Icon } from '../../internal/icon/Icon';
 import { activationProps, type ActivateOn } from '../../internal/utils/activation';
 import { cx } from '../../internal/utils/cx';
-import { tokenPx } from '../../internal/utils/token-px';
 
 const SIDES = ['start', 'end'] as const;
 
@@ -66,10 +65,10 @@ export function ScrollArea({
     { content: true },
   );
 
-  const page = (side: (typeof SIDES)[number]) => {
+  const page = (side: (typeof SIDES)[number], door: Element) => {
     const el = viewportRef.current;
     if (!el) return;
-    const step = el.clientWidth - 2 * tokenPx('--scroll-area-fade', 0, el);
+    const step = el.clientWidth - 2 * door.clientWidth;
     el.scrollBy({ left: side === 'end' ? step : -step, behavior: scrollBehavior(el) });
   };
 
@@ -103,7 +102,7 @@ export function ScrollArea({
             className="zc-scroll-area__door"
             data-side={side}
             aria-hidden
-            {...activationProps(() => page(side), { on: activateOn, holdFocus: true })}
+            {...activationProps((e) => page(side, e.currentTarget), { on: activateOn, holdFocus: true })}
           >
             <span className="zc-scroll-area__chip">
               <Icon name={side === 'start' ? 'caret-left' : 'caret-right'} size="sm" />

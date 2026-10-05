@@ -38,12 +38,13 @@ export interface FieldMessagingProps extends FieldIdProps, FieldRequirementProps
 export interface FieldLabelProps extends FieldIdProps, FieldRequirementProps {
   /** Label text (sentence case). */
   label?: ReactNode;
+  labelId?: string;
 }
 
-export function FieldLabel({ id, label, required, optional }: FieldLabelProps) {
+export function FieldLabel({ id, labelId, label, required, optional }: FieldLabelProps) {
   if (!label) return null;
   return (
-    <label className="zc-fld__label" htmlFor={id}>
+    <label className="zc-fld__label" id={labelId} htmlFor={id}>
       {label}
       {required && (
         <span className="zc-fld__req" aria-hidden="true">

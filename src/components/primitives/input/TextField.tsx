@@ -71,7 +71,8 @@ export function TextField({
   const { state, msg, msgIcon } = resolveFieldMessage(error, warning, success, helper);
   const inputRef = useRef<HTMLInputElement>(null);
   const autoId = useId();
-  const msgId = fieldMessageId(rest.id ?? autoId, msg);
+  const fieldId = rest.id ?? autoId;
+  const msgId = fieldMessageId(fieldId, msg);
   const showClear = clearable && value && !rest.disabled && !rest.readOnly;
 
   function clear() {
@@ -93,7 +94,7 @@ export function TextField({
 
   return (
     <div className={cls} style={style}>
-      <FieldLabel id={rest.id} label={label} required={rest.required} optional={optional} />
+      <FieldLabel id={fieldId} label={label} required={rest.required} optional={optional} />
       <div className="zc-fld__control">
         {leadingIcon && (
           <span className="zc-fld__icon zc-fld__icon--lead">
@@ -106,6 +107,7 @@ export function TextField({
           value={value}
           aria-invalid={error ? true : undefined}
           {...rest}
+          id={fieldId}
           {...htmlProps}
           aria-describedby={joinIds(msgId, htmlProps?.['aria-describedby'])}
         />

@@ -13,8 +13,8 @@ const drivesActivation = (pointerType: string | undefined) => pointerType === 'm
 let activatedOnPointerDown = false;
 
 function isInert(target: EventTarget | null) {
-  const el = target as (Element & { disabled?: boolean }) | null;
-  return Boolean(el?.disabled) || el?.getAttribute?.('aria-disabled') === 'true';
+  const el = target as Element | null;
+  return Boolean(el?.matches?.(':disabled')) || el?.getAttribute?.('aria-disabled') === 'true';
 }
 
 function takeFocus(target: EventTarget | null) {
