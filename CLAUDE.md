@@ -75,7 +75,8 @@ temp/            imported source material (dc.html decks, magicui reference) - n
 ## Delegate the satellite work
 
 - Only after the main task is approved. Until then no agent runs, whatever the task looks like.
-- You: the component, its CSS, its prop JSDoc, its demo page.
+- You: the component, its CSS, its prop JSDoc, its demo page, and its export - `pnpm sync exports tsconfig`
+  the moment the entry file exists, so the review can import it.
 - The `zyncat-docs` agent: the usage doc, the registry row, the canonical example.
 - `pnpm sync`: exports map, docs paths, prop tables, repo docs.
 - Never hand-write a prop table. `pnpm sync props` generates it from `dist/*.d.ts`.
