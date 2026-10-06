@@ -6,8 +6,10 @@
 ## Transitions versus simulations
 
 - Has a destination: `animate`, `flip`, `set`, or a CSS transition.
-- Input-coupled or endless - cursor magnetism, flow fields, particles, sprung counters: `loop`. Never hand-roll a rAF loop.
-- `loop(frame, options?)` returns a `Playback`; `finished` resolves on stop.
+- Input-coupled or endless - cursor magnetism, flow fields, particles: `loop`. Never hand-roll a rAF loop.
+- A spring re-aimed mid-flight still has a destination. Sample it in closed form into a `linear()` easing, seeded with the live position and velocity at the running animation's current time, as the Odometer's `spring.ts` does.
+- `loop(frame, options?)` returns a `LoopPlayback`; `finished` resolves on stop.
+- A `frame` that returns `false` parks the loop until `wake()`. Park once the simulation settles, so an idle one costs no frames.
 - `frame(k, dt, now)`: `k` is the 60fps-normalised step, `dt` is milliseconds. Both are speed- and clock-scaled; `dt` is clamped to 34ms.
 - `options.speed` is sampled every frame; feed it the live prop. `0` idles the frame, an invalid speed runs at `1`.
 - `options.el` plus `options.claims` claim css properties under the one-writer rule. `animate()` on a claimed property stops the loop; stopping releases the claim.
