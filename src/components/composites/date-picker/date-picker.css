@@ -651,6 +651,14 @@
     user-select: none;
     transition: var(--transition-colors);
   }
+  input.zc-tsg__seg {
+    inline-size: calc(2ch + 2 * var(--space-1));
+    caret-color: transparent;
+    user-select: auto;
+  }
+  input.zc-tsg__seg::selection {
+    background: transparent;
+  }
   /* :focus, not :focus-visible: a clicked segment has to read selected, the same as keyboard entry. */
   .zc-tsg__seg:focus {
     background: var(--accent-subtle);
@@ -673,6 +681,11 @@
   .zc-tsg.zc-is-disabled .zc-tsg__seg {
     color: var(--text-disabled);
     cursor: not-allowed;
+  }
+  @media (pointer: coarse) {
+    .zc-tsg {
+      font-size: var(--size-body-lg);
+    }
   }
 
   /* The box is a div in .zc-fld__input chrome, so the input focus rules never reach it; these

@@ -2,11 +2,13 @@
 
 import './date-picker.css';
 
-import type { PointerEvent } from 'react';
+import type { MouseEvent, PointerEvent } from 'react';
 
 import { useControllable } from '../../internal/hooks/use-controllable';
 import { FieldShell, type DateFieldBaseProps } from './field-shell';
 import { TimeSegments } from './time-core';
+
+const focusHours = (box: HTMLDivElement) => box.querySelector<HTMLElement>('.zc-tsg__seg')?.focus();
 
 export interface TimeFieldProps extends DateFieldBaseProps {
   /** Controlled value, canonical 'HH:mm' (24h). */
@@ -50,8 +52,10 @@ export function TimeField({
   function onBoxPointerDown(e: PointerEvent<HTMLDivElement>) {
     if (disabled || (e.target as HTMLElement).closest('.zc-tsg__seg')) return;
     e.preventDefault();
-    const seg = e.currentTarget.querySelector('.zc-tsg__seg') as HTMLElement | null;
-    if (seg) seg.focus();
+    if (e.pointerType === 'mouse') focusHours(e.currentTarget);
+  }
+  function onBoxClick(e: MouseEvent<HTMLDivElement>) {
+    if (!disabled && !(e.target as HTMLElement).closest('.zc-tsg__seg')) focusHours(e.currentTarget);
   }
 
   return (
@@ -69,6 +73,7 @@ export function TimeField({
       <div
         className={'zc-fld__input zc-tfd__box' + (disabled ? ' zc-is-disabled' : '')}
         onPointerDown={onBoxPointerDown}
+        onClick={onBoxClick}
       >
         <TimeSegments
           value={val}

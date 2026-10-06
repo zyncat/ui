@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, type ClipboardEvent, type KeyboardEvent, t
 
 import { cx } from '../../internal/utils/cx';
 import { pad } from './date-utils';
+import { typedKey, type KeyLike } from './typed-key';
 
 type Meridiem = 'AM' | 'PM';
 type Segment = 'h' | 'm';
@@ -70,8 +71,8 @@ export function TimeSegments({
     setPendState(v);
   };
 
-  const hRef = useRef<HTMLSpanElement>(null);
-  const mRef = useRef<HTMLSpanElement>(null);
+  const hRef = useRef<HTMLInputElement>(null);
+  const mRef = useRef<HTMLInputElement>(null);
   const merRef = useRef<HTMLSpanElement>(null);
   const lastRef = useRef<string | null>(value || null);
 
@@ -102,11 +103,11 @@ export function TimeSegments({
     if (onCommit) onCommit(t);
   }
 
-  const focusSeg = (r: RefObject<HTMLSpanElement | null>) => {
+  const focusSeg = (r: RefObject<HTMLElement | null>) => {
     if (r.current) r.current.focus();
   };
 
-  function onHKey(e: KeyboardEvent<HTMLSpanElement>) {
+  function onHKey(e: KeyLike) {
     const k = e.key;
     if (/^[0-9]$/.test(k)) {
       const pd = pend && pend.seg === 'h' ? pend.d : null;
@@ -138,7 +139,7 @@ export function TimeSegments({
     e.preventDefault();
   }
 
-  function onMKey(e: KeyboardEvent<HTMLSpanElement>) {
+  function onMKey(e: KeyLike) {
     const k = e.key;
     if (/^[0-9]$/.test(k)) {
       const pd = pend && pend.seg === 'm' ? pend.d : null;
@@ -239,39 +240,41 @@ export function TimeSegments({
       aria-disabled={disabled || undefined}
       onPaste={onPaste}
     >
-      <span
+      <input
         ref={hRef}
         className={segCls(h == null && !(pend && pend.seg === 'h'))}
         role="spinbutton"
-        tabIndex={tab}
+        inputMode="numeric"
+        disabled={disabled}
+        value={hText}
         aria-label="Hours"
         aria-valuemin={is12 ? 1 : 0}
         aria-valuemax={is12 ? 12 : 23}
         aria-valuenow={h == null ? undefined : is12 ? disp12(h) : h}
         aria-valuetext={h == null ? 'Empty' : hText}
-        onKeyDown={disabled ? undefined : onHKey}
+        onKeyDown={onHKey}
+        onChange={(e) => onHKey(typedKey(e))}
         onBlur={onSegBlur('h')}
-      >
-        {hText}
-      </span>
+      />
       <span className="zc-tsg__sep" aria-hidden="true">
         :
       </span>
-      <span
+      <input
         ref={mRef}
         className={segCls(m == null && !(pend && pend.seg === 'm'))}
         role="spinbutton"
-        tabIndex={tab}
+        inputMode="numeric"
+        disabled={disabled}
+        value={mText}
         aria-label="Minutes"
         aria-valuemin={0}
         aria-valuemax={59}
         aria-valuenow={m == null ? undefined : m}
         aria-valuetext={m == null ? 'Empty' : mText}
-        onKeyDown={disabled ? undefined : onMKey}
+        onKeyDown={onMKey}
+        onChange={(e) => onMKey(typedKey(e))}
         onBlur={onSegBlur('m')}
-      >
-        {mText}
-      </span>
+      />
       {is12 ? (
         <span
           ref={merRef}
@@ -281,6 +284,9 @@ export function TimeSegments({
           aria-label="AM or PM"
           aria-valuetext={mer}
           onKeyDown={disabled ? undefined : onMerKey}
+          onPointerUp={(e) => {
+            if (!disabled && e.pointerType !== 'mouse') setMeridiem(mer === 'AM' ? 'PM' : 'AM');
+          }}
         >
           {mer}
         </span>
