@@ -137,4 +137,31 @@ const CHANNEL_OPTIONS = [
   ariaLabel="Channels"
 />`,
   },
+
+  combobox: {
+    example: `import { Combobox } from '@zyncat/ui/combobox';
+import { Textarea } from '@zyncat/ui/textarea';
+
+const TEAMMATES = [
+  { value: 'ana', label: 'Ana Ng', description: 'Design lead' },
+  { value: 'marco', label: 'Marco Ruiz', description: 'Social media manager' },
+  { value: 'priya', label: 'Priya Shah', description: 'Copywriter' },
+];
+
+<Combobox
+  trigger="@"
+  options={TEAMMATES}
+  insert={(teammate) => '@' + teammate.value + ' '}
+  onSelect={(handle) => addMention(handle)}
+  ariaLabel="Mention a teammate"
+>
+  <Textarea
+    id="post-comment"
+    label="Comment"
+    placeholder="Leave a note for the team..."
+    value={comment}
+    onChange={(e) => setComment(e.target.value)}
+  />
+</Combobox>`,
+  },
 };

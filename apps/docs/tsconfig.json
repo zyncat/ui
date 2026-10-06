@@ -38,6 +38,7 @@
       "@zyncat/ui/textarea": ["../../src/components/primitives/textarea/Textarea.tsx"],
       "@zyncat/ui/toggle": ["../../src/components/primitives/toggle/Toggle.tsx"],
       "@zyncat/ui/alert": ["../../src/components/composites/alert/Alert.tsx"],
+      "@zyncat/ui/combobox": ["../../src/components/composites/combobox/Combobox.tsx"],
       "@zyncat/ui/date-field": ["../../src/components/composites/date-picker/DateField.tsx"],
       "@zyncat/ui/date-range-field": ["../../src/components/composites/date-picker/DateRangeField.tsx"],
       "@zyncat/ui/datetime-field": ["../../src/components/composites/date-picker/DateTimeField.tsx"],

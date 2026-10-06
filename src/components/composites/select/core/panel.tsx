@@ -11,11 +11,11 @@ import { Icon } from '../../../internal/icon/Icon';
 import type { MenuSurfaceProps } from '../../../internal/menu/highlight';
 import { MenuGroupLabel, MenuRow } from '../../../internal/menu/menu-row';
 import { activationProps, type ActivateOn } from '../../../internal/utils/activation';
-import { SelectMenu, type SelectMenuHtmlProps } from './menu';
+import { SelectMenu, type SelectMenuHtmlProps, type SelectMenuProps } from './menu';
 import type { ListRow } from './types';
 import type { ListboxState } from './use-listbox';
 
-export interface ListboxPanelProps extends MenuSurfaceProps {
+export interface ListboxPanelProps extends MenuSurfaceProps, Pick<SelectMenuProps, 'anchor'> {
   lb: ListboxState;
   loading: boolean;
   searchable: boolean;
@@ -50,6 +50,7 @@ function EmptyRow({ query }: { query: string }) {
 
 export function ListboxPanel({
   lb,
+  anchor,
   loading,
   searchable,
   searchPlaceholder,
@@ -98,6 +99,7 @@ export function ListboxPanel({
       menuId={lb.menuId}
       requestClose={lb.requestClose}
       triggerRef={lb.triggerRef}
+      anchor={anchor}
       multiple={multiple}
       highlight={highlight}
       rail={rail}

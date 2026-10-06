@@ -313,6 +313,11 @@
       "types": "./dist/types/components/composites/scroll-area/ScrollArea.d.ts",
       "import": "./dist/scroll-area.js"
     },
+    "./combobox": {
+      "source": "./src/components/composites/combobox/Combobox.tsx",
+      "types": "./dist/types/components/composites/combobox/Combobox.d.ts",
+      "import": "./dist/combobox.js"
+    },
     "./styles.css": "./src/styles.css",
     "./tailwind.css": "./tailwind.css",
     "./next": {

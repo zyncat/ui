@@ -1,0 +1,7 @@
+@layer zyncat.reset, zyncat.tokens, zyncat.base, zyncat.components;
+
+@layer zyncat.components {
+  .zc-combobox {
+    display: contents;
+  }
+}

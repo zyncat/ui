@@ -17,6 +17,7 @@ export interface UseListboxArgs {
   isSelected: (value: string) => boolean;
   onCommit: (opt: SelectOption) => void;
   closeOnCommit: boolean;
+  autoHighlight?: boolean;
 }
 
 export type ListboxState = ReturnType<typeof useListbox>;
@@ -33,6 +34,7 @@ export function useListbox({
   isSelected,
   onCommit,
   closeOnCommit,
+  autoHighlight,
 }: UseListboxArgs) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -80,6 +82,7 @@ export function useListbox({
       returnFocus();
     }
   }
+  const commitActive = () => commit(navItems[activeIdx.current]);
 
   useEffect(() => {
     if (!open) setQuery('');
@@ -87,7 +90,7 @@ export function useListbox({
 
   useLayoutEffect(() => {
     if (!open) return;
-    if (query) activeIdx.current = edgeEnabled(navItems, false);
+    if (query || autoHighlight) activeIdx.current = edgeEnabled(navItems, false);
     else activeIdx.current = navItems.findIndex((o) => isSelected(o.value) && !o.disabled);
   }, [open, query]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -187,7 +190,7 @@ export function useListbox({
         break;
       case 'Enter':
         e.preventDefault();
-        if (activeIdx.current >= 0) commit(navItems[activeIdx.current]);
+        commitActive();
         break;
       case 'Tab':
         if (tabLeavesMenu(e)) requestClose();
@@ -196,7 +199,7 @@ export function useListbox({
         if (searchable) break;
         e.preventDefault();
         if (typeahead.buffered()) typeAhead(e.key);
-        else if (activeIdx.current >= 0) commit(navItems[activeIdx.current]);
+        else commitActive();
         break;
       default:
         if (!searchable && e.key.length === 1 && !e.metaKey && !e.ctrlKey) typeAhead(e.key);
@@ -226,6 +229,7 @@ export function useListbox({
     show,
     requestClose,
     commit,
+    commitActive,
     navigate,
     onMenuKeyDown,
   };

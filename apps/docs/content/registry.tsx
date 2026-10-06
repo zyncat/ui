@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
 
+import * as CB from '../components/pages/combobox';
 import * as C from '../components/pages/compound';
 import * as D from '../components/pages/data';
 import * as T from '../components/pages/datetime';
@@ -345,6 +346,14 @@ export const GROUPS: DocGroup[] = [
         blurb: 'Many-of listbox - toggling keeps the menu open; trigger summarises as first +N.',
         Playground: F.MultiSelectPlayground,
         heroCode: `import { MultiSelect } from '@zyncat/ui/multi-select';\n\n<MultiSelect ariaLabel="Channels" value={channels} onChange={setChannels} options={CHANNELS} searchable />`,
+      },
+      {
+        slug: 'combobox',
+        label: 'Combobox',
+        blurb:
+          'Autocomplete for the text field you already have - @mentions complete mid-sentence, focus never leaves the field, and undo takes a pick back.',
+        Playground: CB.ComboboxPlayground,
+        heroCode: `import { Combobox } from '@zyncat/ui/combobox';\nimport { Textarea } from '@zyncat/ui/textarea';\n\n<Combobox trigger="@" options={TEAMMATES} ariaLabel="Mention a teammate">\n  <Textarea label="Comment" value={comment} onChange={(e) => setComment(e.target.value)} />\n</Combobox>`,
       },
     ],
   },

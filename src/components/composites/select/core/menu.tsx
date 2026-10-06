@@ -13,7 +13,7 @@ import { menuSurfaceAttrs, type MenuSurfaceProps } from '../../../internal/menu/
 import { useAnchorWidth } from '../../../internal/menu/use-anchor-width';
 import { useReturnFocus } from '../../../internal/overlay/focus';
 import { OverlayPortal, useOutsidePress, useOverlayEntry } from '../../../internal/overlay/layer';
-import { useAnchorPosition } from '../../../internal/overlay/position';
+import { useAnchorPosition, type VirtualAnchor } from '../../../internal/overlay/position';
 import { cx } from '../../../internal/utils/cx';
 
 export type SelectMenuHtmlProps = HTMLAttributes<HTMLDivElement> & DataAttributes;
@@ -48,6 +48,7 @@ export interface SelectMenuProps extends MenuSurfaceProps {
   menuId: string;
   requestClose: () => void;
   triggerRef: RefObject<HTMLElement | null>;
+  anchor?: VirtualAnchor | null;
   multiple?: boolean;
   animation?: DisableableAnimation;
   menuProps?: SelectMenuHtmlProps;
@@ -58,6 +59,7 @@ function MenuSurface({
   menuId,
   requestClose,
   triggerRef,
+  anchor,
   multiple,
   highlight,
   rail,
@@ -74,7 +76,7 @@ function MenuSurface({
   useMotion(menuRef, { animate, exit });
   useReturnFocus(menuRef);
   useAnchorWidth(triggerRef, menuRef, width === 'trigger');
-  useAnchorPosition({ side: 'bottom', align: 'start', arrow: false, triggerRef, panelRef: menuRef });
+  useAnchorPosition({ side: 'bottom', align: 'start', arrow: false, anchor, triggerRef, panelRef: menuRef });
   useOutsidePress({ entry, refs: [menuRef, triggerRef], enabled: true, onPress: requestClose });
 
   return (
@@ -97,6 +99,7 @@ export function SelectMenu({
   menuId,
   requestClose,
   triggerRef,
+  anchor,
   multiple,
   highlight,
   rail,
@@ -118,6 +121,7 @@ export function SelectMenu({
             menuId={menuId}
             requestClose={requestClose}
             triggerRef={triggerRef}
+            anchor={anchor}
             multiple={multiple}
             highlight={highlight}
             rail={rail}
