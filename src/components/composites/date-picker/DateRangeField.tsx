@@ -11,6 +11,7 @@ import { Sheet } from '../sheet/Sheet';
 import { FieldShell, FieldTrigger, type DateFieldBaseProps } from './field-shell';
 import { DrpPanel } from './range-panel';
 import { drpRangeText, type DateRange } from './range-presets';
+import { DrpSheet } from './range-sheet';
 
 export type { DateRange };
 
@@ -64,21 +65,7 @@ export function DateRangeField({
 
   const display = val && val.start && val.end ? drpRangeText(val.start, val.end) : null;
   const trigger = <FieldTrigger display={display} placeholder={placeholder} disabled={disabled} />;
-  const panel = (
-    <DrpPanel
-      value={val}
-      commit={commit}
-      close={() => setPickerOpen(false)}
-      min={min}
-      max={max}
-      maxDays={maxDays}
-      timezone={timezone}
-      label={label}
-      months={narrow ? 1 : 2}
-      layout={narrow ? 'sheet' : 'popover'}
-      activateOn={activateOn}
-    />
-  );
+  const range = { value: val, commit, close: () => setPickerOpen(false), min, max, maxDays, timezone, activateOn };
 
   return (
     <FieldShell
@@ -102,7 +89,7 @@ export function DateRangeField({
           activateOn={activateOn}
           animation={animation}
         >
-          {panel}
+          <DrpSheet {...range} title={label || ariaLabel || 'Date range'} />
         </Sheet>
       ) : (
         <Popover
@@ -114,7 +101,7 @@ export function DateRangeField({
           activateOn={activateOn}
           animation={animation}
         >
-          {panel}
+          <DrpPanel {...range} label={label} />
         </Popover>
       )}
     </FieldShell>

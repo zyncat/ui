@@ -1,0 +1,80 @@
+@layer zyncat.reset, zyncat.tokens, zyncat.base, zyncat.components;
+
+@layer zyncat.components {
+  .zc-overlay-panel--sheet-bottom:has(> .zc-drp--sheet) {
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+  .zc-overlay-panel--sheet-bottom[data-drag] > .zc-drp--sheet::before {
+    content: '';
+    position: absolute;
+    top: var(--space-2);
+    inset-inline: 0;
+    width: var(--space-6);
+    height: var(--space-1);
+    margin-inline: auto;
+    border-radius: var(--radius-full);
+    background: var(--border-strong);
+  }
+
+  .zc-drp.zc-drp--sheet {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: none;
+    border: 0;
+    border-radius: inherit;
+    box-shadow: none;
+  }
+
+  .zc-drp--sheet .zc-drp__presets {
+    width: auto;
+    flex-direction: row;
+    gap: var(--space-2);
+    padding: 0 var(--space-4) var(--space-4);
+    border-right: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-padding-inline: var(--space-4);
+    --_dtp-fade-start: 0px;
+    --_dtp-fade-end: 0px;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black var(--_dtp-fade-start),
+      black calc(100% - var(--_dtp-fade-end)),
+      transparent
+    );
+  }
+  .zc-drp--sheet .zc-drp__presets::-webkit-scrollbar {
+    display: none;
+  }
+  .zc-drp--sheet .zc-drp__presets[data-fade~='start'] {
+    --_dtp-fade-start: var(--space-7);
+  }
+  .zc-drp--sheet .zc-drp__presets[data-fade~='end'] {
+    --_dtp-fade-end: var(--space-7);
+  }
+  .zc-drp--sheet .zc-drp__preset {
+    flex: none;
+    padding-inline: var(--space-3);
+    border: var(--border-hairline) solid var(--border-default);
+  }
+
+  .zc-drp--sheet .zc-drp__months {
+    display: block;
+    padding: 0 var(--space-4);
+    overflow: visible clip;
+  }
+  .zc-drp--sheet .zc-drp__months .zc-dtp__cal {
+    padding: 0;
+  }
+  .zc-drp--sheet .zc-dtp__nav {
+    width: var(--control-height);
+    height: var(--control-height);
+  }
+
+  .zc-drp--sheet .zc-drp__foot {
+    padding: var(--space-4) var(--space-4) max(var(--space-4), env(safe-area-inset-bottom));
+    border-top: 0;
+  }
+}

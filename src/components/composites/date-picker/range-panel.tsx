@@ -12,27 +12,16 @@ import { RangeMonth } from './range-month';
 import { drpDays, drpRangeText, RangePresets } from './range-presets';
 import { useRangePanel, type RangeOptions } from './use-range-panel';
 
-interface DrpPanelProps extends RangeOptions {
+const MONTHS_SHOWN = 2;
+
+interface DrpPanelProps extends Omit<RangeOptions, 'months'> {
   timezone?: string;
   label?: string;
-  layout: 'popover' | 'sheet';
   activateOn?: ActivateOn;
 }
 
-export function DrpPanel({
-  value,
-  commit,
-  close,
-  min,
-  max,
-  maxDays,
-  timezone,
-  label,
-  months,
-  layout,
-  activateOn,
-}: DrpPanelProps) {
-  const panel = useRangePanel({ value, commit, close, min, max, maxDays, months });
+export function DrpPanel({ value, commit, close, min, max, maxDays, timezone, label, activateOn }: DrpPanelProps) {
+  const panel = useRangePanel({ value, commit, close, min, max, maxDays, months: MONTHS_SHOWN });
   const { anchor, setHoverKey, daysRef, onGridKeyDown, gridGlide, lo, hi, done } = panel;
   const renderMonth = (offset: number, withPrev: boolean, withNext: boolean) => (
     <RangeMonth
@@ -43,17 +32,13 @@ export function DrpPanel({
       withNext={withNext}
       min={min}
       max={max}
-      months={months}
+      months={MONTHS_SHOWN}
       activateOn={activateOn}
     />
   );
 
   return (
-    <div
-      className={'zc-drp' + (layout === 'sheet' ? ' zc-drp--sheet' : '')}
-      role="dialog"
-      aria-label={label || 'Pick a date range'}
-    >
+    <div className="zc-drp" role="dialog" aria-label={label || 'Pick a date range'}>
       <div className="zc-drp__body">
         <RangePresets draft={panel.draft} fits={panel.fits} onPick={panel.applyPreset} activateOn={activateOn} />
         <div
@@ -65,7 +50,8 @@ export function DrpPanel({
             gridGlide.leave();
           }}
         >
-          {months === 2 ? [renderMonth(0, true, false), renderMonth(1, false, true)] : renderMonth(0, true, true)}
+          {renderMonth(0, true, false)}
+          {renderMonth(1, false, true)}
           <GlidePill className="zc-dtp__hover" glide={gridGlide} />
         </div>
       </div>

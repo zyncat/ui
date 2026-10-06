@@ -2,7 +2,7 @@
 
 import { Icon } from '../../internal/icon/Icon';
 import { activationProps, type ActivateOn } from '../../internal/utils/activation';
-import { DOW, grid, MONTHS, toKey } from './date-utils';
+import { canTurn, DOW, grid, MONTHS, toKey } from './date-utils';
 import { MonthJump } from './month-jump';
 import { RangeDay } from './range-day';
 import type { RangePanel } from './use-range-panel';
@@ -24,8 +24,6 @@ export function RangeMonth({ panel, offset, withPrev, withNext, min, max, months
   const y = base.getFullYear(),
     m = base.getMonth();
   const cells = grid(y, m);
-  const prevEnd = toKey(new Date(y, m, 0));
-  const nextStart = toKey(new Date(y, m + 1, 1));
   return (
     <div className="zc-dtp__cal">
       <div className="zc-drp__mhead">
@@ -34,7 +32,7 @@ export function RangeMonth({ panel, offset, withPrev, withNext, min, max, months
             type="button"
             className="zc-dtp__nav"
             aria-label="Previous month"
-            disabled={min && prevEnd < min}
+            disabled={!canTurn(y, m, -1, min, max)}
             {...activationProps<HTMLButtonElement>(() => nav(-1), { on: activateOn })}
           >
             <Icon name="caret-left" size="sm" />
@@ -53,7 +51,7 @@ export function RangeMonth({ panel, offset, withPrev, withNext, min, max, months
             type="button"
             className="zc-dtp__nav"
             aria-label="Next month"
-            disabled={max && nextStart > max}
+            disabled={!canTurn(y, m, 1, min, max)}
             {...activationProps<HTMLButtonElement>(() => nav(1), { on: activateOn })}
           >
             <Icon name="caret-right" size="sm" />

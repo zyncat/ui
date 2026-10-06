@@ -33,6 +33,7 @@ export function RangeDay({ panel, d, viewMonth, months, activateOn }: RangeDayPr
   } = panel;
   const key = toKey(d);
   const out = d.getMonth() !== viewMonth;
+  if (out && months === 1) return <span aria-hidden="true"></span>;
   const disabled = !inBounds(key);
   const dayCol = col(d);
 
@@ -44,8 +45,11 @@ export function RangeDay({ panel, d, viewMonth, months, activateOn }: RangeDayPr
   const hiGhost = provisional && isHi && !single && hi !== anchor;
 
   const band = inRange && !single;
-  const extL = band && !isLo && dayCol !== 0;
-  const extR = band && !isHi && dayCol !== 6;
+  const fadeL = band && months === 1 && !isLo && d.getDate() === 1;
+  const fadeR =
+    band && months === 1 && !isHi && new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate() === d.getDate();
+  const extL = band && !isLo && dayCol !== 0 && !fadeL;
+  const extR = band && !isHi && dayCol !== 6 && !fadeR;
 
   const capHere = months === 1 || !out;
   const loCap = isLo && capHere;
@@ -60,8 +64,10 @@ export function RangeDay({ panel, d, viewMonth, months, activateOn }: RangeDayPr
   const bandCls = ['zc-drp__band'];
   if (extL) bandCls.push('zc-drp__band--extL');
   if (extR) bandCls.push('zc-drp__band--extR');
-  if (!extL) bandCls.push('zc-drp__band--roundL');
-  if (!extR) bandCls.push('zc-drp__band--roundR');
+  if (fadeL) bandCls.push('zc-drp__band--fadeL');
+  else if (!extL) bandCls.push('zc-drp__band--roundL');
+  if (fadeR) bandCls.push('zc-drp__band--fadeR');
+  else if (!extR) bandCls.push('zc-drp__band--roundR');
 
   return (
     <button

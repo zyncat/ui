@@ -121,7 +121,7 @@ export function useRangePanel({ value, commit, close, min, max, maxDays, months 
     navDir,
     nav,
     jumpToMonth,
-    draft,
+    draft: anchor ? null : draft,
     anchor,
     focusKey,
     setHoverKey,

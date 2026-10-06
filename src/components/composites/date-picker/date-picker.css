@@ -273,6 +273,7 @@
     top: 0;
     left: 0;
     z-index: 0;
+    pointer-events: none;
     border-radius: var(--radius-md);
     background: var(--neutral-wash);
     will-change: transform, opacity;
@@ -600,39 +601,6 @@
   }
   .zc-drp__footSpacer {
     flex: 1 1 auto;
-  }
-
-  .zc-drp--sheet {
-    --dtp-cell: var(--control-height-lg);
-    width: 100vw;
-    max-width: 100%;
-    border: 0;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    box-shadow: none;
-  }
-  .zc-drp--sheet .zc-drp__body {
-    flex-direction: column;
-  }
-  .zc-drp--sheet .zc-drp__presets {
-    width: auto;
-    flex-direction: row;
-    overflow-x: auto;
-    scroll-padding-inline: var(--ring-gutter);
-    gap: var(--space-1);
-    border-right: 0;
-    border-bottom: var(--border-hairline) solid var(--border-subtle);
-    scrollbar-width: none;
-  }
-  .zc-drp--sheet .zc-drp__presets::-webkit-scrollbar {
-    display: none;
-  }
-  .zc-drp--sheet .zc-drp__preset {
-    flex: none;
-    padding-block: var(--space-2);
-  }
-  .zc-drp--sheet .zc-drp__months {
-    justify-content: center;
-    padding-block: var(--space-2);
   }
 
   .zc-tsg {

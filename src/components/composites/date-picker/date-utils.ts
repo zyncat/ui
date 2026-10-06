@@ -29,6 +29,8 @@ export const add = (k: string, days: number): string => {
 export const col = (d: Date): number => (d.getDay() + 6) % 7;
 
 export const within = (k: string, min?: string, max?: string): boolean => (!min || k >= min) && (!max || k <= max);
+export const canTurn = (y: number, m: number, dir: number, min?: string, max?: string): boolean =>
+  dir < 0 ? !min || toKey(new Date(y, m, 0)) >= min : !max || toKey(new Date(y, m + 1, 1)) <= max;
 export const clampKey = (k: string, min?: string, max?: string): string =>
   min && k < min ? min : max && k > max ? max : k;
 

@@ -1,8 +1,9 @@
 'use client';
 
-import { useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 
 import { GlidePill, useGlide } from '../../../motion/glide';
+import { useScrollEdges } from '../../internal/hooks/use-scroll-edges';
 import { activationProps, type ActivateOn } from '../../internal/utils/activation';
 import { add, MONTHS, pad, parse, today, toKey } from './date-utils';
 
@@ -65,6 +66,14 @@ export function RangePresets({ draft, fits, onPick, activateOn }: RangePresetsPr
   const presetsRef = useRef<HTMLDivElement>(null);
   const presetGlide = useGlide(presetsRef);
   const presets = drpPresets();
+  useLayoutEffect(() => {
+    const strip = presetsRef.current;
+    const chip = strip && strip.querySelector<HTMLElement>('.zc-is-active');
+    if (strip && chip) strip.scrollLeft = chip.offsetLeft - (strip.clientWidth - chip.offsetWidth) / 2;
+  }, []);
+  useScrollEdges(presetsRef, (edges, el) => {
+    el.dataset.fade = ((edges.left ? 'start ' : '') + (edges.right ? 'end' : '')).trim();
+  });
   function presetActive(p: DrpPreset): boolean {
     return draft && draft.start === p.start && draft.end === p.end;
   }

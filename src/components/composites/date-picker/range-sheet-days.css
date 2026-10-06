@@ -1,0 +1,35 @@
+@layer zyncat.reset, zyncat.tokens, zyncat.base, zyncat.components;
+
+@layer zyncat.components {
+  .zc-drp.zc-drp--sheet {
+    --dtp-cell: clamp(var(--control-height-sm), 6svh, var(--control-height-xl));
+    --dtp-gap: 0px;
+  }
+  .zc-drp--sheet .zc-dtp__hover {
+    z-index: -1;
+  }
+
+  .zc-drp--sheet .zc-dtp__dow,
+  .zc-drp--sheet .zc-dtp__days {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+  .zc-drp--sheet .zc-dtp__dow {
+    padding-bottom: var(--space-2);
+  }
+  .zc-drp--sheet .zc-dtp__days {
+    row-gap: var(--space-1);
+  }
+  .zc-drp--sheet .zc-dtp__day {
+    width: auto;
+    font-size: var(--size-body);
+  }
+
+  .zc-drp--sheet .zc-drp__band--fadeL {
+    left: -100%;
+    mask-image: linear-gradient(to right, transparent, black 50%);
+  }
+  .zc-drp--sheet .zc-drp__band--fadeR {
+    right: -100%;
+    mask-image: linear-gradient(to left, transparent, black 50%);
+  }
+}
