@@ -42,7 +42,7 @@ export function trackAnchorMove(el: Element, onMove: () => void): AnchorMoveTrac
       (entries) => {
         const ratio = entries[entries.length - 1].intersectionRatio;
         if (ratio !== threshold) {
-          if (!settling) arm(false, 1);
+          if (!settling || !sameRect(rect, el.getBoundingClientRect())) arm(false, 1);
           else if (ratio > 0) arm(false, ratio);
           else release();
           return;
