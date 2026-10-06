@@ -26,6 +26,7 @@ Toggle - @zyncat/ui/toggle - Actuates a setting on the spot - pick Checkbox when
 RadioGroup - @zyncat/ui/radio-group - Pick exactly one from options that stay visible - rows or cards; pick Select for long lists.
 Select - @zyncat/ui/select - Single-select listbox in a popover, searchable; holds value: string | null.
 MultiSelect - @zyncat/ui/multi-select - Many-of listbox; stays open while toggling, trigger summarises as first +N.
+Combobox - @zyncat/ui/combobox - Autocomplete for a text field you own - @mentions, slash commands, or the whole value. A pick only writes text: unlike Select, the value is whatever the field holds.
 
 == Data display ==
 Avatar - @zyncat/ui/avatar - Identity mark: image, initials, or silhouette.
@@ -34,6 +35,7 @@ Tag / TagGroup - @zyncat/ui/tag - User-owned label (a control, not a status).
 ToggleTag - @zyncat/ui/toggle-tag - Many-of-many filter chip.
 Table - @zyncat/ui/table - Declare columns + rows; owns sort, selection, stickiness, overflow.
 Pagination - @zyncat/ui/pagination - Cursor strip: mono range readout + prev/next pair.
+ScrollArea - @zyncat/ui/scroll-area - One-axis scroller with no scrollbar: an edge fades only while content hides past it, and an x rail pages from its edges - keep overflow: auto for a visible bar or two axes.
 
 == Date, time & tabs ==
 The date and time fields share: value is a string, onChange(value | null), timezone, min/max, disabled.
@@ -84,4 +86,4 @@ MotionDevtools - @zyncat/ui/motion-devtools - Dev-only floating panel that slows
 Theme - @zyncat/ui/theme - Typed theming and the theme state: defineTheme shapes a theme, ZyncatTheme emits the CSS and the pre-paint boot script, useTheme reads and sets the choice.
 
 == Types-only modules (documented by their .d.ts alone) ==
-@zyncat/ui/next - get_component("next")
+@zyncat/ui/next - get_component({ components: "next" })

@@ -109,7 +109,7 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       name: 'innerClassName',
       type: 'string',
       description:
-        'Class applied to the inner measured wrapper - the clipping element (overflow: hidden). Content whose focus ring sits flush to its edge needs padding there, or the ring clips.',
+        'Class applied to the inner wrapper - the clipping element (`overflow: clip` on the animated axis). Its padding stays while closed, so content whose focus ring sits flush to the clipped edge gets its room as `var(--ring-gutter)` of padding on a child.',
     },
     {
       name: 'animation',
@@ -1378,8 +1378,16 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     { name: 'defaultValue', type: 'string[]', default: '[]', description: 'Initial selection when uncontrolled.' },
     {
       name: 'onChange',
-      type: '(value: string[], toggled: SelectOption) => void',
-      description: 'Fires with the NEXT array and the option that was toggled. Committing keeps the menu open.',
+      type: '(value: string[], toggled?: SelectOption) => void',
+      description:
+        'Fires with the NEXT array and the option that was toggled, or no option when a preset replaced the selection. Committing keeps the menu open.',
+    },
+    {
+      name: 'presets',
+      type: 'MultiSelectPreset[]',
+      default: '[]',
+      description:
+        "One-press selections, shown as chips between the filter field and the list. A press replaces the selection with the preset's `value` as given and keeps the menu open.",
     },
     {
       name: 'placeholder',
@@ -1501,6 +1509,94 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       type: 'CustomTrigger<SelectOption[]>',
       description:
         'Your own element in place of the built-in trigger. It is cloned with the combobox wiring - role, aria, open/close, arrow keys, and the anchor the menu measures - so it must render one focusable element that forwards its props and ref. Pass a function to read `{ open, selected }`.',
+    },
+  ],
+  combobox: [
+    {
+      name: 'children',
+      type: 'ReactNode',
+      required: true,
+      description:
+        'The field the list completes: one `input` or `textarea`, or a component rendering one, such as `TextField` or `Textarea`. Focus stays in it - the arrow keys walk the list and Enter picks.',
+    },
+    {
+      name: 'options',
+      type: 'SelectOption[] | SelectGroup[]',
+      required: true,
+      description:
+        'The suggestions - a flat `SelectOption[]`, or `SelectGroup[]` for labeled sections - filtered by the query.',
+    },
+    {
+      name: 'trigger',
+      type: 'string',
+      description:
+        'Characters that start a query mid-text, such as `@` for mentions. The list opens when they are typed at the start of a word, filters on the text up to the caret, and a pick replaces that text. Without a trigger the whole value is the query.',
+    },
+    {
+      name: 'insert',
+      type: '(option: SelectOption) => string',
+      default: "the trigger, the option's text and a space; the option's text alone without a `trigger`",
+      description:
+        "The text a pick writes over the query, trigger included. The edit goes through the browser, so undo restores the query and the field's own `onChange` fires.",
+    },
+    {
+      name: 'onSelect',
+      type: '(value: string, option: SelectOption) => void',
+      description:
+        "Fires after a pick has written its text into the field - gets the option's `value` and the full option.",
+    },
+    {
+      name: 'anchor',
+      type: "'caret' | 'field'",
+      default: "'caret' with a `trigger`, else 'field'",
+      description: 'Where the list hangs: `caret` from the start of the query, `field` under the whole field.',
+    },
+    {
+      name: 'width',
+      type: 'MenuWidth',
+      default: "'trigger' under the field, 'auto' at the caret",
+      description:
+        'List width. `trigger` is never narrower than the field, `auto` fits the options, and `sm` | `md` | `lg` are fixed steps with long labels ellipsizing.',
+    },
+    {
+      name: 'size',
+      type: 'MenuSize',
+      default: "'md'",
+      description: 'List density - row type and padding. A row carrying a description sits one step taller.',
+    },
+    { name: 'weight', type: 'MenuWeight', default: "'medium'", description: 'Weight of every option label.' },
+    {
+      name: 'highlight',
+      type: "'neutral' | 'accent'",
+      default: "'neutral'",
+      description:
+        'Hue of the highlight that travels between options: the neutral wash, or the accent wash with accent ink on the active option.',
+    },
+    {
+      name: 'rail',
+      type: 'boolean',
+      default: 'false',
+      description: 'Short accent bar on the leading edge of the highlight, marking the active option.',
+    },
+    { name: 'id', type: 'string', description: 'Base id for the list and option ids; auto-generated if omitted.' },
+    { name: 'ariaLabel', type: 'string', description: 'Accessible name for the list.' },
+    {
+      name: 'menuProps',
+      type: 'SelectMenuHtmlProps',
+      description:
+        'Standard attributes (className, style, data-*, ...) forwarded to the list panel, which portals to <body>.',
+    },
+    {
+      name: 'activateOn',
+      type: 'ActivateOn',
+      default: "'pointerdown'",
+      description: 'Whether an option picks on `pointerdown` (snappier) or waits for `click`.',
+    },
+    {
+      name: 'animation',
+      type: 'DisableableAnimation',
+      default: "duration 'base' + ease 'entrance'/'exit'",
+      description: 'List open/close timing - motion tokens only, or `null` to disable.',
     },
   ],
   avatar: [
@@ -1633,6 +1729,27 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       description: 'Notification only - fires after the local sort updates.',
     },
     {
+      name: 'renderDetail',
+      type: '(row: Row) => ReactNode',
+      description:
+        "A row's details, unfolding full width under it from its disclosure button or a click on the row. A falsy return leaves that row without details.",
+    },
+    {
+      name: 'expanded',
+      type: 'Array<string | number>',
+      description: 'Keys of the rows whose details are open. Omit to let the table own it.',
+    },
+    {
+      name: 'onExpandedChange',
+      type: '(keys: Array<string | number>) => void',
+      description: 'Fires with the open row keys after every toggle.',
+    },
+    {
+      name: 'expandMode',
+      type: "'single' | 'multiple'",
+      description: "`single` closes the open row as another opens. Default 'multiple'.",
+    },
+    {
       name: 'density',
       type: "'cozy' | 'compact'",
       description: "Row rhythm. Default 'cozy' (46px rows); 'compact' is 38px.",
@@ -1649,7 +1766,12 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       description: "Shown when rows is empty and not loading. Default 'Nothing to show'.",
     },
     { name: 'footer', type: 'ReactNode', description: 'Footer strip - pagination, summaries.' },
-    { name: 'onRowClick', type: '(row: Row) => void', description: 'Makes rows clickable (checkbox cell excluded).' },
+    {
+      name: 'onRowClick',
+      type: '(row: Row) => void',
+      description:
+        'Makes rows clickable. A click on the checkbox cell, or on a link, button, field or label in a cell, stays with it.',
+    },
     {
       name: 'activateOn',
       type: 'ActivateOn',
@@ -1777,6 +1899,7 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     { name: 'min', type: 'string', description: "Earliest pickable date, 'YYYY-MM-DD', inclusive." },
     { name: 'max', type: 'string', description: "Latest pickable date, 'YYYY-MM-DD', inclusive." },
     { name: 'label', type: 'string', description: 'Field label rendered above the trigger.' },
+    { name: 'ariaLabel', type: 'string', description: 'Accessible name for a field with no visible `label`.' },
     { name: 'required', type: 'boolean', default: 'false', description: 'Asterisk on the label.' },
     {
       name: 'invalid',
@@ -1846,6 +1969,7 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       description: '↑/↓ step granularity in minutes (typing is exact). Default 5.',
     },
     { name: 'label', type: 'string', description: 'Field label rendered above the trigger.' },
+    { name: 'ariaLabel', type: 'string', description: 'Accessible name for a field with no visible `label`.' },
     { name: 'required', type: 'boolean', default: 'false', description: 'Asterisk on the label.' },
     {
       name: 'invalid',
@@ -1893,7 +2017,8 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     {
       name: 'onChange',
       type: '(value: DateRange) => void',
-      description: 'Fires only on a COMPLETE range (a lone anchor never commits).',
+      description:
+        'Fires on Done with the range the panel shows, when it differs from the current one. Closing the panel any other way discards the pick.',
     },
     {
       name: 'placeholder',
@@ -1908,7 +2033,14 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     },
     { name: 'min', type: 'string', description: "Earliest pickable date, 'YYYY-MM-DD', inclusive." },
     { name: 'max', type: 'string', description: "Latest pickable date, 'YYYY-MM-DD', inclusive." },
+    {
+      name: 'maxDays',
+      type: 'number',
+      description:
+        'Longest pickable range in days, inclusive. After the first day pick, days further away disable, and so do quick picks that run longer.',
+    },
     { name: 'label', type: 'string', description: 'Field label rendered above the trigger.' },
+    { name: 'ariaLabel', type: 'string', description: 'Accessible name for a field with no visible `label`.' },
     { name: 'required', type: 'boolean', default: 'false', description: 'Asterisk on the label.' },
     {
       name: 'invalid',
@@ -1967,6 +2099,7 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     },
     { name: 'min', type: 'string', description: "Lower bound 'HH:mm' - saturates, never errors." },
     { name: 'max', type: 'string', description: "Upper bound 'HH:mm' - saturates, never errors." },
+    { name: 'ariaLabel', type: 'string', description: 'Accessible name for a field with no visible `label`.' },
     { name: 'required', type: 'boolean', default: 'false', description: 'Asterisk on the label.' },
     {
       name: 'invalid',
@@ -2195,7 +2328,12 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       default: 'null',
       description: 'Subtext under the title - wired to `aria-describedby`.',
     },
-    { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Panel width.' },
+    {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description: "Panel width. Below 40rem the dialog opens as a bottom sheet, and 'lg' fills its height.",
+    },
     {
       name: 'tone',
       type: "'default' | 'danger'",
@@ -2341,9 +2479,15 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     },
     {
       name: 'trigger',
-      type: 'ReactElement',
-      required: true,
-      description: 'Cloned to toggle the menu, and used as the anchor. Gets the `aria-haspopup="menu"` wiring.',
+      type: 'ReactElement | null',
+      description:
+        'Cloned to toggle the menu, and used as the anchor unless `anchor` is set. Gets the `aria-haspopup="menu"` wiring.',
+    },
+    {
+      name: 'anchor',
+      type: 'VirtualAnchor | null',
+      description:
+        'Anchor to an arbitrary rect instead of the trigger - any `{ getBoundingClientRect() }`, which an element also satisfies. Drive `open` yourself, name the menu with `ariaLabel` when there is no trigger, and pass a new object to re-place a moving anchor. Submenus always anchor to their row.',
     },
     {
       name: 'activateOn',
@@ -3147,6 +3291,65 @@ export const GENERATED_TYPES: Record<string, NestedType[]> = {
   ],
   'multi-select': [
     {
+      name: 'MultiSelectPreset',
+      rows: [
+        { name: 'label', type: 'string', required: true, description: 'Chip text.' },
+        {
+          name: 'value',
+          type: 'string[]',
+          required: true,
+          description: 'The selection a press applies, replacing the current one as given.',
+        },
+      ],
+    },
+    {
+      name: 'SelectGroup',
+      rows: [
+        {
+          name: 'label',
+          type: 'string',
+          description: 'Section heading rendered above the options; omit for an unlabeled group.',
+        },
+        { name: 'options', type: 'SelectOption[]', required: true, description: 'The options in this section.' },
+      ],
+    },
+    {
+      name: 'SelectOption',
+      rows: [
+        {
+          name: 'value',
+          type: 'string',
+          required: true,
+          description: 'The stored value - what `onChange` returns and `value` matches; must be unique.',
+        },
+        {
+          name: 'label',
+          type: 'ReactNode',
+          required: true,
+          description: 'Primary row text, and the trigger label once selected; also matched by `searchable`.',
+        },
+        {
+          name: 'description',
+          type: 'string',
+          description: 'Optional secondary line under the label; also matched by `searchable`.',
+        },
+        { name: 'icon', type: 'ReactNode', description: 'Your own icon node shown before the label.' },
+        {
+          name: 'disabled',
+          type: 'boolean',
+          default: 'false',
+          description: 'Not selectable - skipped by keyboard nav and typeahead, and marked `aria-disabled`.',
+        },
+        {
+          name: 'searchText',
+          type: 'string',
+          description: 'Text used for `searchable` filtering and typeahead. Required when `label` is not a string.',
+        },
+      ],
+    },
+  ],
+  combobox: [
+    {
       name: 'SelectGroup',
       rows: [
         {
@@ -3218,6 +3421,12 @@ export const GENERATED_TYPES: Record<string, NestedType[]> = {
           name: 'grow',
           type: 'boolean',
           description: 'The one greedy column - absorbs slack width. Others size to content.',
+        },
+        {
+          name: 'width',
+          type: '`${number}%`',
+          description:
+            "Share of the table's width this column takes, e.g. '30%'. A grow column takes what the shares leave; when the table is too narrow, the cells' content widths win.",
         },
         {
           name: 'sortable',
@@ -3368,6 +3577,10 @@ export const GENERATED_TYPES: Record<string, NestedType[]> = {
           description: "Fires when this row commits, before the menu's own `onSelect`.",
         },
       ],
+    },
+    {
+      name: 'VirtualAnchor',
+      rows: [{ name: 'getBoundingClientRect', type: 'DOMRect', required: true, description: '' }],
     },
   ],
   'emoji-picker': [
