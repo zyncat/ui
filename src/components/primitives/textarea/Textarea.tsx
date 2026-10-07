@@ -41,6 +41,8 @@ interface TextareaOwnProps extends FieldMessagingProps, TextareaNative {
   onSubmit?: (value: string) => void;
   /** Soft char limit: shows the meter + over-limit highlight. Does NOT truncate (use native maxLength for a hard stop). */
   max?: number;
+  /** How much one character (a code point) counts toward `max`, e.g. its UTF-8 byte length. @default its UTF-16 length */
+  charWeight?: (char: string) => number;
   /** Rows shown before auto-grow kicks in. @default 3 */
   minRows?: number;
   /** Row cap - grows up to this, then the box scrolls. @default 10 */
@@ -62,6 +64,20 @@ export interface TextareaProps extends TextareaOwnProps {
   htmlProps?: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, keyof TextareaOwnProps | 'rows'> & DataAttributes;
 }
 
+const utf16Weight = (char: string) => char.length;
+
+function weigh(text: string, max: number, charWeight: (char: string) => number) {
+  let count = 0;
+  let fitEnd = -1;
+  let at = 0;
+  for (const char of text) {
+    count += charWeight(char);
+    if (fitEnd < 0 && count > max) fitEnd = at;
+    at += char.length;
+  }
+  return { count, fitEnd: fitEnd < 0 ? text.length : fitEnd };
+}
+
 export function Textarea({
   id,
   label,
@@ -77,6 +93,7 @@ export function Textarea({
   onKeyDown,
   onSubmit,
   max,
+  charWeight = utf16Weight,
   minRows = 3,
   maxRows = 10,
   warnAt = 20,
@@ -92,7 +109,7 @@ export function Textarea({
   const stackRef = useRef<HTMLDivElement>(null);
   const mirrorRef = useRef<HTMLDivElement>(null);
   const text = value ?? '';
-  const count = text.length;
+  const { count, fitEnd } = weigh(text, max ?? Infinity, charWeight);
   const over = max ? Math.max(count - max, 0) : 0;
   const lastMax = useRef(max);
   if (max) lastMax.current = max;
@@ -157,8 +174,8 @@ export function Textarea({
       <div className={boxCls} style={{ '--txa-min-rows': minRows, '--txa-max-rows': maxRows } as CSSProperties}>
         <div className="zc-txa__stack" ref={stackRef}>
           <div className="zc-txa__mirror" ref={mirrorRef} aria-hidden="true">
-            {over ? text.slice(0, max) : text}
-            {over ? <mark>{text.slice(max)}</mark> : null}
+            {over ? text.slice(0, fitEnd) : text}
+            {over ? <mark>{text.slice(fitEnd)}</mark> : null}
             {'\n'}
           </div>
           <textarea
