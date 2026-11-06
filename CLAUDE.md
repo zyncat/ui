@@ -96,6 +96,15 @@ Seven scripts. Three take a target; with none, they run everything they own.
 The task registry is `scripts/lib/tasks.mjs`. Adding a check means one line there, not a new
 `package.json` script.
 
+## Dev server
+
+- On the VPS (host `zyncat`) the Zyncat dev stack always runs as the user unit `zyncat-dev`.
+- fe (dev.zyncat.app) and the studio playground (dev-studio.zyncat.app) link this checkout and
+  resolve its imports to `src/`, so an edit here hot-reloads there without a build.
+- Down, or a change that needs a restart: `systemctl --user restart zyncat-dev`, `start` when it
+  is stopped. Logs: `journalctl --user -u zyncat-dev -f`.
+- `pnpm dev` here is the docs site on :5179, outside that stack.
+
 ## Commits
 
 - Never bypass a hook. Not with no-verify, not with -n. A failing hook is the work, not an obstacle.
