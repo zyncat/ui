@@ -56,7 +56,7 @@
   }
 
   .zc-tag__count {
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-size: var(--size-micro);
     font-variant-numeric: tabular-nums;
     color: var(--text-subtle);

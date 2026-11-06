@@ -267,7 +267,7 @@
   .zc-tbl__bulkCount {
     display: inline-flex;
     align-items: baseline;
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-size: var(--size-caption);
     line-height: var(--leading-caption);
     font-weight: var(--weight-medium);

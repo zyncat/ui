@@ -9,7 +9,7 @@
     gap: var(--space-2);
   }
   .zc-dtf__value {
-    font: var(--type-code);
+    font: var(--type-caption);
     font-variant-numeric: tabular-nums;
     color: var(--text-strong);
   }
@@ -143,7 +143,7 @@
     transition: var(--transition-control);
   }
   .zc-dtp__jumpYear {
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-variant-numeric: tabular-nums;
   }
   .zc-dtp__jumpOpt:hover:not(:disabled):not(.zc-is-active) {
@@ -246,7 +246,7 @@
     padding: 0;
     background: transparent;
     border-radius: var(--radius-md);
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-size: var(--size-caption);
     font-variant-numeric: tabular-nums;
     color: var(--text-body);
@@ -367,7 +367,7 @@
     border-top: var(--border-hairline) solid var(--border-subtle);
   }
   .zc-dtp__tz {
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-size: var(--size-caption);
     font-variant-numeric: tabular-nums;
     color: var(--text-subtle);
@@ -580,7 +580,7 @@
     border-top: var(--border-hairline) solid var(--border-subtle);
   }
   .zc-drp__readout {
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-size: var(--size-caption);
     font-variant-numeric: tabular-nums;
     color: var(--text-body);
@@ -593,7 +593,7 @@
     color: var(--text-disabled);
   }
   .zc-drp__tz {
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-size: var(--size-caption);
     font-variant-numeric: tabular-nums;
     color: var(--text-subtle);
@@ -606,7 +606,7 @@
   .zc-tsg {
     display: inline-flex;
     align-items: center;
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-size: var(--size-caption);
     font-variant-numeric: tabular-nums;
     color: var(--text-strong);

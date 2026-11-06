@@ -8,7 +8,7 @@
   }
 
   .zc-pgn__readout {
-    font: var(--type-code);
+    font: var(--type-caption);
     font-variant-numeric: tabular-nums;
     color: var(--text-subtle);
     white-space: nowrap;

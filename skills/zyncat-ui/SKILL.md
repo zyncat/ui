@@ -71,7 +71,7 @@ overlays & feedback, expressive, compound, replicas, dev tools. The full index i
 
 - Sentence case everywhere; no emoji or exclamation marks in UI copy.
 - Exactly one primary `<Button>` per view.
-- Numbers, times, IDs and status read mono + tabular.
+- Numbers, times, IDs and status read in the body face with tabular figures; the code face is for code only.
 - Status hues (info/success/warning/danger) only for genuine status; hierarchy comes from the
   neutral ramp.
 

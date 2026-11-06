@@ -23,10 +23,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .zc-drp__heading .zc-drp__tz {
-    font-family: var(--font-body);
-  }
-
   .zc-drp__tiles {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -55,7 +51,6 @@
   }
   .zc-drp__tileDate {
     font: var(--type-title);
-    font-family: var(--font-code);
     font-variant-numeric: tabular-nums;
     color: var(--text-strong);
     white-space: nowrap;

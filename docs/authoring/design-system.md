@@ -153,6 +153,6 @@
 
 - Sentence case. No emoji. No exclamation marks in UI copy.
 - One primary `Button` per view.
-- Numbers, times, IDs and status read mono and tabular. Status hues mark genuine status only.
+- Numbers, times, IDs and status read in the body face with tabular figures. The code face is for code only: code blocks, inline code, `kbd`, and opt-ins like a `Table` column with `mono`. Status hues mark genuine status only.
 - Every component imports its own stylesheet. No barrel entry.
 - Legacy debt (comments, px literals, rAF call sites) is ratcheted by `check contracts` against `scripts/contracts-baseline.json`.

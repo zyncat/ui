@@ -258,8 +258,9 @@
     width: 44px;
     height: 52px;
     text-align: center;
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-size: var(--size-title);
+    font-variant-numeric: tabular-nums;
     font-weight: var(--weight-medium);
     color: var(--text-strong);
     background: var(--bg-surface);

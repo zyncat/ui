@@ -11,7 +11,7 @@ export interface TabItem {
   label: ReactNode;
   /** Leading icon - your own node. */
   icon?: ReactNode;
-  /** Rendered mono + tabular. Pass a number or a preformatted string. */
+  /** Rendered with tabular figures. Pass a number or a preformatted string. */
   count?: number | string;
   /** Dims the tab, blocks selection, and skips it during arrow-key travel. */
   disabled?: boolean;

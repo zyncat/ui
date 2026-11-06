@@ -310,7 +310,7 @@
     border-radius: var(--radius-sm, 0.25rem);
     background: var(--bg-muted, oklch(0.97 0.004 264));
     color: var(--text-subtle, oklch(0.6 0.01 264));
-    font-family: var(--font-code, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-family: var(--font-body, system-ui, sans-serif);
     font-size: 0.625rem;
     line-height: 1.4;
     text-align: center;

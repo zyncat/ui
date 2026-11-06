@@ -21,7 +21,7 @@ interface ToggleTagOwnProps {
   onChange?: (selected: boolean) => void;
   /** Your own icon node; replaces the tick. Selected state reads from the wash. */
   icon?: ReactNode | null;
-  /** Optional result count - rendered mono/tabular. */
+  /** Optional result count - rendered with tabular figures. */
   count?: ReactNode;
   /** 'md' sits on `--control-height-sm`; 'sm' is 24px, for dense rows. @default 'md' */
   size?: 'md' | 'sm';

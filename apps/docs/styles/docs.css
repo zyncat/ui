@@ -180,7 +180,7 @@ body {
 }
 
 .search-btn__kbd {
-  font-family: var(--font-code);
+  font-family: var(--font-body);
   font-size: 0.6875rem;
   color: var(--text-subtle);
   border: var(--border-hairline) solid var(--border-subtle);
@@ -946,7 +946,7 @@ body {
   padding: 2px 6px;
   border: var(--border-hairline) solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  font-family: var(--font-code);
+  font-family: var(--font-body);
   font-size: 0.6875rem;
   color: var(--text-subtle);
 }
@@ -1047,7 +1047,7 @@ body {
   padding: 1px 4px;
   border: var(--border-hairline) solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  font-family: var(--font-code);
+  font-family: var(--font-body);
   font-size: 0.6875rem;
 }
 
@@ -1242,7 +1242,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-code);
+  font-family: var(--font-body);
   font-size: 0.71875rem;
   font-weight: 600;
   color: var(--text-strong);
@@ -1582,7 +1582,7 @@ body {
 }
 
 .knob__value {
-  font-family: var(--font-code);
+  font-family: var(--font-body);
   font-size: 0.71875rem;
   font-variant-numeric: tabular-nums;
   color: var(--text-secondary);
@@ -1683,7 +1683,7 @@ body {
   padding: 0 var(--space-2);
   border: var(--border-hairline) solid var(--border-default);
   border-radius: var(--radius-sm);
-  font: var(--type-code);
+  font: var(--type-caption);
   font-size: 0.6875rem;
   color: var(--text-subtle);
 }

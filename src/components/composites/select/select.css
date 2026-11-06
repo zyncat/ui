@@ -121,7 +121,7 @@
   }
   .zc-select__count {
     flex: 0 0 auto;
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-size: var(--size-micro);
     line-height: 1;
     font-variant-numeric: tabular-nums;

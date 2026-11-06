@@ -57,7 +57,7 @@
   }
   .zc-tooltip__shortcut {
     flex: 0 0 auto;
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-size: var(--size-micro);
     font-variant-numeric: tabular-nums;
     color: var(--text-subtle);

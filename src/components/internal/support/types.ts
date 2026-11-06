@@ -7,7 +7,7 @@ export interface SupportAction {
   label: string;
   /** Leading glyph. Any node; the widget sizes the box it sits in. */
   icon?: ReactNode;
-  /** Trailing metadata - a wait time, a slot, a ticket number. Set in mono. */
+  /** Trailing metadata - a wait time, a slot, a ticket number. Set in tabular figures. */
   meta?: string;
   /** Second line under the label. The rail shows it; the fan puts it in the caption. */
   description?: string;

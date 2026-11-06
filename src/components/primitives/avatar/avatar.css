@@ -186,7 +186,7 @@
   }
 
   .zc-avatar--overflow .zc-avatar__initials {
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-variant-numeric: tabular-nums;
     font-size: calc(var(--avatar-size) * 0.36);
     letter-spacing: var(--tracking-normal);

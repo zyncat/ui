@@ -121,7 +121,7 @@
   }
 
   .zc-tab__count {
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-size: var(--size-micro);
     line-height: 1;
     font-variant-numeric: tabular-nums;

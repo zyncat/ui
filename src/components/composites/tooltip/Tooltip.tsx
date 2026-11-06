@@ -24,7 +24,7 @@ import { CLOSE_GRACE, OPEN_DELAY, store, useHostElection, type Placement } from 
 export interface TooltipProps {
   /** The hint - a string or small node; never interactive content. */
   content: ReactNode;
-  /** Optional keyboard hint, rendered as mono metadata ("⌘↩", "S"). */
+  /** Optional keyboard hint, rendered as small metadata ("⌘↩", "S"). */
   shortcut?: string | null;
   /** Preferred side; flips automatically when out of viewport room. */
   placement?: Placement;

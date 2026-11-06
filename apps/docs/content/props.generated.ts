@@ -415,7 +415,7 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     {
       name: 'status',
       type: 'string',
-      description: 'Small mono line under the heading - opening hours, queue depth, a shift note.',
+      description: 'Small line under the heading - opening hours, queue depth, a shift note.',
     },
     {
       name: 'side',
@@ -1047,6 +1047,12 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
       type: 'number',
       description:
         'Soft char limit: shows the meter + over-limit highlight. Does NOT truncate (use native maxLength for a hard stop).',
+    },
+    {
+      name: 'charWeight',
+      type: '(char: string) => number',
+      default: 'its UTF-16 length',
+      description: 'How much one character (a code point) counts toward `max`, e.g. its UTF-8 byte length.',
     },
     { name: 'minRows', type: 'number', default: '3', description: 'Rows shown before auto-grow kicks in.' },
     {
@@ -2251,7 +2257,7 @@ export const GENERATED_PROPS: Record<string, PropRow[]> = {
     {
       name: 'shortcut',
       type: 'string | null',
-      description: 'Optional keyboard hint, rendered as mono metadata ("⌘↩", "S").',
+      description: 'Optional keyboard hint, rendered as small metadata ("⌘↩", "S").',
     },
     {
       name: 'placement',
@@ -3161,7 +3167,7 @@ export const GENERATED_TYPES: Record<string, NestedType[]> = {
         {
           name: 'meta',
           type: 'string',
-          description: 'Trailing metadata - a wait time, a slot, a ticket number. Set in mono.',
+          description: 'Trailing metadata - a wait time, a slot, a ticket number. Set in tabular figures.',
         },
         {
           name: 'description',
@@ -3483,7 +3489,7 @@ export const GENERATED_TYPES: Record<string, NestedType[]> = {
         {
           name: 'count',
           type: 'number | string',
-          description: 'Rendered mono + tabular. Pass a number or a preformatted string.',
+          description: 'Rendered with tabular figures. Pass a number or a preformatted string.',
         },
         {
           name: 'disabled',
@@ -3535,7 +3541,7 @@ export const GENERATED_TYPES: Record<string, NestedType[]> = {
         {
           name: 'shortcut',
           type: 'string',
-          description: 'Keyboard hint shown at the trailing edge, mono. Display only - you still bind the key.',
+          description: 'Keyboard hint shown at the trailing edge. Display only - you still bind the key.',
         },
         {
           name: 'danger',

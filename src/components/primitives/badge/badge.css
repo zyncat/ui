@@ -30,7 +30,7 @@
   }
 
   .zc-badge--num {
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-variant-numeric: tabular-nums;
   }
 

@@ -15,7 +15,7 @@ export interface DropdownItem {
   description?: string;
   /** Your own icon node shown before the label. */
   icon?: ReactNode;
-  /** Keyboard hint shown at the trailing edge, mono. Display only - you still bind the key. */
+  /** Keyboard hint shown at the trailing edge. Display only - you still bind the key. */
   shortcut?: string;
   /** Destructive action - the row reads in the danger hue. @default false */
   danger?: boolean;

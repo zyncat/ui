@@ -69,7 +69,7 @@
 
   .zc-dropdown__item-shortcut {
     flex: 0 0 auto;
-    font: var(--type-code);
+    font: var(--type-caption);
     font-variant-numeric: tabular-nums;
     color: var(--text-subtle);
     padding-left: var(--space-2);

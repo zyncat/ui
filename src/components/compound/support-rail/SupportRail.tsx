@@ -196,7 +196,7 @@ export interface SupportRailOwnProps {
   actions: SupportAction[];
   /** Panel heading, and the panel's accessible name. @default 'Talk to us' */
   title?: string;
-  /** Small mono line under the heading - opening hours, queue depth, a shift note. */
+  /** Small line under the heading - opening hours, queue depth, a shift note. */
   status?: string;
   /** Container edge the rail pins to. Flips the tab, the morph origin and the panel's border. @default 'right' */
   side?: 'right' | 'left';

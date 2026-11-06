@@ -162,7 +162,7 @@
 
   .zc-toast__count {
     flex: none;
-    font-family: var(--font-code);
+    font-family: var(--font-body);
     font-size: var(--size-micro);
     line-height: var(--leading-micro);
     font-variant-numeric: tabular-nums;
